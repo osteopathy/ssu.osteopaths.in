@@ -1,0 +1,16 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	body {
+		@apply bg-layer-0 text-layer-13 flex flex-col items-center min-h-screen;
+	}
+	button {
+	  	user-select: none;
+  		-webkit-tap-highlight-color: transparent;
+  		-webkit-touch-callout: none;
+		@apply inline-flex items-center justify-center text-center font-semibold py-2 px-4;
+	}
+}
