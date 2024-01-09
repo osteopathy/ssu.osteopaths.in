@@ -2,7 +2,8 @@
 	import DatePicker from "./date-picker.svelte"
 	import Avatar from "$lib/ui/Avatar.svelte"
 	import { ArrowRightIcon } from "lucide-svelte"
-	export let data
+	import type { PageData } from "./$types"
+	export let data: PageData
 </script>
 
 <section class="p-4 flex gap-4 w-full justify-between min-h-screen">
@@ -16,7 +17,11 @@
 		<div
 			class="flex items-center px-3 py-2 rounded-full shadow-inner shadow-layer-5 border border-layer-6 gap-x-2"
 		>
-			<Avatar placeholder={data.user.name[0] + data.user.name[1]} />
+			<Avatar
+				src={data.user.image}
+				alt="@{data.user.name}"
+				placeholder={data.user.name[0] + data.user.name[1]}
+			/>
 			<div class="flex flex-col grow w-0">
 				<h3 class="text-lg/6 w-full">{data.user.name}</h3>
 				<div class="-mt-1 text-sm flex items-center">

@@ -6,22 +6,24 @@
 		alt,
 		size = "default",
 	} = $props<{
-		src: string
-		alt: string
-		size: keyof typeof styles
+		src?: string
+		alt?: string
+		size?: keyof typeof styles
 		placeholder?: string
 	}>()
 
 	let loading = $state<"loading" | "loaded" | "error">("loading")
 
 	onMount(() => {
-		const image = new Image()
-		image.src = src
-		image.onload = () => {
-			loading = "loaded"
-		}
-		image.onerror = () => {
-			loading = "error"
+		if (src) {
+			const image = new Image()
+			image.src = src
+			image.onload = () => {
+				loading = "loaded"
+			}
+			image.onerror = () => {
+				loading = "error"
+			}
 		}
 	})
 
@@ -35,7 +37,9 @@
 
 <div class="{styles[size]} rounded-full border {loading === 'loaded'}">
 	<div class="flex h-full w-full items-center justify-center rounded-full">
-		<img class:hidden={loading === "loading"} {src} {alt} />
+		{#if src}
+			<img class:hidden={loading === "loading"} {src} {alt} />
+		{/if}
 		{#if placeholder}
 			<span
 				class:block={loading === "loading"}

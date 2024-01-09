@@ -67,6 +67,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
         id: userId,
         gmail: payload?.email,
         name: payload?.name,
+        image: payload?.picture,
       });
 
       const session = await lucia.createSession(userId, {});

@@ -18,6 +18,7 @@ interface DatabaseSessionAttributes { }
 
 interface DatabaseUserAttributes {
   gmail: string;
+  image: string;
   name: string
 }
 
@@ -37,6 +38,7 @@ export const lucia = new Lucia(adapter, {
     return {
       // attributes has the type of DatabaseUserAttributes
       gmail: attributes.gmail,
+      image: attributes.image,
       name: attributes.name
     };
   }

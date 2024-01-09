@@ -5,6 +5,7 @@ export const userTable = sqliteTable('user', {
   id: text('id').primaryKey(),
   name: text('name'),
   gmail: text('gmail'),
+  image: text('image'),
   role: text('role', {
     enum: ['user', 'osteopath']
   })
