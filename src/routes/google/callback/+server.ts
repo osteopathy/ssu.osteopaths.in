@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import { userTable } from "$lib/db/schema";
 import { generateId } from "lucia";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env/static/private";
+import { isOsteopath } from "$lib/utils/is-osteopath";
 
 export async function GET(event: RequestEvent): Promise<Response> {
   const code = event.url.searchParams.get("code");
@@ -27,8 +28,6 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
     const tokens = await google.validateAuthorizationCode(code, codeVerifier);
 
-    console.log(JSON.stringify(tokens, null, 2))
-
     const client = new OAuth2Client({
       clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET
@@ -40,13 +39,9 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
     const payload = ticket.getPayload();
 
-    console.log("PAYLOAD", payload)
-
     const existingUser = payload?.email ? await db.query.userTable.findFirst({
       where: eq(userTable.gmail, payload?.email)
     }) : false;
-
-    console.log("User Existing: ", existingUser ? "YES" : "NO")
 
     if (existingUser) {
 
@@ -62,12 +57,14 @@ export async function GET(event: RequestEvent): Promise<Response> {
     } else {
 
       const userId = generateId(15);
+      const osteopath = !!(payload?.email && isOsteopath(payload.email));
 
       await db.insert(userTable).values({
         id: userId,
         gmail: payload?.email,
         name: payload?.name,
         image: payload?.picture,
+        role: osteopath ? 'osteopath' : 'user'
       });
 
       const session = await lucia.createSession(userId, {});

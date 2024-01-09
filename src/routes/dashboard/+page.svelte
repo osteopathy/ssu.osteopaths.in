@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DatePicker from "./date-picker.svelte"
 	import Avatar from "$lib/ui/Avatar.svelte"
+	import LogoutButton from "../google/logout/button.svelte"
 	import { ArrowRightIcon } from "lucide-svelte"
 	import type { PageData } from "./$types"
 	export let data: PageData
@@ -14,21 +15,24 @@
 			</li>
 			<li></li>
 		</ul>
-		<div
-			class="flex items-center px-3 py-2 rounded-full shadow-inner shadow-layer-5 border border-layer-6 gap-x-2"
-		>
-			<Avatar
-				src={data.user.image}
-				alt="@{data.user.name}"
-				placeholder={data.user.name[0] + data.user.name[1]}
-			/>
-			<div class="flex flex-col grow w-0">
-				<h3 class="text-lg/6 w-full">{data.user.name}</h3>
-				<div class="-mt-1 text-sm flex items-center">
-					<span class=""> view profile </span>
-					<span> <ArrowRightIcon size={16} /> </span>
+		<div class="flex flex-col gap-y-4">
+			<div
+				class="flex items-center px-3 py-2 rounded-full shadow-inner shadow-layer-5 border border-layer-6 gap-x-2"
+			>
+				<Avatar
+					src={data.user.image}
+					alt="@{data.user.name}"
+					placeholder={data.user.name[0] + data.user.name[1]}
+				/>
+				<div class="flex flex-col grow w-0">
+					<h3 class="text-lg/6 w-full">{data.user.name}</h3>
+					<div class="-mt-1 text-sm flex items-center">
+						<span class=""> view profile </span>
+						<span> <ArrowRightIcon size={16} /> </span>
+					</div>
 				</div>
 			</div>
+			<LogoutButton class="w-max pr-3" label="Logout" />
 		</div>
 	</aside>
 	<main class="flex flex-col gap-4 flex-1">

@@ -8,6 +8,13 @@
       "when": 1704768027454,
       "tag": "0000_chilly_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1704779902379,
+      "tag": "0001_yellow_imperial_guard",
+      "breakpoints": true
     }
   ]
 }

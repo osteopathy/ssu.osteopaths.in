@@ -13,7 +13,7 @@
 	{/if}
 	<Button
 		type="submit"
-		class="border-layer-6 gap-x-2 rounded-lg border shadow-sm"
+		class="border-layer-6 gap-x-2 rounded-lg border shadow-sm px-3 py-2"
 	>
 		<Icons.Google class="size-6" />
 		<span class="text-xl">{label}</span>

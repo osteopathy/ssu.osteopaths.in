@@ -8,7 +8,7 @@ export const userTable = sqliteTable('user', {
   image: text('image'),
   role: text('role', {
     enum: ['user', 'osteopath']
-  })
+  }).default('user')
 })
 
 export const usersRelations = relations(userTable, ({ many }) => ({
