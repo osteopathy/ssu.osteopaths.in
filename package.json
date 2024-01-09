@@ -10,14 +10,18 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"devDependencies": {
+		"@epic-web/remember": "^1.0.2",
 		"@libsql/client": "^0.4.0-pre.5",
 		"@lucia-auth/adapter-sqlite": "^3.0.0-beta.12",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"arctic": "^0.10.3",
 		"autoprefixer": "^10.4.16",
 		"drizzle-kit": "^0.20.10",
 		"drizzle-orm": "^0.29.3",
+		"lucia": "^3.0.0-beta.14",
+		"oslo": "^0.26.1",
 		"postcss": "^8.4.32",
 		"postcss-load-config": "^5.0.2",
 		"svelte": "^5.0.0-next.29",
