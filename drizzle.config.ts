@@ -8,8 +8,8 @@ export default {
   out: './drizzle/migrations',
   driver: 'turso',
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
-    authToken: process.env.DATABASE_AUTH_TOKEN!
+    url: process.env.PUBLIC_DATABASE_URL!,
+    authToken: process.env.PUBLIC_DATABASE_AUTH_TOKEN!
   },
   // Print all statements
   verbose: true,

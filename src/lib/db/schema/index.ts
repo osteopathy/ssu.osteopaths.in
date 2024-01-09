@@ -5,7 +5,10 @@ export const userTable = sqliteTable('user', {
   id: text('id').primaryKey(),
   name: text('name'),
   gmail: text('gmail'),
-},)
+  role: text('role', {
+    enum: ['user', 'osteopath']
+  })
+})
 
 export const usersRelations = relations(userTable, ({ many }) => ({
   sessions: many(sessionTable),

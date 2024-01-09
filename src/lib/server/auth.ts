@@ -37,7 +37,7 @@ export const lucia = new Lucia(adapter, {
     return {
       // attributes has the type of DatabaseUserAttributes
       gmail: attributes.gmail,
-      fullName: attributes.name
+      name: attributes.name
     };
   }
 });

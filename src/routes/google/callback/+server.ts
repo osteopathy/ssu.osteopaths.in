@@ -24,7 +24,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
   }
 
   try {
+
     const tokens = await google.validateAuthorizationCode(code, codeVerifier);
+
+    console.log(JSON.stringify(tokens, null, 2))
+
     const client = new OAuth2Client({
       clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET
@@ -36,24 +40,35 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
     const payload = ticket.getPayload();
 
+    console.log("PAYLOAD", payload)
+
     const existingUser = payload?.email ? await db.query.userTable.findFirst({
       where: eq(userTable.gmail, payload?.email)
     }) : false;
 
+    console.log("User Existing: ", existingUser ? "YES" : "NO")
+
     if (existingUser) {
+
       const session = await lucia.createSession(existingUser.id, {});
+
       const sessionCookie = lucia.createSessionCookie(session.id);
+
       event.cookies.set(sessionCookie.name, sessionCookie.value, {
         path: ".",
         ...sessionCookie.attributes
       });
+
     } else {
+
       const userId = generateId(15);
+
       await db.insert(userTable).values({
         id: userId,
         gmail: payload?.email,
         name: payload?.name,
       });
+
       const session = await lucia.createSession(userId, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
       event.cookies.set(sessionCookie.name, sessionCookie.value, {

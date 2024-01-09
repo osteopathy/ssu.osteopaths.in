@@ -1,8 +1,6 @@
-import type { PageServerLoad, Actions } from './$types';
+import { redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async (event) => { };
-
-export const actions: Actions = {
-  login: async (event) => { },
-  logout: async (event) => { },
+export const load: PageServerLoad = async (event) => {
+  if (event.locals.user) redirect(302, '/dashboard')
 };
