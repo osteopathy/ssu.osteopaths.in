@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { type InferSelectModel, type InferInsertModel } from 'drizzle-orm'
 
 export const userTable = sqliteTable('user', {
   id: text('id').primaryKey(),
@@ -10,6 +11,9 @@ export const userTable = sqliteTable('user', {
     enum: ['user', 'osteopath']
   }).default('user')
 })
+
+export type User = InferSelectModel<typeof userTable>;
+export type PartialUser = InferInsertModel<typeof userTable>;
 
 export const usersRelations = relations(userTable, ({ many }) => ({
   sessions: many(sessionTable),

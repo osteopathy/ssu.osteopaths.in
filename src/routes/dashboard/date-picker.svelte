@@ -193,7 +193,7 @@
 							on:click={() => {
 								selected = day
 							}}
-							class="flex items-center rounded-md justify-center hover:bg-layer-3 aspect-square bg-layer-2 aria-selected:bg-layer-12 aria-selected:text-layer-0 {styles[
+							class="flex items-center rounded-md justify-center hover:bg-layer-3 aspect-square bg-layer-2 aria-selected:bg-blue-600 aria-selected:text-layer-0 {styles[
 								'cell'
 							]['text'][size]}"
 						>

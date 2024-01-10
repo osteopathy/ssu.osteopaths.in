@@ -23,6 +23,7 @@
 		"@sveltejs/adapter-netlify": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@tailwindcss/typography": "^0.5.10",
 		"arctic": "^0.10.3",
 		"autoprefixer": "^10.4.16",
 		"drizzle-kit": "^0.20.10",
@@ -51,6 +52,8 @@
 		"jose": "^5.2.0",
 		"postcss-import": "^16.0.0",
 		"postcss-nesting": "^12.0.2",
+		"svelte-easy-crop": "^2.0.2",
+		"svelte-headless-table": "^0.18.1",
 		"tailwind-merge": "^2.2.0"
 	}
 }
