@@ -10,7 +10,11 @@ import type { PageServerLoad } from './$types';
 // import { eq } from 'drizzle-orm';
 
 export const load = (async () => {
-  const users = db.query.userTable.findMany()
+  const users = db.query.userTable.findMany({
+    with: {
+      osteopath: true
+    }
+  })
   return {
     users: {
       data: users

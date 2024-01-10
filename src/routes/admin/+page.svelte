@@ -12,5 +12,12 @@
 			<span>Users</span>
 			<span><ArrowRightCircleIcon /></span>
 		</a>
+		<a
+			href="/admin/courses"
+			class="p-6 text-4xl bg-layer-3 hover:bg-layer-5 rounded-lg flex items-center justify-between"
+		>
+			<span>Courses</span>
+			<span><ArrowRightCircleIcon /></span>
+		</a>
 	</div>
 </main>

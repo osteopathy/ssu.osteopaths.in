@@ -35,7 +35,10 @@
 	}
 </script>
 
-<div class="{styles[size]} rounded-full border {loading === 'loaded'}">
+<div
+	class="{styles[size]} rounded-full overflow-hidden border {loading ===
+		'loaded'}"
+>
 	<div class="flex h-full w-full items-center justify-center rounded-full">
 		{#if src}
 			<img class:hidden={loading === "loading"} {src} {alt} />

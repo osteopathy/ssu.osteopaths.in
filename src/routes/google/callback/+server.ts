@@ -4,10 +4,11 @@ import type { RequestEvent } from "@sveltejs/kit";
 import { OAuth2RequestError } from "arctic";
 import { db } from "$lib/db";
 import { eq } from "drizzle-orm";
-import { userTable } from "$lib/db/schema";
+import { courseTable, osteopathTable, userTable } from "$lib/db/schema";
 import { generateId } from "lucia";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env/static/private";
-import { isOsteopath } from "$lib/utils/is-osteopath";
+import { isOsteopath, parseSSUEmail } from "$lib/utils/is-osteopath";
+import { Temporal } from "@js-temporal/polyfill";
 
 export async function GET(event: RequestEvent): Promise<Response> {
   const code = event.url.searchParams.get("code");
@@ -63,9 +64,19 @@ export async function GET(event: RequestEvent): Promise<Response> {
         id: userId,
         gmail: payload?.email,
         name: payload?.name,
-        image: payload?.picture,
-        role: osteopath ? 'osteopath' : 'user'
+        image: payload?.picture
       });
+
+      if (osteopath && payload.email) {
+        const res = parseSSUEmail(payload?.email)
+        // ...(course?.name && { course: course.name }),
+        await db.insert(osteopathTable).values({
+          id: generateId(6),
+          userId,
+          course: res?.batch,
+          year: res?.year.toString(),
+        })
+      }
 
       const session = await lucia.createSession(userId, {});
       const sessionCookie = lucia.createSessionCookie(session.id);

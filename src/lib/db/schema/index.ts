@@ -37,15 +37,25 @@ export const courseTable = sqliteTable('course', {
   duration: text('duration').notNull()
 })
 
+export type Course = InferSelectModel<typeof courseTable>;
+export type PartialCourse = InferInsertModel<typeof courseTable>;
+
+
 export const osteopathTable = sqliteTable('osteopath', {
   id: text('id').primaryKey(),
-  userId: text("user_id").references(() => userTable.id, { onDelete: 'cascade' }),
+  userId: text("user_id").notNull().references(() => userTable.id, { onDelete: 'cascade' }),
   passedOut: integer('passed', { mode: 'boolean' }).default(false),
   year: text('year'),
   course: text('course').references(() => courseTable.name, { onDelete: 'no action' }),
 })
 
 export const osteopathsRelation = relations(osteopathTable, ({ one }) => ({
-  user: one(userTable),
-  course: one(courseTable)
+  user: one(userTable, {
+    fields: [osteopathTable.userId],
+    references: [userTable.id]
+  }),
+  course: one(courseTable, {
+    fields: [osteopathTable.course],
+    references: [courseTable.name]
+  })
 }))

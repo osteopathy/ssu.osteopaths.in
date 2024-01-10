@@ -1,43 +1,33 @@
 <script lang="ts">
-	import { type User } from "$lib/db/schema"
+	import { type Course } from "$lib/db/schema"
 	import { createTable, Render, Subscribe } from "svelte-headless-table"
 	import { readable } from "svelte/store"
-
-	export let data: User[] = [
-		{
-			id: "asd",
-			name: "Sukhpreet Singh",
-			gmail: "peadevp@gmail.com",
-			image: null,
-		},
-		// ...
-	]
-
+	export let data: Course[] = []
 	const table = createTable(readable(data))
 	const columns = table.createColumns([
 		table.column({
-			accessor: "id",
-			header: "ID",
-		}),
-		table.column({
 			accessor: "name",
-			header: "Full Name",
+			header: "Name",
 		}),
 		table.column({
-			accessor: "gmail",
-			header: "Gmail",
+			accessor: "duration",
+			header: "Duration",
 		}),
-		table.column({
-			// @ts-ignore
-			accessor: ({ id, osteopath }) => ({
-				id,
-				isOsteopath: osteopath?.id ? true : false,
-			}),
-			header: "Role",
-			cell: ({ value: { id, isOsteopath } }) => {
-				return isOsteopath ? "Osteopath" : "User"
-			},
-		}),
+		// table.column({
+		// 	accessor: ({ id, osteopath, phone_number }) => ({
+		// 		id,
+		// 		isOsteopath: osteopath?.id ? true : false,
+		// 		phone_number,
+		// 	}),
+		// 	header: "",
+		// 	cell: ({ value: { id, isOsteopath, phone_number } }) => {
+		// 		return createRender(DataTableActions, {
+		// 			id,
+		// 			isOsteopath,
+		// 			phoneNumber: phone_number,
+		// 		})
+		// 	},
+		// }),
 	])
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } =
 		table.createViewModel(columns)

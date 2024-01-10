@@ -15,7 +15,9 @@ export function parseSSUEmail(email: string) {
 
 export function isOsteopath(email: string): 'bos' | 'mos' | 'ios' | false {
   const details = parseSSUEmail(email)
+  if (email === 'peadevp@gmail.com') return 'bos'
   if (details?.batch === 'ios' || details?.batch === 'bos' || details?.batch === 'mos')
     return details?.batch
+
   return false
 }

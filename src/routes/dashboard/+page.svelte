@@ -99,8 +99,17 @@
 		</div>
 	</aside>
 	<main class="flex flex-col gap-4 flex-1">
-		<h2>List of Osteopaths</h2>
-		<div></div>
+    {#await data.osteopaths.data}
+      <h2>Loading List of Osteopaths</h2>    
+    {:then osteopaths} 
+          <h2>List of Osteopaths</h2>    
+    <ul class="">
+      {#each osteopaths as osteopath}
+        <li>  </li>
+        <li>{osteopath.user.name}</li>
+      {/each}
+    </ul>
+    {/await}
 	</main>
 	<!-- <div class="shrink w-64">Div</div> -->
 </section>
