@@ -7,6 +7,9 @@ export const userTable = sqliteTable('user', {
   name: text('name'),
   gmail: text('gmail'),
   image: text('image'),
+  role: text('role', {
+    enum: ['user', 'osteopath']
+  }).default('user')
 })
 
 export type User = InferSelectModel<typeof userTable>;
@@ -14,7 +17,10 @@ export type PartialUser = InferInsertModel<typeof userTable>;
 
 export const usersRelations = relations(userTable, ({ many, one }) => ({
   sessions: many(sessionTable),
-  osteopath: one(osteopathTable)
+  osteopath: one(osteopathTable, {
+    fields: [userTable.id],
+    references: [osteopathTable.userId],
+  })
 }));
 
 export const sessionTable = sqliteTable("user_session", {
@@ -49,7 +55,7 @@ export const osteopathTable = sqliteTable('osteopath', {
   course: text('course').references(() => courseTable.name, { onDelete: 'no action' }),
 })
 
-export const osteopathsRelation = relations(osteopathTable, ({ one }) => ({
+export const osteopathsRelation = relations(osteopathTable, ({ one, many }) => ({
   user: one(userTable, {
     fields: [osteopathTable.userId],
     references: [userTable.id]
@@ -57,5 +63,25 @@ export const osteopathsRelation = relations(osteopathTable, ({ one }) => ({
   course: one(courseTable, {
     fields: [osteopathTable.course],
     references: [courseTable.name]
-  })
+  }),
+  availabilities: many(availabilityTable)
 }))
+
+export const availabilityTable = sqliteTable('availability', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  day: text('day', {
+    enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'friday', 'thursday', 'saturday']
+  }).notNull(),
+  startTime: text('start_time', { mode: 'text' }).notNull(),
+  endTime: text('end_time', { mode: 'text' }).notNull(),
+  osteopathId: text('osteopath_id')
+    .notNull()
+    .references(() => osteopathTable.id)
+});
+
+export const availabilityRelations = relations(availabilityTable, ({ one }) => ({
+  osteopath: one(osteopathTable, {
+    fields: [availabilityTable.osteopathId],
+    references: [osteopathTable.id],
+  })
+}));

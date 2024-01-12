@@ -108,7 +108,11 @@
 	} as const
 </script>
 
-<div class="border rounded-md flex flex-col {styles['container'][size]}">
+<div
+	class="border rounded-md border-layer-4 flex flex-col {styles['container'][
+		size
+	]}"
+>
 	<div class="flex items-center text-gray-900">
 		<div
 			class="flex-auto text-layer-12 font-semibold {styles['headerLabel'][

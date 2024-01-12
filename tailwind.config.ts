@@ -1,8 +1,9 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
-import { slateDark as darkShade, slate as lightShade, blue, blueDark } from '@radix-ui/colors';
+import { slateDark as darkShade, slate as lightShade, blue, blueDark, indigo, indigoDark } from '@radix-ui/colors';
 import hexRgb from 'hex-rgb';
 import { Config } from 'tailwindcss';
 import T from "@tailwindcss/typography"
+import F from "@tailwindcss/forms"
 
 function getRgbChannels(hex) {
   const { red, green, blue } = hexRgb(hex);
@@ -45,10 +46,14 @@ const config = {
     },
   },
   plugins: [
-    T,
+    T, F,
     function ({ addBase }) {
       addBase({
         ':root': getCssVariableDeclarations(lightShade, 'layer', {
+          '--layer-0': getRgbChannels('#ffffff'),
+          '--layer-13': getRgbChannels('#000000'),
+        }),
+        '.theme-indigo': getCssVariableDeclarations(indigo, 'layer', {
           '--layer-0': getRgbChannels('#ffffff'),
           '--layer-13': getRgbChannels('#000000'),
         }),
@@ -60,9 +65,13 @@ const config = {
           '--layer-0': getRgbChannels('#0e0e0e'),
           '--layer-13': getRgbChannels('#ffffff'),
         }),
-        '.dark > theme-blue': getCssVariableDeclarations(blueDark, 'layer', {
+        '.dark > .theme-blue': getCssVariableDeclarations(blueDark, 'layer', {
           '--layer-0': getRgbChannels('#0e0e0e'),
           '--layer-13': getRgbChannels('#ffffff'),
+        }),
+        '.dark > .theme-indigo': getCssVariableDeclarations(indigoDark, 'layer', {
+          '--layer-0': getRgbChannels('#ffffff'),
+          '--layer-13': getRgbChannels('#000000'),
         }),
       });
     },

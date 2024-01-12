@@ -5,6 +5,7 @@ import { Google } from "arctic";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI } from "$env/static/private"
 import { LibSQLAdapter } from "@lucia-auth/adapter-sqlite";
 import { client } from "$lib/db";
+import type { User } from "$lib/db/schema";
 
 declare module "lucia" {
   interface Register {
@@ -16,10 +17,7 @@ declare module "lucia" {
 
 interface DatabaseSessionAttributes { }
 
-interface DatabaseUserAttributes {
-  gmail: string;
-  image: string;
-  name: string
+interface DatabaseUserAttributes extends User {
 }
 
 
@@ -37,6 +35,7 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       // attributes has the type of DatabaseUserAttributes
+      role: attributes.role,
       gmail: attributes.gmail,
       image: attributes.image,
       name: attributes.name

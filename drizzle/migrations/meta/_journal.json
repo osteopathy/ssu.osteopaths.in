@@ -36,6 +36,20 @@
       "when": 1704871407499,
       "tag": "0004_cuddly_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1704997213329,
+      "tag": "0005_cute_otto_octavius",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1705031435528,
+      "tag": "0006_new_greymalkin",
+      "breakpoints": true
     }
   ]
 }

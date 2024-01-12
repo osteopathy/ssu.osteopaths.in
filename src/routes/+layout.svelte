@@ -1,6 +1,7 @@
 <script>
 	import '../app.pcss';
-  import Logo from "$lib/ui/Logo.svelte"
+  	import { Toaster, toast } from 'svelte-sonner';
+	import Logo from "$lib/ui/Logo.svelte"
 	let { children} = $props();
 </script>
 
@@ -30,3 +31,5 @@
 		>built with sveltekit, typescript,<br class="block xs:hidden" /> tailwindcss and tursodb</span
 	>
 </footer>
+
+<Toaster/>
