@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRightIcon, MailIcon } from 'lucide-svelte';
+	import { ArrowRightIcon, MailIcon } from '$lib/ui/icons';
 </script>
 
 <div class="py-10 px-2 max-w-5xl w-full flex flex-col items-center">
@@ -16,7 +16,7 @@
 				class="text-base sm:text-lg pl-8 text-layer-13 underline underline-offset-4 inline-flex items-center"
 			>
 				<span>send now</span>
-				<ArrowRightIcon size={20} />
+				<ArrowRightIcon />
 			</span>
 		</div>
 	</div>

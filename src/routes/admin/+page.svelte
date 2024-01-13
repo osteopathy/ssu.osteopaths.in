@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRightCircleIcon } from "lucide-svelte"
+	import { ArrowRightIcon } from '$lib/ui/icons';
 </script>
 
 <main class="max-w-6xl w-full mt-16">
@@ -10,14 +10,14 @@
 			class="p-6 text-4xl bg-layer-3 hover:bg-layer-5 rounded-lg flex items-center justify-between"
 		>
 			<span>Users</span>
-			<span><ArrowRightCircleIcon /></span>
+			<span><ArrowRightIcon /></span>
 		</a>
 		<a
 			href="/admin/courses"
 			class="p-6 text-4xl bg-layer-3 hover:bg-layer-5 rounded-lg flex items-center justify-between"
 		>
 			<span>Courses</span>
-			<span><ArrowRightCircleIcon /></span>
+			<span><ArrowRightIcon /></span>
 		</a>
 	</div>
 </main>

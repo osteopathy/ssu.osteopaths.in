@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import { PlusCircleIcon, Trash2Icon } from 'lucide-svelte';
+	import { PlusCircleIcon, TrashIcon } from '$lib/ui/icons';
 	import { config, divideTimeIntoX } from './utils';
 	import { fromTimeStr } from './utils';
 	import Button from '$lib/ui/Button.svelte';
@@ -184,7 +184,7 @@
 					}}
 					class="p-1 bg-white/10 hover:bg-rose-400 group-hover:opacity-100 opacity-0 rounded-md"
 				>
-					<Trash2Icon class="text-indigo-950" />
+					<TrashIcon class="text-indigo-950" />
 				</button>
 			</div>
 		{/each}

@@ -5,8 +5,6 @@
 </script>
 
 <svg
-	{...props}
-	class={className}
 	fill="none"
 	shape-rendering="geometricPrecision"
 	stroke="currentColor"
@@ -14,6 +12,8 @@
 	stroke-linejoin="round"
 	stroke-width="1.5"
 	viewBox="0 0 24 24"
+	{...props}
+	class={className}
 >
 	<circle cx="12" cy="12" r="3" />
 	<path
