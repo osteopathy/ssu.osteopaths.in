@@ -32,7 +32,6 @@
 		"drizzle-orm": "^0.29.3",
 		"just-group-by": "^2.2.0",
 		"lucia": "^3.0.0-beta.14",
-		"lucide-svelte": "^0.307.0",
 		"oslo": "^0.26.1",
 		"postcss": "^8.4.32",
 		"postcss-load-config": "^5.0.2",

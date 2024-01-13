@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { ArrowRightCircleIcon } from "lucide-svelte"
+	import { ArrowRightIcon } from '$lib/ui/icons';
 	const roles = [
 		{
-			label: "Junior Front-end Developer",
+			label: 'Junior Front-end Developer'
 		},
 		{
-			label: "UI/UX Engineer",
-		},
-	]
+			label: 'UI/UX Engineer'
+		}
+	];
 </script>
 
 <main class="max-w-5xl w-full">
@@ -18,12 +18,10 @@
 			Join us
 		</span>
 	</h1>
-	<h2 class="text-4xl text-layer-10 font-bold p-1">
-		Built what matters in reality
-	</h2>
+	<h2 class="text-4xl text-layer-10 font-bold p-1">Built what matters in reality</h2>
 	<p class="mt-4 p-1.5 font-medium text-lg text-layer-11 max-w-3xl">
-		We are a team of young enthuiastis who are always ready to get themsvelves a
-		experience of learning by building real world products.
+		We are a team of young enthuiastis who are always ready to get themsvelves a experience of
+		learning by building real world products.
 	</p>
 	<div class="flex flex-col mt-6 p-6 border rounded-lg">
 		<h2 class="text-2xl font-semibold text-layer-12">Job Opening</h2>
@@ -33,7 +31,7 @@
 					<span
 						class="text-lg text-layer-11 hover:underline hover:text-layer-10 inline-flex items-center gap-x-4"
 					>
-						<ArrowRightCircleIcon />{role.label}</span
+						<ArrowRightIcon />{role.label}</span
 					>
 				</li>
 			{/each}

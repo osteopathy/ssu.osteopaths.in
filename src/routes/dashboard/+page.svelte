@@ -3,7 +3,13 @@
 	import DatePicker from './DatePicker.svelte';
 	import Avatar from '$lib/ui/Avatar.svelte';
 	import LogoutButton from '../google/logout/button.svelte';
-	import { ArrowRightIcon, CheckCheckIcon } from 'lucide-svelte';
+	import {
+		ArrowRightIcon,
+		CheckInCircleIcon,
+		CircleIcon,
+		CalendarIcon,
+		FileSpreadSheetIcon
+	} from '$lib/ui/icons';
 	import { cn, flyAndScale } from '$lib';
 	import { Temporal } from '@js-temporal/polyfill';
 	import AvailabilityPanel from './AvailabilityPanel.svelte';
@@ -61,10 +67,11 @@
 						}}
 					>
 						<div class="flex gap-x-2">
-							<CheckCheckIcon
-								size={20}
-								class={cn(selected[label] ? 'text-blue-600' : 'text-layer-8')}
-							/>
+							{#if selected[label]}
+								<CheckInCircleIcon />
+							{:else}
+								<CircleIcon />
+							{/if}
 							<span>{label}</span>
 						</div>
 						<div class="flex gap-x-2">
@@ -98,7 +105,7 @@
 					<h3 class="text-lg/6 w-full">{data.user.name}</h3>
 					<div class="-mt-1 text-sm flex items-center">
 						<span class=""> view profile </span>
-						<span> <ArrowRightIcon size={16} /> </span>
+						<span> <ArrowRightIcon class="size-4" /> </span>
 					</div>
 				</div>
 			</button>
@@ -117,26 +124,13 @@
 							class="flex items-center theme-indigo bg-layer-1 font-medium text-left px-3 py-2 rounded-full shadow-inner shadow-layer-5 border border-layer-6 gap-x-2"
 						>
 							<div class="size-10 flex bg-layer-3 rounded-full items-center justify-center">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="w-6 h-6"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
-									/>
-								</svg>
+								<CalendarIcon />
 							</div>
 							<div class="flex flex-col grow w-0">
 								<h3 class="text-base/6 w-full">Weekly Availability</h3>
 								<div class="-mt-1 text-sm flex items-center">
 									<span class=""> change </span>
-									<span> <ArrowRightIcon size={16} /> </span>
+									<span> <ArrowRightIcon class="size-4" /> </span>
 								</div>
 							</div>
 						</button>
@@ -149,13 +143,27 @@
 						/>
 						<Dialog.Content
 							transition={flyAndScale}
-							class="fixed left-[50%] top-[50%] z-50 w-full max-w-[94%] sm:max-w-[978px] bg-layer-0 rounded-lg translate-x-[-50%] translate-y-[-50%] border p-5 outline-none md:w-full"
+							class="fixed max-h-[90%] overflow-auto left-[50%] top-[50%] z-50 w-full max-w-[94%] sm:max-w-[978px] bg-layer-0 rounded-lg translate-x-[-50%] translate-y-[-50%] border p-5 outline-none md:w-full"
 						>
 							<AvailabilityPanel availabilities={data?.availabilities && data.availabilities} />
 						</Dialog.Content>
 					</Dialog.Portal>
 				</Dialog.Root>
 			{/if}
+			<button
+				class="flex items-center theme-blue bg-layer-1 font-medium text-left px-3 py-2 rounded-full shadow-inner shadow-layer-5 border border-layer-6 gap-x-2"
+			>
+				<div class="size-10 flex bg-layer-3 rounded-full items-center justify-center">
+					<FileSpreadSheetIcon />
+				</div>
+				<div class="flex flex-col grow w-0">
+					<h3 class="text-base/6 w-full">Patient Records</h3>
+					<div class="-mt-1 text-sm flex items-center">
+						<span class=""> record </span>
+						<span> <ArrowRightIcon class="size-4" /> </span>
+					</div>
+				</div>
+			</button>
 			<LogoutButton class="w-max pr-3" label="Logout" />
 		</div>
 	</aside>
