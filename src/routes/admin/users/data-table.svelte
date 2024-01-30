@@ -1,97 +1,91 @@
 <script lang="ts">
-	import { type User } from "$lib/db/schema"
-	import { createTable, Render, Subscribe } from "svelte-headless-table"
-	import { readable } from "svelte/store"
+    import type { User, CreateUserSchema } from "$lib/db/schema";
+    import { createTable, Render, Subscribe, createRender } from "svelte-headless-table";
+    import { readable } from "svelte/store";
+    import * as Table from "$lib/components/ui/table";
+    import DataTableActions from "./data-table-actions.svelte";
+	  import AddUserForm from "./user-form.svelte";
+  	import type { SuperValidated } from "sveltekit-superforms";
 
-	export let data: User[] = [
-		{
-			id: "asd",
-			name: "Sukhpreet Singh",
-			gmail: "peadevp@gmail.com",
-			image: null,
-		},
-		// ...
-	]
 
-	const table = createTable(readable(data))
-	const columns = table.createColumns([
-		table.column({
-			accessor: "id",
-			header: "ID",
-		}),
-		table.column({
-			accessor: "name",
-			header: "Full Name",
-		}),
-		table.column({
-			accessor: "gmail",
-			header: "Gmail",
-		}),
-		table.column({
-			// @ts-ignore
-			accessor: ({ id, osteopath }) => ({
-				id,
-				isOsteopath: osteopath?.id ? true : false,
-			}),
-			header: "Role",
-			cell: ({ value: { id, isOsteopath } }) => {
-				return isOsteopath ? "Osteopath" : "User"
-			},
-		}),
-	])
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } =
-		table.createViewModel(columns)
+    export let data: User[] = [];
+    export let form: SuperValidated<CreateUserSchema>;
+    let dialogEl:HTMLDialogElement;
+    let selectedUserId = "";
+
+    const table = createTable(readable(data));
+
+    const columns = table.createColumns([
+
+    table.column({
+      accessor: "id",
+      header: "ID"
+    }),
+    table.column({
+      accessor: "name",
+      header: "Name"
+    }),
+    table.column({
+      accessor: "gmail",
+      header: "Gmail"
+    }),
+    table.column({
+      accessor: "role",
+      header: "Role"
+    }),
+    table.column({
+      accessor: (user) => user,
+      header: "",
+      cell: ({ value:user }) => {
+        return createRender(DataTableActions, {id:user.id}).on('update',() => {
+          selectedUserId = user.id;
+          dialogEl.showModal()
+        });
+      }
+    })
+  ]);
+  const { headerRows, pageRows, tableAttrs, tableBodyAttrs } =
+    table.createViewModel(columns);
 </script>
 
 <div class="rounded-md border">
-	<table class="min-w-full divide-y divide-gray-300" {...$tableAttrs}>
-		<thead>
-			{#each $headerRows as headerRow}
-				<Subscribe rowAttrs={headerRow.attrs()} let:rowAttrs>
-					<tr {...rowAttrs}>
-						{#each headerRow.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
-								<th
-									scope="col"
-									class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-									{...attrs}
-								>
-									{#if cell.id === "amount"}
-										<div class="text-right">
-											<Render of={cell.render()} />
-										</div>
-										<!-- {:else if cell.id === 'email'}
-										<Button variant="ghost" on:click={props.sort.toggle}>
-											<Render of={cell.render()} />
-											<ArrowUpDown class={'ml-2 h-4 w-4'} />
-										</Button> -->
-									{:else}
-										<Render of={cell.render()} />
-									{/if}
-								</th>
-							</Subscribe>
-						{/each}
-					</tr>
-				</Subscribe>
-			{/each}
-		</thead>
-		<tbody class="divide-y divide-gray-200" {...$tableBodyAttrs}>
-			{#each $pageRows as row (row.id)}
-				<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-					<tr {...rowAttrs}>
-						{#each row.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs>
-								<td
-									class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-									{...attrs}
-								>
-									<Render of={cell.render()} />
-								</td>
-							</Subscribe>
-						{/each}
-					</tr>
-				</Subscribe>
-			{/each}
-		</tbody>
-	</table>
-</div>
+    <Table.Root {...$tableAttrs}>
+      <Table.Header>
+        {#each $headerRows as headerRow}
+          <Subscribe rowAttrs={headerRow.attrs()}>
+            <Table.Row>
+              {#each headerRow.cells as cell (cell.id)}
+                <Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
+                  <Table.Head {...attrs}>
+                    <Render of={cell.render()} />
+                  </Table.Head>
+                </Subscribe>
+              {/each}
+            </Table.Row>
+          </Subscribe>
+        {/each}
+      </Table.Header>
+      <Table.Body {...$tableBodyAttrs}>
+        {#each $pageRows as row (row.id)}
+          <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
+            <Table.Row {...rowAttrs}>
+              {#each row.cells as cell (cell.id)}
+                <Subscribe attrs={cell.attrs()} let:attrs>
+                  <Table.Cell {...attrs}>
+                    <Render of={cell.render()} />
+                  </Table.Cell>
+                </Subscribe>
+              {/each}
+            </Table.Row>
+          </Subscribe>
+        {/each}
+      </Table.Body>
+    </Table.Root>
+  </div>
+
+<dialog
+	bind:this={dialogEl}
+	class="p-4 w-full max-w-xs rounded-md border bg-secondary text-secondary-foreground"
+>
+	<AddUserForm userId={selectedUserId} formType="update-user" form={form} />
+</dialog>

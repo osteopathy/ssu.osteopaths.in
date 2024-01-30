@@ -5,50 +5,29 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1704768027454,
-      "tag": "0000_chilly_patriot",
+      "when": 1706581582716,
+      "tag": "0000_kind_baron_strucker",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1704779902379,
-      "tag": "0001_yellow_imperial_guard",
+      "when": 1706582673745,
+      "tag": "0001_easy_ben_urich",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "5",
-      "when": 1704869431970,
-      "tag": "0002_absent_chamber",
+      "when": 1706596166695,
+      "tag": "0002_overconfident_hercules",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "5",
-      "when": 1704869740548,
-      "tag": "0003_low_morlocks",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1704871407499,
-      "tag": "0004_cuddly_silver_sable",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1704997213329,
-      "tag": "0005_cute_otto_octavius",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1705031435528,
-      "tag": "0006_new_greymalkin",
+      "when": 1706639860308,
+      "tag": "0003_confused_mindworm",
       "breakpoints": true
     }
   ]

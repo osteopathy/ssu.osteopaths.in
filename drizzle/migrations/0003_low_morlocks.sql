@@ -1,1 +1,0 @@
-ALTER TABLE osteopath ADD `year` text;

@@ -1,23 +1,11 @@
 <script lang="ts">
-	import { ArrowRightIcon } from '$lib/ui/icons';
+    import { modules } from "./+layout.svelte"
 </script>
 
-<main class="max-w-6xl w-full mt-16">
-	<h2 class="text-7xl">Admin Dashboard</h2>
-	<div class="grid sm:grid-cols-2 gap-10 mt-12">
-		<a
-			href="/admin/users"
-			class="p-6 text-4xl bg-layer-3 hover:bg-layer-5 rounded-lg flex items-center justify-between"
-		>
-			<span>Users</span>
-			<span><ArrowRightIcon /></span>
-		</a>
-		<a
-			href="/admin/courses"
-			class="p-6 text-4xl bg-layer-3 hover:bg-layer-5 rounded-lg flex items-center justify-between"
-		>
-			<span>Courses</span>
-			<span><ArrowRightIcon /></span>
-		</a>
-	</div>
-</main>
+<span>Admin Dashboard</span>
+
+<div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3 md:grid-cols-4">
+    {#each modules as mod}
+        <a href={mod.href} class="p-4 bg-secondary">{mod.label}</a>
+    {/each}
+</div>

@@ -1,38 +1,51 @@
-# create-svelte
+<p align="center">
+  Building blocks for your Sveltekit project
+</p>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## Introduction
 
-## Creating a project
+This is an opinionated collection of components, hooks, and utilities for your Sveltekit project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Tech Stack + Features
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+### Frameworks
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- [Sveltekit](https://kit.svelte.dev) – Svelte-Kit is full-stack framework for building Svelte apps with server-side rendering, file-based routing, and more.
+- [Lucia](https://lucia-auth.com) – Handle user authentication with ease with providers like Google, Twitter, GitHub, etc.
+- [Drizzle](https://orm.drizzle.team) – Headless Typescript ORM
 
-## Developing
+### Platforms
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- [TursoDB](https://turso.tech/) – Simple, Cost Efficient and Scalable Database
+- [Upstash](https://upstash.com) - Serverless Redis
 
-```bash
-npm run dev
+### UI
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework for rapid UI development
+- [Shadcn Svelte](https://shadcn-svelte.com/) – Primitives like modal, popover, etc. to build a stellar user experience
+- [Lucide](https://lucide.dev/) – Beautifully simple, pixel-perfect icons
 
-## Building
+### Hooks and Utilities, Comming Soon
 
-To create a production version of your app:
+- For Handling Google Token with Upstash Redis
+- Dark Mode
 
-```bash
-npm run build
-```
+### Code Quality
 
-You can preview the production build with `npm run preview`.
+- [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
+- [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
+- [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+### File Structure
+
+#### Routes and Pages
+
+- `src/routes` – Sveltekit routes
+	- `src/google` - Continue with Google Screen main UI
+		- `src/google/callback` - API Endpoint for Callback
+		- `src/google/login` - API Endpoint for Generate Auth URL
+		- `src/google/logout` - API Endpoint for Logout
+
+## Inspired from
+
+- [Precedent](https://github.com/steven-tey/precedent/blob/main/README.md) Next.js Tempalte by Steven Tey ([@steventey](https://twitter.com/steventey))
