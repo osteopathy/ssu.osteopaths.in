@@ -8,6 +8,7 @@
 	import type { CreateUserSchema } from '$lib/db/schema';
 	import UserForm from './user-form.svelte';
 	import { page } from '$app/stores';
+	// import UsernameDialog from '$lib/components/username-dialog.svelte';
 
 	export let form: SuperValidated<CreateUserSchema>;
 	export let data;
@@ -112,5 +113,6 @@
 			imageSrc={image}
 		/>
 	</div>
+	<!-- <UsernameDialog /> -->
 	<UserForm user={data.user} {form} userId={$page.params.id} />
 </main>

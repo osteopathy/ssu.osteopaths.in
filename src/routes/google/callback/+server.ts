@@ -64,21 +64,25 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 		if (existingUser) {
 			const session = await lucia.createSession(existingUser.id, {});
-
 			const sessionCookie = lucia.createSessionCookie(session.id);
-
 			event.cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
 				...sessionCookie.attributes
 			});
+			return new Response(null, {
+				status: 302,
+				headers: {
+					Location: '/'
+				}
+			});
 		} else {
 			const userId = generateId(15);
-
-			const emailDetail = extractFromEmail(payload.email)
-			
+			const emailDetail = extractFromEmail(payload.email)			
+			let r;
 			if (emailDetail) {
 				const { year, batch } = emailDetail;
 				const { role, course } = (batch === 'bos' || batch === 'mos' || batch === 'ios') ? { role: 'osteopath', course: batch } as const : { role: 'student', course: batch } as const;
+				r = role;
 				await Promise.all([db.insert(userTable).values({
 					id: userId,
 					gmail: payload.email,
@@ -90,6 +94,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 					userId,
 					batch: year
 				})])
+
 			} else {
 				await db.insert(userTable).values({
 					id: userId,
@@ -106,14 +111,14 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				path: '.',
 				...sessionCookie.attributes
 			});
+			return new Response(null, {
+				status: 302,
+				headers: {
+					Location: r === 'osteopath' ? '/setup-username' : '/'
+				}
+			});
 		}
 
-		return new Response(null, {
-			status: 302,
-			headers: {
-				Location: '/'
-			}
-		});
 	} catch (e) {
 		console.log(e);
 		// the specific error message depends on the provider
