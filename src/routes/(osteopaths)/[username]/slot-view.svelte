@@ -4,6 +4,7 @@
 	import { quintInOut } from 'svelte/easing';
 	import { ArrowRight, Check, Minus } from 'radix-icons-svelte';
 	import { createEventDispatcher } from 'svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	const dispatch = createEventDispatcher<{
 		book: {
@@ -121,7 +122,6 @@
 				};
 				if (disabled === false)
 					for (let i = 0; i < bydates[starting_point.toString()]?.length; i++) {
-						console.log(bydates[starting_point.toString()][i].userId);
 						if (bydates[starting_point.toString()][i].userId) {
 							seats.booked.push(bydates[starting_point.toString()][i]);
 						} else {
@@ -147,7 +147,7 @@
 
 <div class="relative flex flex-col sm:flex-row">
 	<div
-		class="xs:p-3 border-layer-5 h-full w-full rounded-t-lg border-l-2 border-r-2 border-t-2 p-2 sm:rounded-l-lg sm:rounded-tr-none sm:border-b-2 sm:border-r-0 sm:p-4"
+		class="xs:p-3 h-full w-full rounded-t-lg border-l-2 border-r-2 border-t-2 p-2 sm:rounded-l-lg sm:rounded-tr-none sm:border-b-2 sm:border-r-0 sm:p-4"
 	>
 		<div class="mb-4 flex items-center justify-between">
 			<span class="text-lg font-bold">
@@ -155,7 +155,7 @@
 			</span>
 			<div class="flex items-center gap-x-4">
 				<button
-					class="text-layer-11 disabled:text-layer-7 hover:bg-layer-3 rounded-md p-1"
+					class="rounded-md p-1 hover:bg-muted disabled:text-muted-foreground"
 					on:click={() => prevMonth()}
 					disabled={view.date.since(min).sign === 0}
 				>
@@ -172,7 +172,7 @@
 				</button>
 				<button
 					disabled={view.date.until(max).sign === 0}
-					class="text-layer-11 disabled:text-layer-7 hover:bg-layer-3 -m-1 rounded-md p-1"
+					class="-m-1 rounded-md p-1 hover:bg-muted disabled:text-muted-foreground"
 					on:click={() => nextMonth()}
 				>
 					<svg
@@ -206,16 +206,18 @@
 							<button
 								type="button"
 								role="gridcell"
-								class="xs:p-1.5 text-layer-11 border-layer-6 bg-layer-4 hover:bg-layer-6 disabled:!text-layer-7 aria-selected:bg-layer-13
-								aria-selected:text-layer-0 group relative
-								flex w-full items-center
-								justify-center
-								rounded-md
-								border
-								p-1
+								class="xs:p-1.5
+								group relative flex
+								w-full items-center justify-center
+								rounded-md border
+								bg-muted p-1 text-foreground
+								hover:bg-muted/80
 								disabled:border-transparent
 								disabled:!bg-transparent
+								disabled:!text-muted-foreground/50
 								aria-selected:border-transparent
+								aria-selected:bg-blue-500
+								aria-selected:text-white
 								sm:p-2
 							"
 								aria-selected={selected.equals(day)}
@@ -233,19 +235,19 @@
 								</time>
 								{#if seats.available.length !== 0 && seats.booked.length !== 0}
 									<span
-										class="border-layer-0 group-aria-selected:bg-layer-13 group-aria-selected:text-layer-0 text-layer-12 absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border bg-yellow-500 text-sm group-disabled:!invisible"
+										class="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border bg-yellow-500 text-sm group-disabled:!invisible group-aria-selected:bg-background group-aria-selected:text-foreground"
 									>
 										{seats.available.length}
 									</span>
 								{:else if seats.available.length !== 0}
 									<span
-										class="border-layer-0 group-aria-selected:bg-layer-13 group-aria-selected:text-layer-0 text-layer-12 bg-layer-5 absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border text-sm group-disabled:!invisible"
+										class="bg-layer-5 absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border text-sm group-disabled:!invisible group-aria-selected:bg-background group-aria-selected:text-foreground"
 									>
 										{seats.available.length}
 									</span>
 								{:else if seats.booked.length > 0}
 									<span
-										class="border-layer-0 group-aria-selected:bg-layer-13 group-aria-selected:text-layer-0 text-layer-12 bg-layer-5 absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border text-sm group-disabled:!invisible"
+										class="bg-layer-5 absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border text-sm group-disabled:!invisible group-aria-selected:bg-background group-aria-selected:text-foreground"
 									>
 										<Check />
 									</span>
@@ -301,10 +303,11 @@
 								};
 							}}
 							disabled={userId !== null}
-							class="aria-pressed:bg-layer-13 aria-pressed:text-layer-0
-							disabled:bg-layer-2
-							disabled:text-layer-7 bg-layer-3 group flex items-center gap-x-1 rounded-md
-							px-1.5 py-0.5"
+							class="
+							disabled:text-muted-foregound group
+							flex items-center
+							gap-x-1 rounded-md border bg-muted px-1.5 py-0.5 disabled:bg-muted
+							aria-pressed:bg-blue-500 aria-pressed:text-white"
 						>
 							<span class="whitespace-nowrap tabular-nums">{formattedStartTime}</span>
 							<Minus />
@@ -317,11 +320,7 @@
 	</div>
 	<div class="absolute bottom-4 right-4">
 		{#if selectedTimeslot?.id}
-			<button
-				class="bg-layer-6 hover:bg-layer-7 inline-flex items-center gap-x-1 rounded-md px-2 py-1"
-				on:click={() => {
-					if (selectedTimeslot?.id) dispatch('book', selectedTimeslot);
-				}}
+			<div
 				transition:fly={{
 					delay: 50,
 					duration: 300,
@@ -330,8 +329,15 @@
 					easing: quintInOut
 				}}
 			>
-				Book <ArrowRight class="h-4 w-4" />
-			</button>
+				<Button
+					size="sm"
+					on:click={() => {
+						if (selectedTimeslot?.id) dispatch('book', selectedTimeslot);
+					}}
+				>
+					Book <ArrowRight class="h-4 w-4" />
+				</Button>
+			</div>
 		{/if}
 	</div>
 </div>

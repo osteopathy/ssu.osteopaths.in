@@ -1,5 +1,6 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import F from "@tailwindcss/forms"
+
 /** @type {import('tailwindcss').Config} */
 const config = {
 	darkMode: ["class"],

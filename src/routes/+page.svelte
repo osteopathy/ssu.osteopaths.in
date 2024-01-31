@@ -5,7 +5,7 @@
 	import { ArrowRight, ArrowTopRight } from 'radix-icons-svelte';
 	export let data;
 </script>
-{#if data.user?.isLogged}
+{#if data.isLogged}
 <section class="flex flex-col place-items-center gap-y-6 p-10">
 	<h1 class="text-3xl font-bold">Welcome {data.user?.name}</h1>
 </section>

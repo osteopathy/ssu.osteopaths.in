@@ -1,6 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import cloudinary from '$lib/server/cloudinary';
-import { db } from '$lib/db';
+import { db } from '$lib/server/db';
 import { userTable } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 

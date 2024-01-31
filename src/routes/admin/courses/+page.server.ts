@@ -7,7 +7,6 @@ import { eq } from "drizzle-orm";
 
 
 export const load: PageServerLoad = async () => {
-
   return {
     courses: await db.query.courseTable.findMany(),
     form: await superValidate(createCourseSchema)

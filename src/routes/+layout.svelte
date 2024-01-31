@@ -7,6 +7,7 @@
 	import { Toaster } from "$lib/components/ui/sonner";
 	import '../app.pcss';
 	import type { PageData } from './$types';
+	import FeedbackDialog from './feedback/feedback-dialog.svelte';
 
 	export let data:PageData;
 </script>
@@ -24,7 +25,7 @@
 			<a href="/">Home</a>
 			<a href="/courses">Courses</a>
 			{#if data.isLogged}
-			<a href="/user/{data.user?.id}">Profile</a>
+				<a href="/user/{data.user?.id}">Profile</a>
 			{/if}
 		</nav>
 	</div>
@@ -61,6 +62,8 @@
 		>built with sveltekit, typescript,<br class="block xs:hidden" /> tailwindcss and tursodb</span
 	>
 </footer>
+
+<FeedbackDialog />
 
 <div
 	class="fixed bottom-1 left-1 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-gray-950 p-3 font-robotic text-xs text-white"

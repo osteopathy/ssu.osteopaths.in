@@ -75,10 +75,10 @@
 			<Dialog.Description>You can choose a date, and select time.</Dialog.Description>
 		</Dialog.Header>
 		<View bydates={data.bydates} on:book={(e) => console.log(e)} />
-		{#if !data.isCurrentUser}
+		{#if data.isCurrentUser}
 			<div class="mt-8 flex w-full items-center justify-center">
 				<a
-					href="/"
+					href="/{data.osteopath?.username}/appointments"
 					class="shadow-layer-5 border-layer-6 group flex w-max items-center rounded-full border py-2 pl-3 pr-4 shadow-inner transition-all hover:scale-95"
 				>
 					<Pencil1 size={24} class="transition-transform group-hover:scale-95" />
