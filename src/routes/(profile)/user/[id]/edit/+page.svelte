@@ -35,7 +35,6 @@
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ id: publicID })
 				});
-				console.log(res);
 			} else {
 				console.log('Maybe Google Profile Image');
 			}

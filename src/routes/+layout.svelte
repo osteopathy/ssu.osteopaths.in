@@ -22,7 +22,10 @@
 		<ThemeButton />
 		<nav class="flex gap-x-3 pr-2">
 			<a href="/">Home</a>
+			<a href="/courses">Courses</a>
+			{#if data.isLogged}
 			<a href="/user/{data.user?.id}">Profile</a>
+			{/if}
 		</nav>
 	</div>
 	<div class="hidden sm:block">
@@ -37,7 +40,7 @@
 </header>
 <slot />
 <footer
-	class="w-full max-w-5xl mt-auto bg-layer-2 py-2 pl-2 pr-4 mb-10 flex flex-col shadow-md shadow-layer-6/30 rounded-xl"
+	class="w-full border max-w-5xl mt-auto bg-layer-2 py-2 pl-2 pr-4 mb-10 flex flex-col shadow-md shadow-layer-6/30 rounded-xl"
 >
 	<div class="flex flex-col sm:flex-row items-center gap-y-4 mb-2 sm:mb-1 justify-between w-full">
 		<div class="flex items-center gap-x-2">

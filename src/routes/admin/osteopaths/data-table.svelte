@@ -49,7 +49,7 @@
       }
     }),
     table.column({
-      accessor: "course",
+      accessor: "courseId",
       header: "Course",
       plugins: {
         sort: {

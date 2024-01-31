@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let data;
 	let image = data.user?.image;
@@ -15,7 +16,10 @@
 		</Avatar.Root>
 		<dir class="mt-12 flex p-0">
 			{#if data.isCurrentUser}
-				<Button size="responsive" href="/{$page.params.username}/edit">Copy URL</Button>
+				<Button size="responsive" on:click={() => {
+					navigator.clipboard.writeText(`https://ssu.osteopaths.in/${$page.params.username}`);
+					toast.info('URL COPIED!')
+				}}>Copy URL</Button>
 				<div class="mr-4 border-r-2 px-2"></div>
 				<Button variant="outline" size="responsive" href="/{$page.params.username}/edit"
 					>Edit</Button

@@ -60,7 +60,7 @@
 			<Form.Validation />
 		</Form.Item>
 	</Form.Field>
-	<Form.Field {config} name="course">
+	<Form.Field {config} name="courseId">
 		<Form.Item class="space-y-3">
 			<Form.Label>Select A Course</Form.Label>
 			<Form.RadioGroup class="flex flex-col space-y-1">

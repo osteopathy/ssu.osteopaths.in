@@ -1,11 +1,11 @@
 import { db } from "$lib/server/db";
 import { getUserIdByUsername } from "$lib/server/kv";
 import { eq } from "drizzle-orm";
-import type { PageServerLoad } from "./$types";
-import { osteopathTable, userTable } from "$lib/db/schema";
+import type { LayoutServerLoad } from "./$types";
+import { courseTable, osteopathTable, userTable } from "$lib/db/schema";
 import { error } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async (event) => {
+export const load: LayoutServerLoad = async (event) => {
     const userId = await getUserIdByUsername(event.params.username)
 
     if (!userId) error(404, {
@@ -25,9 +25,13 @@ export const load: PageServerLoad = async (event) => {
             osteopath,
         }
     }
-    const res = (await db.select().from(userTable).where(eq(userTable.id,userId)).leftJoin(osteopathTable,eq(userTable.id,osteopathTable.userId)))[0];
+    const res = (await db.select().from(userTable).where(eq(userTable.id,userId)).leftJoin(osteopathTable,eq(userTable.id,osteopathTable.userId)).leftJoin(courseTable,eq(courseTable.id,osteopathTable.courseId)))[0];
     return {
         isCurrentUser: false,
-        ...res
+        user: res.user,
+        osteopath: {
+            ...res.osteopath,
+            course: res.course
+        }
     }
 };

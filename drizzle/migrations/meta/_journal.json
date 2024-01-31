@@ -43,6 +43,13 @@
       "when": 1706678057924,
       "tag": "0005_regular_goliath",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1706687045771,
+      "tag": "0006_exotic_bromley",
+      "breakpoints": true
     }
   ]
 }
