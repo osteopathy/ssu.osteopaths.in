@@ -7,7 +7,7 @@
 	import { Toaster } from "$lib/components/ui/sonner";
 	import '../app.pcss';
 	import type { PageData } from './$types';
-	import FeedbackDialog from './feedback/feedback-dialog.svelte';
+	import FeedbackDialog from '$lib/components/feedback-dialog.svelte';
 
 	export let data:PageData;
 </script>
