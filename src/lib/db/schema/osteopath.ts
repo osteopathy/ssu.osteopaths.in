@@ -41,11 +41,12 @@ export const createOsteopathSchema = createInsertSchema(osteopathTable)
 
 export type CreateOsteopathSchema = typeof createOsteopathSchema;
 
-export const osteopathsRelations = relations(osteopathTable, ({ one }) => ({
+export const osteopathsRelations = relations(osteopathTable, ({ one,many }) => ({
     user: one(userTable,{
         fields: [osteopathTable.userId],
         references: [userTable.id],
     }),
+    appointments: many(appointmentTable),
     course: one(courseTable,{
         fields: [osteopathTable.courseId],
         references: [courseTable.id],
@@ -60,7 +61,7 @@ export const appointmentTable = sqliteTable('appointment', {
 	userId: text('user_id').references(() => userTable.id),
 	osteopathId: text('osteopath_id')
 		.notNull()
-		.references(() => osteopathTable.id)
+		.references(() => osteopathTable.id),
 });
 
 export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
@@ -71,11 +72,7 @@ export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
 	osteopath: one(osteopathTable, {
 		fields: [appointmentTable.osteopathId],
 		references: [osteopathTable.id]
-	}),
-    medicalRecord: one(medicalRecord, {
-        fields: [appointmentTable.id],
-        references: [medicalRecord.appointmentId]
-    })
+	})
 }));
 
 export const medicalRecord = sqliteTable('medical_record', {
