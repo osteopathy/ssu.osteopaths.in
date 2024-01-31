@@ -11,8 +11,8 @@
 </section>
 {/if}
 <main class="w-full max-w-5xl">
-	<div class="w-full">
-		<h2 class="mb-4 text-5xl">Osteopaths</h2>
+	<div class="w-full p-3">
+		<h2 class="mb-12 text-5xl">Osteopaths</h2>
 		{#await data.osteopaths}
 			Loading osteopaths...
 		{:then osteopaths}
