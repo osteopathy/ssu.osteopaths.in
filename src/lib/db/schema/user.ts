@@ -20,7 +20,6 @@ export const userTable = sqliteTable('user', {
 });
 
 export type User = InferSelectModel<typeof userTable>;
-
 // Schema for inserting a user - can be used to validate API requests
 export const createUserSchema = createInsertSchema(userTable);
 export type CreateUserSchema = typeof createUserSchema;

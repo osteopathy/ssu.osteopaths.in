@@ -43,7 +43,7 @@
 	<Form.Field {config} name="batch">
 		<Form.Item>
 			<Form.Label>Batch</Form.Label>
-			<Form.Input type="number" min={4} max={4} />
+			<Form.Input type="text" min={4} max={4} />
 			<Form.Description>
 				read as eg. <em>2021</em> batch <br/>
 			</Form.Description>

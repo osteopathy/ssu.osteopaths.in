@@ -29,5 +29,6 @@
     </DropdownMenu.Group>
     <DropdownMenu.Separator />
     <DropdownMenu.Item on:click={() => dispatch('update')}>Update Details</DropdownMenu.Item>
+    <DropdownMenu.Item on:click={() => dispatch('username')}>Update Username</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

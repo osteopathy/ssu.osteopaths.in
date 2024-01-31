@@ -1,8 +1,10 @@
-import { relations, type InferSelectModel } from "drizzle-orm";
+import { relations, type InferSelectModel, eq } from "drizzle-orm";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { userTable } from "./user";
 import { createInsertSchema } from 'drizzle-zod';
 import { genId } from "../helpers/generate-id";
+import { z } from "zod";
+
 
 export const courseTable = sqliteTable('course', {
     id: text('id').primaryKey(),
@@ -16,8 +18,11 @@ export type Course = InferSelectModel<typeof courseTable>
 export const createCourseSchema = createInsertSchema(courseTable);
 export type CreateCourseSchema = typeof createCourseSchema;
 
-export const coursesRelations = relations(courseTable, ({ many }) => ({
-    osteopath: many(osteopathTable),
+export const coursesRelations = relations(courseTable, ({ one }) => ({
+    osteopath: one(osteopathTable,{
+        fields: [courseTable.id],
+        references: [osteopathTable.course],
+    })
 }));
 
 export const osteopathTable = sqliteTable('osteopath', {
@@ -25,7 +30,7 @@ export const osteopathTable = sqliteTable('osteopath', {
     username: text('username'),
     course: text('course',{enum: ['bos','mos','ios']}).references(() => courseTable.id).notNull(),
     batch: text('batch').default('0000'),
-    userId: text('user_id').references(() => userTable.id).notNull(),
+    userId: text('user_id').references(() => userTable.id,{ onDelete: 'cascade' }).notNull(),
 
     about: text('about'),
     address: text('address'),
@@ -34,7 +39,8 @@ export const osteopathTable = sqliteTable('osteopath', {
 export type Osteopath = InferSelectModel<typeof osteopathTable>;
 
 // Schema for inserting a osteopath - can be used to validate API requests
-export const createOsteopathSchema = createInsertSchema(osteopathTable);
+export const createOsteopathSchema = createInsertSchema(osteopathTable)
+
 export type CreateOsteopathSchema = typeof createOsteopathSchema;
 
 export const osteopathsRelations = relations(osteopathTable, ({ one }) => ({

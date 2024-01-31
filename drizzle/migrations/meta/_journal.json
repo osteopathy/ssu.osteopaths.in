@@ -29,6 +29,20 @@
       "when": 1706639860308,
       "tag": "0003_confused_mindworm",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1706656227816,
+      "tag": "0004_abandoned_toro",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1706678057924,
+      "tag": "0005_regular_goliath",
+      "breakpoints": true
     }
   ]
 }

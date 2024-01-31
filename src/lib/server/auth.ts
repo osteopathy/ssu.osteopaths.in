@@ -31,12 +31,15 @@ export const lucia = new Lucia(adapter, {
 		}
 	},
 	getUserAttributes: (attributes) => {
+		console.log(attributes)
 		return {
 			// attributes has the type of DatabaseUserAttributes
+			id: attributes.id,
 			role: attributes.role,
 			gmail: attributes.gmail,
 			image: attributes.image,
-			name: attributes.name
+			name: attributes.name,
+			phoneNumber: attributes['phone_number'],
 		};
 	}
 });

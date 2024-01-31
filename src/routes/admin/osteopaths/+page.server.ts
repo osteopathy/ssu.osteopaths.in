@@ -4,11 +4,13 @@ import type { PageServerLoad, Actions } from "./$types";
 import { superValidate } from "sveltekit-superforms/server";
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
+import { createUsername, doesUsernameExist } from "$lib/server/kv";
+import { generateId } from "lucia";
 
 export const load: PageServerLoad = async () => {
   return {
     osteopaths: await db.query.osteopathTable.findMany({
-      with:{
+      with: {
         user: {
           columns: {
             name: true
@@ -32,13 +34,23 @@ export const actions: Actions = {
     }
 
     const osteopath = form.data;
+    const osteopathId = generateId(15);
+    let usernameExist = false;
 
     try {
-      await Promise.all([db.update(userTable).set({
-        role: 'osteopath',
-      }).where(eq(userTable.id, osteopath.userId)),
-      db.insert(osteopathTable).values(osteopath)]
-      )
+      if(osteopath.username) {
+        usernameExist = await doesUsernameExist(osteopath.username)
+      }
+      await Promise.all([
+        osteopath.username && !usernameExist && createUsername(osteopath.username, osteopathId, osteopath.userId),
+        db.update(userTable).set({
+          role: 'osteopath',
+        }).where(eq(userTable.id, osteopath.userId)),
+        db.insert(osteopathTable).values({
+          ...osteopath,
+          id: osteopathId,
+        })
+      ])
     } catch (error) {
       return fail(404, {
         message: error,
@@ -59,15 +71,21 @@ export const actions: Actions = {
     }
 
     const osteopath = form.data;
-    console.log("SERVER: OSTEOPATH", osteopath)
-    // try {
-    //   await db.update(osteopathTable).set(osteopath).where(eq(osteopathTable.id, osteopath.id));
-    // } catch (error) {
-    //   return fail(404, {
-    //     message: error,
-    //     form
-    //   })
-    // }
+
+    if (!osteopath.id) {
+      return fail(400, {
+        form
+      });
+    }
+
+    try {
+      await db.update(osteopathTable).set(osteopath).where(eq(osteopathTable.id, osteopath.id));
+    } catch (error) {
+      return fail(404, {
+        message: error,
+        form
+      })
+    }
     return {
       form
     };

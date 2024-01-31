@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Logo from '$lib/components/logo.svelte';
+	import { ProgressBar } from "progressbar-svelte";
 	import ThemeButton from '$lib/components/theme-button.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Google from '$lib/components/ui/icons/google.svelte';
@@ -10,6 +11,7 @@
 	export let data:PageData;
 </script>
 
+<ProgressBar color="#5B5BD6" height="0.125em" exitDelay={500} startPosition={0}/>
 <Toaster />
 <header class="mb-10 mt-4 flex w-full max-w-5xl items-center justify-between">
 	<div class="inline-flex items-center gap-x-2 px-2 py-1">
@@ -20,7 +22,7 @@
 		<ThemeButton />
 		<nav class="flex gap-x-3 pr-2">
 			<a href="/">Home</a>
-			<a href="/settings">Settings</a>
+			<a href="/user/{data.user?.id}">Profile</a>
 		</nav>
 	</div>
 	<div class="hidden sm:block">

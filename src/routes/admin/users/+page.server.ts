@@ -46,14 +46,17 @@ export const actions: Actions = {
       });
     }
     
-    const user = form.data;
+    let user = form.data;
 
     if(!user.id) {
       return fail(400, {
         form
       });
     }
-
+    const removeNullUndefined = <T extends Object>(obj:T) => Object.entries(obj).reduce((a, [k, v]) => (v == null ? a : (a[k] = v, a)), {});
+    console.log(user)
+    user = removeNullUndefined(user);
+    console.log(user)
     try {
       await db.update(userTable).set(user).where(eq(userTable.id, user.id));
     } catch (error) {
