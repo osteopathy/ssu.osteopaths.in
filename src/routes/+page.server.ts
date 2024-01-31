@@ -1,9 +1,9 @@
 import { db } from "$lib/server/db";
-import { fail, json } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { createUsername, deleteUsername, doesUsernameExist } from "$lib/server/kv";
 import { eq } from "drizzle-orm";
-import { osteopathTable } from "$lib/db/schema";
+import { feedbackTable, osteopathTable } from "$lib/db/schema";
 import slugify from "$lib/utils/slugify";
 
 export const load: PageServerLoad = async () => {
@@ -22,16 +22,22 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
     feedback: async (event) => {
         const formData = await event.request.formData()
-        formData.forEach((value, key) => {
-            console.log(key, value)
-        })
-        if (!event.locals.user?.id) {
+
+        const content = formData.get('content')
+        const category = formData.get('category')
+
+        if (!event.locals.user?.id || !content || !category) {
             return fail(400, {
                 message: 'failed'
             });
         }
-
+        const userId = event.locals.user.id
         try {
+            await db.insert(feedbackTable).values({
+                userId,
+                category: category.toString() as 'idea' | 'issue' | 'other',
+                content: content.toString(),
+            })
         } catch (error) {
             return fail(400, {
                 message: error,
@@ -44,7 +50,7 @@ export const actions: Actions = {
         let username = formData.get('username')?.toString()
 
         if (!event.locals.user?.id || event.locals.user.role !== 'osteopath') {
-            return fail(401,{
+            return fail(401, {
                 message: 'unauthorized'
             });
         }
@@ -84,10 +90,10 @@ export const actions: Actions = {
             })
         } else if (res1.status === 'fulfilled' && res2.status === 'fulfilled') {
             try {
-                if(osteopath.username) await deleteUsername(osteopath.username);
+                if (osteopath.username) await deleteUsername(osteopath.username);
             } catch (error) {
-                await Promise.all([db.update(osteopathTable).set({ username: osteopath.username }).where(eq(osteopathTable.id, osteopath.id)),deleteUsername(username)]);
-                return fail(500,{
+                await Promise.all([db.update(osteopathTable).set({ username: osteopath.username }).where(eq(osteopathTable.id, osteopath.id)), deleteUsername(username)]);
+                return fail(500, {
                     message: 'failed to delete old username'
                 })
             }
@@ -95,7 +101,7 @@ export const actions: Actions = {
                 username
             }
         } else {
-            if(res2.status === 'rejected') await deleteUsername(username);
+            if (res2.status === 'rejected') await deleteUsername(username);
             return fail(500, {
                 message: 'failed to create username'
             })

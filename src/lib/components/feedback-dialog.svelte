@@ -38,13 +38,13 @@
 			}}
 		>
 			<div class="grid w-full items-center gap-4">
-				<Textarea id="feedback" name="feedback" />
+				<Textarea id="content" name="content" />
 				<fieldset class="flex gap-x-2">
 					{#each ['issue', 'idea', 'others'] as option}
 						<div class="flex items-center gap-x-3">
 							<input
 								id={option}
-								name="rate-syllabus"
+								name="category"
 								type="radio"
 								value={option}
 								checked={option === 'issue'}

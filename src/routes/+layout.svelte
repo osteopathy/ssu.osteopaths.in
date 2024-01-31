@@ -62,9 +62,9 @@
 		>built with sveltekit, typescript,<br class="block xs:hidden" /> tailwindcss and tursodb</span
 	>
 </footer>
-
-<FeedbackDialog />
-
+{#if data.isLogged}
+	<FeedbackDialog />
+{/if}
 <div
 	class="fixed bottom-1 left-1 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-gray-950 p-3 font-robotic text-xs text-white"
 >

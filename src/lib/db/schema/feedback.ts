@@ -4,13 +4,12 @@ import { genId } from "../helpers/generate-id";
 import { createInsertSchema } from "drizzle-zod";
 import { userTable } from ".";
 
-
 export const feedbackTable = sqliteTable('feedback', {
     id: genId(),
     content: text('content').notNull(),
     category: text('category',{enum: ['issue','idea','other']}).default('issue'),
     createdAt: integer('created_at').$default(() => Date.now()),
-    userId: text('user_id').notNull(),
+    userId: text('user_id').notNull().references(() => userTable.id),
 });
 
 export type Feedback = InferSelectModel<typeof feedbackTable>;
@@ -18,7 +17,7 @@ export type Feedback = InferSelectModel<typeof feedbackTable>;
 export const createFeedbackSchema = createInsertSchema(feedbackTable);
 export type CreateFeedbackSchema = typeof createFeedbackSchema;
 
-export const usersRelations = relations(feedbackTable, ({ many, one }) => ({
+export const feedbacksRelations = relations(feedbackTable, ({ many, one }) => ({
     user: one(userTable,{
         fields: [feedbackTable.userId],
         references: [userTable.id],

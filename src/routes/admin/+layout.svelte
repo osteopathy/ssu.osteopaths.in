@@ -11,6 +11,10 @@
         {
             label: 'Osteopaths',
             href: '/admin/osteopaths'
+        },
+        {
+            label: 'Feedback',
+            href: '/admin/feedback'
         }
     ]
 </script>
