@@ -115,11 +115,11 @@
 		<div
 			class="xs:flex-row text-layer-11 flex flex-wrap items-center justify-center space-x-4 text-sm font-semibold leading-6"
 		>
-			<a href="/privacy-policy" class="hover:underline">Privacy policy</a>
+			<a href="https://osteopaths.in/privacy-policy" class="hover:underline">Privacy policy</a>
 			<div class="xs:block hidden h-4 w-px bg-slate-500/20"></div>
-			<a href="/term-of-service" class="hover:underline">Term of Service</a>
+			<a href="https://osteopaths.in/term-of-service" class="hover:underline">Term of Service</a>
 			<div class="xs:block hidden h-4 w-px bg-slate-500/20"></div>
-			<a href="/contact-us" class="hover:underline">Contact Us</a>
+			<a href="https://osteopaths.in/contact-us" class="hover:underline">Contact Us</a>
 		</div>
 	</div>
 	<span class="text-layer-9 mt-1 p-px text-center text-sm font-medium sm:text-left"
