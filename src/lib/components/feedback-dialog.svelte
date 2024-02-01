@@ -101,6 +101,7 @@
 					// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
 				};
 			}}
+			class="p-4"
 		>
 			<div class="grid w-full items-center gap-4">
 				<Textarea id="content" name="content" />

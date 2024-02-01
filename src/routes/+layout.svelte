@@ -9,8 +9,7 @@
 	import type { PageData } from './$types';
 	import FeedbackDialog from '$lib/components/feedback-dialog.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { CaretRight, DotsVertical, Exit, Gear, Home, Person } from 'radix-icons-svelte';
-	import * as Avatar from '$lib/components/ui/avatar';
+	import { DotsVertical, Exit, Gear, Home, Person } from 'radix-icons-svelte';
 	import { flyAndScale } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
 
