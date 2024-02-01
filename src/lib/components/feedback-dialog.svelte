@@ -71,7 +71,7 @@
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root bind:open>
+	<Drawer.Root bind:open snapPoints={[0.4,0.6]} activeSnapPoint={0.6} >
 		<Drawer.Trigger
 			class={buttonVariants({
 				size: 'responsive',
