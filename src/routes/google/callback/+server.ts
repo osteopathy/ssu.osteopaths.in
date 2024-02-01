@@ -90,7 +90,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 					name: payload.name,
 					role
 				}), (role === 'osteopath') && db.insert(osteopathTable).values({
-					course,
+					courseId: course,
 					userId,
 					batch: year
 				})])
