@@ -8,7 +8,7 @@
     export let data;
 </script>
 
-<main class="w-full max-w-5xl">
+<main class="w-full max-w-5xl p-4">
     <div class="mb-12 flex flex-col items-start justify-between sm:flex-row">
 		<h2 class="text-4xl mb-4 sm:mb-0">Your Settings</h2>
 		<div class="flex">
