@@ -19,5 +19,5 @@
 			{/if}
 		</div>
 	</div>
-    <OsteopathForm about={data.osteopath?.about ?? ''} form={form} />
+    <OsteopathForm session_daily_limit={data.osteopath?.session?.daily_limit} session_duration={data.osteopath?.session?.duration} session_location={data.osteopath?.session?.location} about={data.osteopath?.about ?? ''} form={form} />
 </main>

@@ -7,7 +7,6 @@
 	  import AddFeedbackForm from "./feedback-form.svelte";
   	import type { SuperValidated } from "sveltekit-superforms";
 
-
     export let data: Feedback[] = [];
     export let form: SuperValidated<CreateFeedbackSchema>;
     let dialogEl:HTMLDialogElement;

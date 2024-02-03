@@ -2,13 +2,14 @@ import { db } from "$lib/server/db";
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { createUsername, deleteUsername, doesUsernameExist } from "$lib/server/kv";
-import { eq } from "drizzle-orm";
+import { eq, not } from "drizzle-orm";
 import { feedbackTable, osteopathTable } from "$lib/db/schema";
 import slugify from "$lib/utils/slugify";
 
 export const load: PageServerLoad = async () => {
     return {
         osteopaths: db.query.osteopathTable.findMany({
+            where: not(eq(osteopathTable.username,'vishnu')),
             with: {
                 user: true,
                 course: true

@@ -29,9 +29,15 @@ export const actions: Actions = {
     }
 
     const osteopath = form.data;
+    console.log(osteopath)
     try {
       await db.update(osteopathTable).set({
-        about: osteopath.about
+        about: osteopath.about,
+        session: {
+          location: osteopath.session_location,
+          duration: osteopath.session_duration,
+          daily_limit: osteopath.session_daily_limit,
+        }
       }).where(eq(osteopathTable.userId, event.locals.user.id))
     } catch (error) {
       return fail(400, {
@@ -39,6 +45,7 @@ export const actions: Actions = {
         form
       })
     }
+
     return {
       form
     };

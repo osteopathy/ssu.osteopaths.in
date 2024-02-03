@@ -18,7 +18,6 @@
 		{:then osteopaths}
 			<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-12">
 				{#each osteopaths as osteopath}
-					{#if osteopath.username !== 'vishnu'}
 						<div class="group relative rounded-xl border bg-card p-4 text-card-foreground shadow">
 							<ArrowTopRight
 								class="absolute right-4 top-4 text-card-foreground group-hover:scale-125"
@@ -52,7 +51,6 @@
 								</div>
 							</div>
 						</div>
-					{/if}
 				{/each}
 			</div>
 		{:catch error}

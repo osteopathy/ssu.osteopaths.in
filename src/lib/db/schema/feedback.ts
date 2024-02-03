@@ -9,7 +9,7 @@ export const feedbackTable = sqliteTable('feedback', {
     content: text('content').notNull(),
     category: text('category',{enum: ['issue','idea','other']}).default('issue'),
     createdAt: integer('created_at').$default(() => Date.now()),
-    userId: text('user_id').notNull().references(() => userTable.id),
+    userId: text('user_id').notNull().references(() => userTable.id, { onDelete: 'cascade' }),
 });
 
 export type Feedback = InferSelectModel<typeof feedbackTable>;

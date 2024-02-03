@@ -31,5 +31,3 @@ export const usersRelations = relations(userTable, ({ many, one }) => ({
         references: [osteopathTable.userId],
     }),
 }));
-
-// Actions
