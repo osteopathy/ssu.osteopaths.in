@@ -36,7 +36,7 @@
 		submit: { startTime: string; duration: string },
 		cancel: undefined
 	}>();
-	let loading = false;
+	export let loading = false;
 </script>
 
 <div class="grid grid-cols-4 gap-1 pt-32 overflow-y-scroll pb-1 px-1 grow h-0 place-content-center">

@@ -4,7 +4,6 @@
 	import ThemeButton from '$lib/components/theme-button.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Google from '$lib/components/ui/icons/google.svelte';
-	import CalendarAdd from '$lib/components/ui/icons/calendar-add.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import '../app.pcss';
 	import type { PageData } from './$types';
@@ -13,10 +12,8 @@
 	import { ChatBubble, DotsVertical, Exit, Gear, Home, Person } from 'radix-icons-svelte';
 	import { flyAndScale } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
-	import BookSchedule from '$lib/components/dialogs/schedule/book-schedule.svelte';
 	
 	let feedbackDialogOpen = false;
-	let open = false;
 	export let data: PageData;
 </script>
 
@@ -152,13 +149,6 @@
 		built with sveltekit, typescript,<br class="xs:hidden block" /> tailwindcss and tursodb
 	</span>
 </footer>
-{#if data.user?.role === 'osteopath'}
-	<button on:click={() => open = true} class="p-4 rounded-full bg-background border fixed bottom-8 right-8" >
-		<CalendarAdd size={32} />
-	</button>
-	<BookSchedule editable bind:open />
-{/if}
-
 
 {#if data.isLogged}
 	<FeedbackDialog buttonVisible={false} bind:open={feedbackDialogOpen} />

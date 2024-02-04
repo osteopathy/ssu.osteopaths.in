@@ -12,7 +12,7 @@ export const POST = (async ({ request }) => {
         duration,
         startTime
     }).returning())[0];
-	return new Response(JSON.stringify({ message: 'Created', data: res }));
+	return new Response(JSON.stringify({ message: 'CREATED', data: res }));
 }) satisfies RequestHandler;
 
 export const PATCH = (async (event) => {
@@ -25,5 +25,5 @@ export const PATCH = (async (event) => {
 export const DELETE = (async ({ request }) => {
 	const {appointmentId }= await request.json();
     const res = (await db.delete(appointmentTable).where(eq(appointmentTable.id, appointmentId)).returning())[0];
-	return new Response(JSON.stringify({ message: 'Thing deleted', data: res }));
+	return new Response(JSON.stringify({ message: 'DELETED', data: res }));
 }) satisfies RequestHandler;

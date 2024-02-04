@@ -5,6 +5,7 @@
 	import { ArrowRight, Pencil1 } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
 	import BookSchedule from '$lib/components/dialogs/schedule/book-schedule.svelte';
+	import CalendarAdd from '$lib/components/ui/icons/calendar-add.svelte';
 
 	export let data;
 	let image = data.user?.image;
@@ -68,4 +69,11 @@
 	</ul>
 </main>
 
-<BookSchedule editable={false} bind:open bydates={data.bydates} />
+{#if data.user?.role === 'osteopath'}
+	<button on:click={() => open = true} class="p-4 rounded-full bg-background border fixed bottom-8 right-8" >
+		<CalendarAdd size={32} />
+	</button>
+	<BookSchedule editable bind:open bydates={data.bydates} />
+	{:else}
+	<BookSchedule editable={false} bind:open bydates={data.bydates} />
+{/if}

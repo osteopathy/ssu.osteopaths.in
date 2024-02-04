@@ -2,7 +2,7 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import { uploadFile } from '../../../../(api)/image/upload';
+	import { uploadFile } from '../../../../(api)/image/upload'
 	import ImageUpload from './image-uploader.svelte';
 	import { toast } from 'svelte-sonner';
 	import type { CreateUserSchema } from '$lib/db/schema';

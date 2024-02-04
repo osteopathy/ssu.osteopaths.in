@@ -10,6 +10,8 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { ArrowRight, PlusCircled } from 'radix-icons-svelte';
 	import { buttonVariants } from '$lib/components/ui/button';
+	import { createAppointment } from '../../../../routes/(api)/appointment'
+	import { page } from '$app/stores';
 
 	export let open = false;
 	// editable will make it possible to edit schedule
@@ -42,12 +44,15 @@
 
 	let selected = [new Temporal.PlainDate(year, month, day)];
 	let bydate = bydates[selected[0].toString()] ? bydates[selected[0].toString()] : [];
+
 	let timeslot: {
 		id: string;
 		date: string;
 		startTime: string;
 		duration: string;
 	} | null = null;
+
+	let loading = 'idle';
 </script>
 
 <Dialog.Root bind:open>
@@ -59,7 +64,7 @@
 		<div class="relative flex flex-col sm:flex-row">
 			<DatePicker
 				{editable}
-				{bydates}
+				bind:bydates
 				bind:selected
 				on:select={(e) => {
 					if (e.detail.changed) timeslot = null;
@@ -95,8 +100,29 @@
 								class="flex h-[267px] w-max flex-col gap-y-2 rounded-lg bg-background p-0"
 							>
 								<TimePicker
+									loading={loading === 'create-appointment'}
 									on:cancel={() => (popover = false)}
-									on:submit={(e) => console.log(e.detail)}
+									on:submit={async (e) => {
+										loading = 'create-appointment'
+										const res = await createAppointment({
+											osteopathId: $page.data.osteopath.id,
+											date: selected[0].toString(),
+											startTime: e.detail.startTime,
+											duration: e.detail.duration
+										});
+										if (bydates[selected.toString()]) {
+											bydates[selected.toString()].push({user:null,...res.data});
+										} else {
+											bydates[selected.toString()] = [{user:null,...res.data}];
+										}
+										bydates = bydates;
+										selected = selected;
+										bydate = bydates[selected[0].toString()] ? bydates[selected[0].toString()] : [];
+										loading = 'idle'
+										setTimeout(() => {
+											popover = false;
+										}, 300);
+									}}
 								/>
 							</Popover.Content>
 						</Popover.Root>
