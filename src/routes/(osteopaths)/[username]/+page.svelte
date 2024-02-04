@@ -1,14 +1,15 @@
 <script lang="ts">
-	import View from '../../../lib/components/dialogs/schedule/slot-view.svelte';
 	import { page } from '$app/stores';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { ArrowRight, Pencil1 } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
+	import BookSchedule from '$lib/components/dialogs/schedule/book-schedule.svelte';
 
 	export let data;
 	let image = data.user?.image;
 	let open = false;
+	
 </script>
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
@@ -67,3 +68,4 @@
 	</ul>
 </main>
 
+<BookSchedule editable={false} bind:open bydates={data.bydates} />

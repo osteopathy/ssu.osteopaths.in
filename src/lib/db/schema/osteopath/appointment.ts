@@ -9,10 +9,10 @@ export const appointmentTable = sqliteTable('appointment', {
 	date: text('date'),
 	startTime: text('start_at'),
 	duration: text('duration').default('30'),
-	userId: text('user_id').references(() => userTable.id, { onUpdate: 'cascade', onDelete: 'no action' }),
+	userId: text('user_id').references(() => userTable.id, { onDelete: 'no action' }),
 	osteopathId: text('osteopath_id')
 		.notNull()
-		.references(() => osteopathTable.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		.references(() => osteopathTable.id, { onDelete: 'cascade' }),
 });
 
 export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
