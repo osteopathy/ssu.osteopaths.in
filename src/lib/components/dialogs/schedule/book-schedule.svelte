@@ -53,8 +53,8 @@
 <Dialog.Root bind:open>
 	<Dialog.Content class="max-w-fit">
 		<Dialog.Header>
-			<Dialog.Title>Book Appointment</Dialog.Title>
-			<Dialog.Description>You can choose a date, and select time.</Dialog.Description>
+			<Dialog.Title>{editable ? 'Edit' : 'Book'} Appointment{editable?'s':''}</Dialog.Title>
+			<Dialog.Description>You can {editable ? 'edit' : 'choose'} a date, and select time.</Dialog.Description>
 		</Dialog.Header>
 		<div class="relative flex flex-col sm:flex-row">
 			<DatePicker
