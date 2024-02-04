@@ -1,8 +1,7 @@
 <script lang="ts">
-	import View from './slot-view.svelte';
+	import View from '../../../lib/components/dialogs/schedule/slot-view.svelte';
 	import { page } from '$app/stores';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import * as Dialog from '$lib/components/ui/dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { ArrowRight, Pencil1 } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
@@ -68,31 +67,3 @@
 	</ul>
 </main>
 
-<Dialog.Root bind:open>
-	<Dialog.Content class="max-w-fit">
-		<Dialog.Header>
-			<Dialog.Title>Book Appointment</Dialog.Title>
-			<Dialog.Description>You can choose a date, and select time.</Dialog.Description>
-		</Dialog.Header>
-		<View bydates={data.bydates} on:book={(e) => console.log(e)} />
-		{#if data.isCurrentUser}
-			<div class="mt-8 flex w-full items-center justify-center">
-				<a
-					href="/{data.osteopath?.username}/appointments"
-					class="shadow-layer-5 border-layer-6 group flex w-max items-center rounded-full border py-2 pl-3 pr-4 shadow-inner transition-all hover:scale-95"
-				>
-					<Pencil1 size={24} class="transition-transform group-hover:scale-95" />
-					<span
-						class="ml-2 mr-2 inline-block scale-105 text-2xl transition-transform group-hover:scale-100"
-					>
-						Edit
-					</span>
-					<ArrowRight
-						size={24}
-						class="transition-transform group-hover:translate-x-0.5 group-active:translate-x-1 "
-					/>
-				</a>
-			</div>
-		{/if}
-	</Dialog.Content>
-</Dialog.Root>

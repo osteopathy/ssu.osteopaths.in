@@ -10,21 +10,25 @@
 
 	const isDesktop = mediaQuery('(min-width: 624px)');
 
-	let open = false;
+	export let open = false;
+	export let buttonVisible = true;
+	
 	let loading = false;
 </script>
 
 {#if $isDesktop}
 	<Dialog.Root bind:open>
+		{#if buttonVisible}
 		<Dialog.Trigger
 			class={buttonVariants({
 				size: 'responsive',
 				class:
-					'absolute bottom-4 right-4 items-center gap-x-2 bg-indigo-500 text-white hover:bg-indigo-600'
+					'rounded-full items-center gap-x-2 bg-indigo-500 text-white hover:bg-indigo-600'
 			})}
 		>
 			<ChatBubble /> Give Feedback</Dialog.Trigger
 		>
+		{/if}
 		<Dialog.Content class="sm:max-w-[425px]">
 			<Dialog.Header>
 				<Dialog.Title>Give Feedback</Dialog.Title>
@@ -72,6 +76,7 @@
 	</Dialog.Root>
 {:else}
 	<Drawer.Root bind:open shouldScaleBackground direction="left"  onOutsideClick={() => open = !open} >
+		{#if buttonVisible}
 		<Drawer.Trigger
 			class={buttonVariants({
 				size: 'responsive',
@@ -81,6 +86,7 @@
 		>
 			<ChatBubble /> Give Feedback</Drawer.Trigger
 		>
+		{/if}
 		<Drawer.Content>
 			<Drawer.Header class="text-left">
 				<Drawer.Title>Give Feedback</Drawer.Title>

@@ -7,12 +7,13 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import '../app.pcss';
 	import type { PageData } from './$types';
-	import FeedbackDialog from '$lib/components/feedback-dialog.svelte';
+	import FeedbackDialog from '$lib/components/dialogs/feedback-dialog.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { DotsVertical, Exit, Gear, Home, Person } from 'radix-icons-svelte';
+	import { ChatBubble, DotsVertical, Exit, Gear, Home, Person } from 'radix-icons-svelte';
 	import { flyAndScale } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
-
+	
+	let feedbackDialogOpen = false;
 	export let data: PageData;
 </script>
 
@@ -25,7 +26,7 @@
 	</div>
 	<div class="flex items-center gap-x-4 rounded-full border px-2 py-2">
 		<ThemeButton />
-		<nav class="hidden sm:flex gap-x-3 pr-2">
+		<nav class="hidden gap-x-3 pr-2 sm:flex">
 			<a href="/">Home</a>
 			<a href="/courses">Courses</a>
 			{#if data.isLogged}
@@ -33,72 +34,92 @@
 			{/if}
 		</nav>
 	</div>
-	<div class="">
+	<div>
 		{#if data.user}
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger
-			  class="focus-visible sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-input bg-background text-sm font-medium text-foreground shadow-btn hover:bg-muted focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-98"
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger
+					class="focus-visible border-border-input shadow-btn active:scale-98 m-2 inline-flex h-10 w-10 items-center justify-center rounded-full border bg-background text-sm font-medium text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:hidden"
+				>
+					<DotsVertical class="h-6 w-6 text-foreground" />
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content
+					class="w-max rounded-xl border border-muted bg-background px-1 py-1.5 shadow-popover"
+					transition={flyAndScale}
+					sideOffset={8}
+				>
+				<DropdownMenu.Group>
+					<DropdownMenu.Item
+						class="rounded-md flex h-10 select-none items-center py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+						href="/"
+					>
+						<div class="flex items-center">
+							<Home class="text-foreground-alt mr-2 size-5" /> Home
+						</div>
+					</DropdownMenu.Item>
+					<DropdownMenu.Item
+						class="rounded-md flex h-10 select-none items-center py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+						href="/user/{data.user.id}"
+					>
+						<div class="flex items-center">
+							<Person class="text-foreground-alt mr-2 size-5" />
+							Profile
+						</div>
+					</DropdownMenu.Item>
+					<DropdownMenu.Item
+						class="rounded-md flex h-10 select-none items-center py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+						href="/user/{data.user.id}/edit"
+					>
+						<div class="flex items-center">
+							<Gear class="text-foreground-alt mr-2 size-5" />
+							Settings
+						</div>
+					</DropdownMenu.Item>
+				</DropdownMenu.Group>
+					<DropdownMenu.Separator/>
+					<DropdownMenu.Item
+					class="rounded-md flex h-10 select-none items-center py-1 pl-3 pr-4 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+					on:click={() => feedbackDialogOpen = true}
+				>
+					<div class="flex items-center">
+						<ChatBubble class="text-foreground-alt mr-2 size-5" />
+						Give Feedback
+					</div>
+					<!-- <div class="ml-auto flex items-center gap-px">
+			<kbd
+			  class="inline-flex items-center justify-center rounded-md border border-dark-10 bg-background text-xs text-muted-foreground shadow-kbd size-5"
 			>
-			  <DotsVertical class="h-6 w-6 text-foreground" />
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content
-			  class="w-max rounded-xl border border-muted bg-background px-1 py-1.5 shadow-popover"
-			  transition={flyAndScale}
-			  sideOffset={8}
+			  ⌘
+			</kbd>
+			<kbd
+			  class="inline-flex items-center justify-center rounded-md border border-dark-10 bg-background text-[10px] text-muted-foreground shadow-kbd size-5"
 			>
-			  <DropdownMenu.Item
-			class="flex h-10 select-none items-center rounded-button py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-				href="/"
-			  >
-				<div class="flex items-center">
-					<Home class="mr-2 text-foreground-alt size-5" /> Home
-				</div>
-			  </DropdownMenu.Item>
-			<DropdownMenu.Item
-			class="flex h-10 select-none items-center rounded-button py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-			href="/user/{data.user.id}"
-		  >
-			<div class="flex items-center">
-			  <Person class="mr-2 text-foreground-alt size-5" />
-			  Profile
-			</div>
-		  </DropdownMenu.Item>
-			  <DropdownMenu.Item
-				class="flex h-10 select-none items-center rounded-button py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-				href="/user/{data.user.id}/edit"
-			  >
-				<div class="flex items-center">
-				  <Gear class="mr-2 text-foreground-alt size-5" />
-				  Settings
-				</div>
-				<!-- <div class="ml-auto flex items-center gap-px">
-				  <kbd
-					class="inline-flex items-center justify-center rounded-button border border-dark-10 bg-background text-xs text-muted-foreground shadow-kbd size-5"
-				  >
-					⌘
-				  </kbd>
-				  <kbd
-					class="inline-flex items-center justify-center rounded-button border border-dark-10 bg-background text-[10px] text-muted-foreground shadow-kbd size-5"
-				  >
-					S
-				  </kbd>
-				</div> -->
-			  </DropdownMenu.Item>
-			  <DropdownMenu.Item
-				class={buttonVariants({variant:'destructive',class:'data-[highlighted]:bg-destructive/80 data-[highlighted]:text-destructive-foregound flex h-10 select-none items-center justify-start rounded-button py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent'})}
+			  S
+			</kbd>
+		  </div> -->
+				</DropdownMenu.Item>
+				<DropdownMenu.Separator/>
+				<DropdownMenu.Item
+				class={buttonVariants({
+					variant: 'destructive',
+					class:
+						'data-[highlighted]:text-destructive-foregound rounded-md flex h-10 select-none items-center justify-start py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-destructive/80'
+				})}
 				href="/google/logout"
-			  >
+			>
 				<div class="flex items-center">
-				  <Exit class="mr-2 text-foreground-alt size-5" />
-				  Logout
+					<Exit class="text-foreground-alt mr-2 size-5" />
+					Logout
 				</div>
-			  </DropdownMenu.Item>
-			</DropdownMenu.Content>
-		  </DropdownMenu.Root>
-			<Button class="rounded-full hidden sm:block" href="/google/logout" variant="destructive">Logout</Button>
+			</DropdownMenu.Item>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+			<Button class="hidden rounded-full sm:block" href="/google/logout" variant="destructive">
+				Logout
+			</Button>
 		{:else}
 			<a href="/google/login" class="flex items-center gap-x-2 rounded-full border px-3 py-2">
-				<Google class="size-5" /> Continue With Google
+				<Google class="size-5" /> <span class="block sm:hidden">Signup</span>
+				<span class="hidden sm:block"> Continue </span> With Google
 			</a>
 		{/if}
 	</div>
@@ -126,17 +147,7 @@
 		>built with sveltekit, typescript,<br class="xs:hidden block" /> tailwindcss and tursodb</span
 	>
 </footer>
+
 {#if data.isLogged}
-	<FeedbackDialog />
+	<FeedbackDialog buttonVisible={false} bind:open={feedbackDialogOpen} />
 {/if}
-<div
-	class="font-robotic fixed bottom-1 left-1 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-gray-950 p-3 text-xs text-white"
->
-	<div class="xs:hidden block">vs</div>
-	<div class="xs:block hidden sm:hidden">xs</div>
-	<div class="hidden sm:block md:hidden">sm</div>
-	<div class="hidden md:block lg:hidden">md</div>
-	<div class="hidden lg:block xl:hidden">lg</div>
-	<div class="hidden xl:block 2xl:hidden">xl</div>
-	<div class="hidden 2xl:block">2xl</div>
-</div>
