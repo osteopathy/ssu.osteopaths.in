@@ -74,6 +74,6 @@
 		<CalendarAdd size={32} />
 	</button>
 	<BookSchedule editable bind:open bydates={data.bydates} />
-	{:else}
+	{:else if data.user?.role !== null}
 	<BookSchedule editable={false} bind:open bydates={data.bydates} />
 {/if}
