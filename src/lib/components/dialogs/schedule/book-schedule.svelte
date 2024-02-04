@@ -56,7 +56,7 @@
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Content class="max-w-fit">
+	<Dialog.Content class="max-w-fit max-h-[92%] overflow-auto">
 		<Dialog.Header>
 			<Dialog.Title>{editable ? 'Edit' : 'Book'} Appointment{editable?'s':''}</Dialog.Title>
 			<Dialog.Description>You can {editable ? 'edit' : 'choose'} a date, and select time.</Dialog.Description>
