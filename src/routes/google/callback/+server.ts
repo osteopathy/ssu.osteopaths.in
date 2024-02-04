@@ -4,7 +4,7 @@ import { OAuth2RequestError } from 'arctic';
 import { generateId } from 'lucia';
 import { db } from '$lib/db';
 import { eq } from 'drizzle-orm';
-import { osteopathTable, userTable } from '$lib/db/schema';
+import { userTable } from '$lib/db/schema';
 
 type GoogleUserResult = {
 	id: string;
@@ -77,33 +77,32 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			});
 		} else {
 			const userId = generateId(15);
-			const emailDetail = extractFromEmail(payload.email)			
+			// const emailDetail = extractFromEmail(payload.email)			
 			let r;
-			if (emailDetail) {
-				const { year, batch } = emailDetail;
-				const { role, course } = (batch === 'bos' || batch === 'mos' || batch === 'ios') ? { role: 'osteopath', course: batch } as const : { role: 'student', course: batch } as const;
-				r = role;
-				await Promise.all([db.insert(userTable).values({
-					id: userId,
-					gmail: payload.email,
-					image: payload.picture,
-					name: payload.name,
-					role
-				}), (role === 'osteopath') && db.insert(osteopathTable).values({
-					courseId: course,
-					userId,
-					batch: year
-				})])
-
-			} else {
-				await db.insert(userTable).values({
-					id: userId,
-					gmail: payload.email,
-					image: payload.picture,
-					name: payload.name,
-					role: 'user'
-				})
-			}
+			// if (emailDetail) {
+			// const { year, batch } = emailDetail;
+			// const { role, course } = (batch === 'bos' || batch === 'mos' || batch === 'ios') ? { role: 'osteopath', course: batch } as const : { role: 'student', course: batch } as const;
+			// r = role;
+			// await Promise.all([db.insert(userTable).values({
+			// 	id: userId,
+			// 	gmail: payload.email,
+			// 	image: payload.picture,
+			// 	name: payload.name,
+			// 	role
+			// }), (role === 'osteopath') && db.insert(osteopathTable).values({
+			// 	courseId: course,
+			// 	userId,
+			// 	batch: year
+			// })])
+			// } else {
+			await db.insert(userTable).values({
+				id: userId,
+				gmail: payload.email,
+				image: payload.picture,
+				name: payload.name,
+				role: 'user'
+			})
+			// }
 
 			const session = await lucia.createSession(userId, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
@@ -114,13 +113,13 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			return new Response(null, {
 				status: 302,
 				headers: {
-					Location: r === 'osteopath' ? '/setup-username' : '/'
+					// Location: r === 'osteopath' ? '/setup-username' : '/'
+					Location: '/'
 				}
 			});
 		}
 
 	} catch (e) {
-		console.log(e);
 		// the specific error message depends on the provider
 		if (e instanceof OAuth2RequestError) {
 			// invalid code

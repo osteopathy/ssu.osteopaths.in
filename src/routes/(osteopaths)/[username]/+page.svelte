@@ -5,6 +5,7 @@
 	import { toast } from 'svelte-sonner';
 	import BookSchedule from '$lib/components/dialogs/schedule/book-schedule.svelte';
 	import CalendarAdd from '$lib/components/ui/icons/calendar-add.svelte';
+	import { Calendar } from 'radix-icons-svelte';
 
 	export let data;
 	let image = data.user?.image;
@@ -32,7 +33,9 @@
 					>Edit</Button
 				>
 			{:else}
-				<Button on:click={() => (open = !open)} size="responsive">Book Appointment</Button>
+				<Button on:click={() => (open = !open)} size="responsive">
+					<Calendar /> Book Appointment
+				</Button>
 			{/if}
 		</dir>
 	</div>
