@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { ArrowRight, Pencil1 } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
 	import BookSchedule from '$lib/components/dialogs/schedule/book-schedule.svelte';
 	import CalendarAdd from '$lib/components/ui/icons/calendar-add.svelte';
