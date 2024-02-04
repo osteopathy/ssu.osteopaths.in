@@ -72,7 +72,6 @@
 	<button on:click={() => open = true} class="p-4 rounded-full bg-background border fixed bottom-8 right-8" >
 		<CalendarAdd size={32} />
 	</button>
-	<BookSchedule editable bind:open bydates={data.bydates} />
-	{:else if data.user?.role !== null}
-	<BookSchedule editable={false} bind:open bydates={data.bydates} />
 {/if}
+
+<BookSchedule editable={data.isCurrentUser} bind:open bydates={data.bydates} />
