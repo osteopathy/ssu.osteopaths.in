@@ -3,6 +3,8 @@
 	import { enhance } from '$app/forms';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
+	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
 
 	let loading = false;
 	let errorMessage = '';
@@ -27,6 +29,9 @@
 				loading = false;
 				// @ts-ignore
 				errorMessage = result.data?.message;
+				if(result.status === 200) {
+					goto('/')
+				}
 				// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
 			};
 		}}
