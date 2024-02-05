@@ -34,7 +34,7 @@ export const POST = (async (event) => {
         }
     }
     
-    console.log(reqObj)
+
     const db_calendar = await db.query.calendarTable.findFirst({where: eq(calendarTable.id, calendarId)});
 
     if(!db_calendar) return error(404,'Calendar not found');
@@ -55,21 +55,21 @@ export const POST = (async (event) => {
         );
         const event = await calendarAPI.createEvent(calendar.id, reqObj);
         console.log('Submitted', event);
-        if (event?.id && event.attendees) {
-          console.log('SENDING UPDATE EVENT');
-          const attendeeIndex = event.attendees?.findIndex(
-            (attendee) => attendee.email === osteopathGmail
-          );
-          if (attendeeIndex)
-            event.attendees[attendeeIndex] = {
-              ...event.attendees[attendeeIndex],
-              responseStatus: 'accepted'
-            };
-          const rsvp = await calendarAPI.updateEvent(calendar.id, event?.id, event);
-          console.log('\n\nUPDATED', rsvp);
-        } else {
-          // TODO: Add Exception statement
-        }
+        // if (event?.id && event.attendees) {
+        //   console.log('SENDING UPDATE EVENT');
+        //   const attendeeIndex = event.attendees?.findIndex(
+        //     (attendee) => attendee.email === osteopathGmail
+        //   );
+        //   if (attendeeIndex)
+        //     event.attendees[attendeeIndex] = {
+        //       ...event.attendees[attendeeIndex],
+        //       responseStatus: 'accepted'
+        //     };
+        //   const rsvp = await calendarAPI.updateEvent(calendar.id, event?.id, event);
+        //   console.log('\n\nUPDATED', rsvp);
+        // } else {
+        //   // TODO: Add Exception statement
+        // }
       }
     return new Response(JSON.stringify({ message: 'CREATED', data: res }));
 }) satisfies RequestHandler;
