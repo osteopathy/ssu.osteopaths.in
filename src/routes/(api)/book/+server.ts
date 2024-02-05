@@ -1,6 +1,6 @@
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { appointmentTable, calendarTable, osteopathTable, userTable } from '$lib/db/schema';
+import { appointmentTable, calendarTable } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { Temporal } from 'temporal-polyfill';
 import calendarService from '$lib/server/calendar';
@@ -33,7 +33,6 @@ export const POST = (async (event) => {
             email: event.locals.user?.gmail as string
         }
     }
-    
 
     const db_calendar = await db.query.calendarTable.findFirst({where: eq(calendarTable.id, calendarId)});
 

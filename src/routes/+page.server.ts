@@ -18,7 +18,6 @@ export const load: PageServerLoad = async () => {
     }
 };
 
-
 // Global Actions
 export const actions: Actions = {
     feedback: async (event) => {
@@ -68,7 +67,7 @@ export const actions: Actions = {
 
         if (exist) {
             return fail(409, {
-                message: 'username already exist'
+                message: `username already exist ${username}`
             });
         }
 

@@ -1,8 +1,5 @@
 import { Redis } from '@upstash/redis';
 import * as env from '$env/static/private';
-import { db } from './db';
-import { eq } from 'drizzle-orm';
-import { osteopathTable } from '$lib/db/schema';
 
 const upstashClient = new Redis({
 	url: env.UPSTASH_URL,

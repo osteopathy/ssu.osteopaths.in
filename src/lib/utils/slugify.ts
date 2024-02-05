@@ -15,6 +15,7 @@ export const slugify = (str: string, forDisplayingInput?: boolean) => {
     .replace(/[^.\p{L}\p{N}\p{Zs}\p{Emoji}]+/gu, "-") // Replace any non-alphanumeric characters (including Unicode and except "." period) with a dash
     .replace(/[\s_#]+/g, "-") // Replace whitespace, # and underscores with a single dash
     .replace(/^-+/, "") // Remove dashes from start
+    .replace(/^\d+/, "") // Remove numbers frim start
     .replace(/\.{2,}/g, ".") // Replace consecutive periods with a single period
     .replace(/^\.+/, ""); // Remove periods from the start
 
