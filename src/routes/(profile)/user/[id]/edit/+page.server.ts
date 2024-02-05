@@ -6,9 +6,13 @@ import { db } from "$lib/db";
 import { eq } from "drizzle-orm";
 
 export const load: PageServerLoad = async (event) => {
-    const isCurrentUser = event.params.id === event.locals.user?.id;
+    if(!event.locals.user) redirect(308,'/');
+    
+    const isCurrentUser = event.params.id === event.locals.user.id;
+    
     if(!isCurrentUser) redirect(308,`/user/${event.params.id}`)
-    if(event.locals.user?.role === 'osteopath') {
+    
+    if(event.locals.user.role === 'osteopath') {
         const osteopath = await db.query.osteopathTable.findFirst({
             where: eq(osteopathTable.userId,event.locals.user.id),
             columns: {
@@ -16,11 +20,14 @@ export const load: PageServerLoad = async (event) => {
             }
         })
         return {
+            user: event.locals.user,
             form: await superValidate(createUserSchema),
             username: osteopath?.username
         };
     }
+
     return {
+        user: event.locals.user,
         form: await superValidate(createUserSchema),
         username: null
     };

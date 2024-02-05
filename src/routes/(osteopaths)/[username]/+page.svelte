@@ -8,19 +8,11 @@
 	import { fade } from 'svelte/transition';
 	import { flyAndScale } from '$lib/utils/index.js';
 	import { bookAppointment } from '../../(api)/book';
-	import { onMount } from 'svelte';
 	
 	export let data;
 	let image = data.osteopath.user?.image;
 	let open = false;
 	let alertDialogOpen = false;
-
-	let usernameForm: Promise<typeof import("$lib/components/dialogs/username-dialog.svelte")>;
-	onMount(() => {
-		if(!!!(data.osteopath.username)) {
-			usernameForm = import('$lib/components/dialogs/username-dialog.svelte');
-		}
-	})
 </script>
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
@@ -114,12 +106,6 @@
 		bydates={data.bydates}
 	/>
 {/await}
-
-{#if usernameForm}
-	{#await usernameForm then { default: UsernameForm }}
-		<UsernameForm />
-	{/await}
-{/if}
 
 <AlertDialog.Root bind:open={alertDialogOpen}>
 	<AlertDialog.Portal>

@@ -8,7 +8,7 @@
 	import type { CreateUserSchema } from '$lib/db/schema';
 	import UserForm from './user-form.svelte';
 	import { page } from '$app/stores';
-	// import UsernameDialog from '$lib/components/username-dialog.svelte';
+	import { onMount } from 'svelte';
 
 	export let form: SuperValidated<CreateUserSchema>;
 	export let data;
@@ -41,6 +41,13 @@
 			}
 		}
 	}
+
+	let usernameForm: Promise<typeof import("$lib/components/dialogs/username-dialog.svelte")>;
+	onMount(() => {
+		if(!!!(data.username) && data.user.role === 'osteopath') {
+			usernameForm = import('$lib/components/dialogs/username-dialog.svelte');
+		}
+	})
 </script>
 
 <main class="flex w-full max-w-5xl flex-col p-4">
@@ -113,6 +120,11 @@
 			imageSrc={image}
 		/>
 	</div>
-	<!-- <UsernameDialog /> -->
 	<UserForm user={data.user} {form} userId={$page.params.id} />
 </main>
+
+{#if usernameForm}
+	{#await usernameForm then { default: UsernameForm }}
+		<UsernameForm />
+	{/await}
+{/if}
