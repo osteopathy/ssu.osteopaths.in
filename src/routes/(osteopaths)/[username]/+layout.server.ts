@@ -39,15 +39,21 @@ export const load: LayoutServerLoad = async (event) => {
                 course: true,
                 appointments: {
                     where: gte(appointmentTable.date, t),
-                }
+                    with: {
+                        user:true
+                    }
+                },
+                calendar: true
             }
         })
 
         const bydates = groupBy(osteopath?.appointments || [], (appointment) => appointment.date as string) as ByDatesType;
         return {
             isCurrentUser: true,
-            user: event.locals.user,
-            osteopath,
+            osteopath: {
+                user: event.locals.user,
+                ...osteopath
+            },
             bydates
         }
     }
@@ -59,8 +65,8 @@ export const load: LayoutServerLoad = async (event) => {
         const bydates = groupBy(appointments, (appointment) => appointment.date as string) as ByDatesType;
         return {
             isCurrentUser: false,
-            user: res.user,
             osteopath: {
+                user: res.user,
                 ...res.osteopath,
                 course: res.course
             },
@@ -69,8 +75,8 @@ export const load: LayoutServerLoad = async (event) => {
     }
     return {
         isCurrentUser: false,
-        user: res.user,
         osteopath: {
+            user: res.user,
             ...res.osteopath,
             course: res.course
         },
