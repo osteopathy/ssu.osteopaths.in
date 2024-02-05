@@ -3,12 +3,22 @@ import type { Actions, PageServerLoad } from "./$types";
 import { formSchema } from "./schema";
 import { fail } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
-import { osteopathTable } from "$lib/db/schema";
+import { calendarTable, osteopathTable, type Calendar } from "$lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export const load: PageServerLoad = async (event) => {
+  const data = await event.parent();
+  let calendar: Calendar | undefined;
+  
+  if(data.osteopath?.calendarId) {
+    calendar = await db.query.calendarTable.findFirst({
+      where: eq(calendarTable.id, data.osteopath?.calendarId)
+    });
+  }
+
   return {
-    form: await superValidate(formSchema)
+    form: await superValidate(formSchema),
+    calendar
   }
 };
 
