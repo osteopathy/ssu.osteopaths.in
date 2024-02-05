@@ -3,17 +3,24 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { ArrowRight, Pencil1 } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
 	import CalendarAdd from '$lib/components/ui/icons/calendar-add.svelte';
 	import { fade } from 'svelte/transition';
 	import { flyAndScale } from '$lib/utils/index.js';
 	import { bookAppointment } from '../../(api)/book';
-
+	import { onMount } from 'svelte';
+	
 	export let data;
 	let image = data.osteopath.user?.image;
 	let open = false;
 	let alertDialogOpen = false;
+
+	let usernameForm: Promise<typeof import("$lib/components/dialogs/username-dialog.svelte")>;
+	onMount(() => {
+		if(!!!(data.osteopath.username)) {
+			usernameForm = import('$lib/components/dialogs/username-dialog.svelte');
+		}
+	})
 </script>
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
@@ -107,6 +114,12 @@
 		bydates={data.bydates}
 	/>
 {/await}
+
+{#if usernameForm}
+	{#await usernameForm then { default: UsernameForm }}
+		<UsernameForm />
+	{/await}
+{/if}
 
 <AlertDialog.Root bind:open={alertDialogOpen}>
 	<AlertDialog.Portal>
