@@ -12,7 +12,17 @@
 	import { buttonVariants } from '$lib/components/ui/button';
 	import { createAppointment } from '../../../../routes/(api)/appointment'
 	import { page } from '$app/stores';
+	import { createEventDispatcher } from 'svelte';
 
+	const dispatch = createEventDispatcher<{
+		book: {
+			id: string,
+			date: string,
+			startTime: string,
+			duration: string
+		}
+	}>()
+	
 	export let open = false;
 	// editable will make it possible to edit schedule
 	export let editable = true;
@@ -144,7 +154,9 @@
 						<Button
 							size="sm"
 							on:click={() => {
-								console.log(timeslot);
+								if(timeslot) {
+									dispatch('book', timeslot);
+								}
 							}}
 						>
 							Book <ArrowRight class="h-4 w-4" />
