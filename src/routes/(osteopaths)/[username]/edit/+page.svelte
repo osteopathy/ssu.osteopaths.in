@@ -21,15 +21,20 @@
 		</div>
 	</div>
     <OsteopathForm session_daily_limit={data.osteopath?.session?.daily_limit} session_duration={data.osteopath?.session?.duration} session_location={data.osteopath?.session?.location} about={data.osteopath?.about ?? ''} form={form} />
-	<div class="p-4 mt-8 border rounded-md">
+	<div class="p-4 mt-8 border rounded-md flex flex-col gap-y-4">
+		<div>
+			<h2 class="text-muted-foreground text-xl mb-1">Username</h2>
+			<p class="text-foreground text-sm">Your username is {data.osteopath.username}</p>
+		</div>
+		<div>
 		<h2 class="text-muted-foreground text-xl mb-1">Calendar</h2>
 		{#if data.calendar}
-			<p class="text-muted-foreground text-sm">You have connected your Google account to your calendar.</p>
 			<span>{data.calendar.gmail}</span>
 			<!-- <a href="/calendar/disconnect" class="text-primary-foreground">Disconnect your calendar</a> -->
 		{:else}
 			<p class="text-foreground mb-2 text-sm">You can connect your calendar to your account to manage your availability and appointments.</p>
 			<Button size="responsive" variant="secondary" href="/google/login?calendar=true">Connect Google Calendar</Button>
 		{/if}
+		</div>
 	</div>
 </main>
