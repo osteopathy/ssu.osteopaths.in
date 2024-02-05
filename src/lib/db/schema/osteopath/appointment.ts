@@ -2,7 +2,8 @@ import { genId } from "../../helpers/generate-id";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { userTable } from "../user";
 import { osteopathTable } from "./index";
-import { relations } from "drizzle-orm";
+import { relations, type InferSelectModel } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
 
 export const appointmentTable = sqliteTable('appointment', {
 	id: genId(),
@@ -14,6 +15,12 @@ export const appointmentTable = sqliteTable('appointment', {
 		.notNull()
 		.references(() => osteopathTable.id, { onDelete: 'cascade' }),
 });
+
+export type Appointment = InferSelectModel<typeof appointmentTable>
+
+// Schema for inserting a appointment - can be used to validate API requests
+export const createAppointmentSchema = createInsertSchema(appointmentTable);
+export type CreateAppointmentSchema = typeof createAppointmentSchema;
 
 export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
 	user: one(userTable, {

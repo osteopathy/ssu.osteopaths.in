@@ -113,6 +113,27 @@
       "when": 1707031009386,
       "tag": "0015_fancy_rogue",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1707109129783,
+      "tag": "0016_stale_wong",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1707109198195,
+      "tag": "0017_plain_bromley",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1707109265400,
+      "tag": "0018_nifty_rocket_racer",
+      "breakpoints": true
     }
   ]
 }

@@ -5,9 +5,11 @@ import { createInsertSchema } from 'drizzle-zod';
 import { genId } from "../../helpers/generate-id";
 import { courseTable } from "./course";
 import { appointmentTable } from "./appointment";
+import { calendarTable } from "./calendar";
 
 export * from "./course"
 export * from "./appointment"
+export * from "./calendar"
 
 export const osteopathTable = sqliteTable('osteopath', {
     id: genId(),
@@ -15,7 +17,8 @@ export const osteopathTable = sqliteTable('osteopath', {
     courseId: text('course_id',{enum: ['bos','mos','ios']}).references(() => courseTable.id, { onDelete: 'no action' }).notNull(),
     batch: text('batch').default('0000'),
     userId: text('user_id').references(() => userTable.id,{ onDelete: 'cascade' }).notNull(),
-    
+    calendarId: text('calendar_id').references(() => calendarTable.id, {onDelete: 'no action' }),
+
     about: text('about'),
     address: text('address'),
 
@@ -46,5 +49,9 @@ export const osteopathsRelations = relations(osteopathTable, ({ one,many }) => (
     course: one(courseTable,{
         fields: [osteopathTable.courseId],
         references: [courseTable.id],
-    })
+    }),
+    calendar: one(calendarTable,{
+        fields: [osteopathTable.calendarId],
+        references: [calendarTable.id],
+    }),
 }));
