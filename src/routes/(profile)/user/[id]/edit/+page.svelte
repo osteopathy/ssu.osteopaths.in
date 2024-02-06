@@ -44,7 +44,8 @@
 
 	let usernameForm: Promise<typeof import("$lib/components/dialogs/username-dialog.svelte")>;
 	onMount(() => {
-		if(!!!(data.username) && data.user.role === 'osteopath') {
+		if(!!!(data.username) && data.user.role === 'osteopath' && data.isLogged && data.isCurrentUser) {
+			console.log(data.username)
 			usernameForm = import('$lib/components/dialogs/username-dialog.svelte');
 		}
 	})

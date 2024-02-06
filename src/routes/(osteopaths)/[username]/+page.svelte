@@ -8,6 +8,7 @@
 	import { fade } from 'svelte/transition';
 	import { flyAndScale } from '$lib/utils/index.js';
 	import { bookAppointment } from '../../(api)/book';
+	import { createAppointment, updateAppointment } from '../../(api)/appointment';
 	
 	export let data;
 	let image = data.osteopath.user?.image;
@@ -83,7 +84,15 @@
 {#await import('$lib/components/dialogs/schedule/book-schedule.svelte') then { default: BookSchedule }}
 	<BookSchedule
 		on:book={async (e) => {
-			if (data?.user && data.osteopath) {
+			if(data.osteopath && data.osteopath.id) {
+				await updateAppointment(e.detail.id, {
+					osteopathId: data.osteopath.id,
+					date: e.detail.date,
+					startTime: e.detail.startTime,
+					duration: e.detail.duration
+				})
+			}
+			if (data?.user && data.osteopath && data.osteopath.calendarId) {
 				toast.loading('Booking Appointment...');
 				try {
 					await bookAppointment(data.osteopath.calendarId, data.user.id, {

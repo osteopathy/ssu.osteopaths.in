@@ -20,13 +20,14 @@ export const load: PageServerLoad = async (event) => {
             }
         })
         return {
+            isCurrentUser,
             user: event.locals.user,
             form: await superValidate(createUserSchema),
             username: osteopath?.username
         };
     }
-
     return {
+        isCurrentUser,
         user: event.locals.user,
         form: await superValidate(createUserSchema),
         username: null
