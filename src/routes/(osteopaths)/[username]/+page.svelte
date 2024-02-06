@@ -84,30 +84,28 @@
 {#await import('$lib/components/dialogs/schedule/book-schedule.svelte') then { default: BookSchedule }}
 	<BookSchedule
 		on:book={async (e) => {
-			if(data.osteopath && data.osteopath.id) {
-				await updateAppointment(e.detail.id, {
-					osteopathId: data.osteopath.id,
-					date: e.detail.date,
-					startTime: e.detail.startTime,
-					duration: e.detail.duration
-				})
-			}
-			if (data?.user && data.osteopath && data.osteopath.calendarId) {
-				toast.loading('Booking Appointment...');
-				try {
-					await bookAppointment(data.osteopath.calendarId, data.user.id, {
-						gmail: data.osteopath.user.gmail,
-						id: data.osteopath.id,
-					},e.detail)
-					toast.success(`Appointment Booked!`);
-					open = false;
-				} catch (error) {
-					toast.error('Failed to book appointment!');
-					console.log(error)
-				}
-			} else {
+			if(!!!(data?.user) || !!!(data?.osteopath) || !!!(data.osteopath?.id)) {
 				open = false;
 				alertDialogOpen = true;
+				return
+			}
+			await updateAppointment(e.detail.id, {
+				osteopathId: data.osteopath.id,
+				date: e.detail.date,
+				startTime: e.detail.startTime,
+				duration: e.detail.duration
+			})
+			toast.loading('Booking Appointment...');
+			try {
+				await bookAppointment(data.osteopath.calendarId, data.user.id, {
+					gmail: data.osteopath.user.gmail,
+					id: data.osteopath.id,
+				},e.detail)
+				toast.success(`Appointment Booked!`);
+				open = false;
+			} catch (error) {
+				toast.error('Failed to book appointment!');
+				console.log(error)
 			}
 		}}
 		editable={data.isCurrentUser}
