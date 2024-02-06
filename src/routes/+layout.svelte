@@ -9,20 +9,42 @@
 	import type { PageData } from './$types';
 	import FeedbackDialog from '$lib/components/dialogs/feedback-dialog.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { ChatBubble, DotsVertical, Exit, Gear, Home, Person } from 'radix-icons-svelte';
+	import { ChatBubble, DotsVertical, Exit, Gear, Home, Person, ArrowLeft } from 'radix-icons-svelte';
 	import { flyAndScale } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
-	
+
 	let feedbackDialogOpen = false;
 	export let data: PageData;
+
+	import { goto, afterNavigate } from '$app/navigation';
+	import { base } from '$app/paths';
+	import { page } from '$app/stores';
+
+	let previousPage: string = base;
+
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
 </script>
 
-<ProgressBar color="#5B5BD6" height="0.125em" exitDelay={500} startPosition={0} />
+<ProgressBar color="#5B5BD6" height="0.250em" exitDelay={250} startPosition={0} />
 <Toaster />
 <header class="mb-10 mt-4 flex w-full max-w-5xl items-center justify-between">
 	<div class="inline-flex items-center gap-x-2 px-2 py-1">
-		<Logo size={32} />
-		<span class="text-xl font-medium">V2O</span>
+		{#if $page.url.pathname === '/'}
+			<Logo size={32} />
+			<span class="text-xl font-medium">V2O</span>
+			{:else}
+			<Button
+				class="gap-x-2"
+				size="responsive"
+				variant="link"
+				on:click={() => goto(previousPage)}
+			>
+				<ArrowLeft />
+				Back
+			</Button>
+		{/if}
 	</div>
 	<div class="flex items-center gap-x-4 rounded-full border px-2 py-2">
 		<ThemeButton />
@@ -47,44 +69,44 @@
 					transition={flyAndScale}
 					sideOffset={8}
 				>
-				<DropdownMenu.Group>
+					<DropdownMenu.Group>
+						<DropdownMenu.Item
+							class="flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+							href="/"
+						>
+							<div class="flex items-center">
+								<Home class="text-foreground-alt mr-2 size-5" /> Home
+							</div>
+						</DropdownMenu.Item>
+						<DropdownMenu.Item
+							class="flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+							href="/user/{data.user.id}"
+						>
+							<div class="flex items-center">
+								<Person class="text-foreground-alt mr-2 size-5" />
+								Profile
+							</div>
+						</DropdownMenu.Item>
+						<DropdownMenu.Item
+							class="flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+							href="/user/{data.user.id}/edit"
+						>
+							<div class="flex items-center">
+								<Gear class="text-foreground-alt mr-2 size-5" />
+								Settings
+							</div>
+						</DropdownMenu.Item>
+					</DropdownMenu.Group>
+					<DropdownMenu.Separator />
 					<DropdownMenu.Item
-						class="rounded-md flex h-10 select-none items-center py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-						href="/"
+						class="flex h-10 select-none items-center rounded-md py-1 pl-3 pr-4 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+						on:click={() => (feedbackDialogOpen = true)}
 					>
 						<div class="flex items-center">
-							<Home class="text-foreground-alt mr-2 size-5" /> Home
+							<ChatBubble class="text-foreground-alt mr-2 size-5" />
+							Give Feedback
 						</div>
-					</DropdownMenu.Item>
-					<DropdownMenu.Item
-						class="rounded-md flex h-10 select-none items-center py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-						href="/user/{data.user.id}"
-					>
-						<div class="flex items-center">
-							<Person class="text-foreground-alt mr-2 size-5" />
-							Profile
-						</div>
-					</DropdownMenu.Item>
-					<DropdownMenu.Item
-						class="rounded-md flex h-10 select-none items-center py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-						href="/user/{data.user.id}/edit"
-					>
-						<div class="flex items-center">
-							<Gear class="text-foreground-alt mr-2 size-5" />
-							Settings
-						</div>
-					</DropdownMenu.Item>
-				</DropdownMenu.Group>
-					<DropdownMenu.Separator/>
-					<DropdownMenu.Item
-					class="rounded-md flex h-10 select-none items-center py-1 pl-3 pr-4 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-					on:click={() => feedbackDialogOpen = true}
-				>
-					<div class="flex items-center">
-						<ChatBubble class="text-foreground-alt mr-2 size-5" />
-						Give Feedback
-					</div>
-					<!-- <div class="ml-auto flex items-center gap-px">
+						<!-- <div class="ml-auto flex items-center gap-px">
 			<kbd
 			  class="inline-flex items-center justify-center rounded-md border border-dark-10 bg-background text-xs text-muted-foreground shadow-kbd size-5"
 			>
@@ -96,21 +118,21 @@
 			  S
 			</kbd>
 		  </div> -->
-				</DropdownMenu.Item>
-				<DropdownMenu.Separator/>
-				<DropdownMenu.Item
-				class={buttonVariants({
-					variant: 'destructive',
-					class:
-						'data-[highlighted]:text-destructive-foregound rounded-md flex h-10 select-none items-center justify-start py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-destructive/80'
-				})}
-				href="/google/logout"
-			>
-				<div class="flex items-center">
-					<Exit class="text-foreground-alt mr-2 size-5" />
-					Logout
-				</div>
-			</DropdownMenu.Item>
+					</DropdownMenu.Item>
+					<DropdownMenu.Separator />
+					<DropdownMenu.Item
+						class={buttonVariants({
+							variant: 'destructive',
+							class:
+								'data-[highlighted]:text-destructive-foregound flex h-10 select-none items-center justify-start rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-destructive/80'
+						})}
+						href="/google/logout"
+					>
+						<div class="flex items-center">
+							<Exit class="text-foreground-alt mr-2 size-5" />
+							Logout
+						</div>
+					</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 			<Button class="hidden rounded-full sm:block" href="/google/logout" variant="destructive">
