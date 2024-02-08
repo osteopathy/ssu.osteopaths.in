@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { genId } from "../../../helpers/generate-id";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { categoryToArticle } from "./categoryToArticle";
+import { categoryToArticleTable } from "./categoryToArticle";
 import { osteopathTable } from "../index";
 import { commentTable } from "./comment";
 
@@ -17,8 +17,8 @@ export const articleTable = sqliteTable('article', {
     updatedAt: integer('updated_at', { mode: 'timestamp' }),
 });
 
-export const relation = relations(articleTable, ({ many }) => ({
+export const articlesRelation = relations(articleTable, ({ many }) => ({
     comments: many(commentTable),
-    categories: many(categoryToArticle),
+    categories: many(categoryToArticleTable),
     osteopaths: many(osteopathTable),
 }));

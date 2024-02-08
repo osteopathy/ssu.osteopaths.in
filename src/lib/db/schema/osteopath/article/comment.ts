@@ -8,12 +8,12 @@ export const commentTable = sqliteTable('comment', {
     id: genId(),
     // (text of the comment)
     content: text('content').notNull(),
-    authorId: text('author_id').references(() => userTable.id).notNull(),
-    articleId: text('article_id').references(() => articleTable.id).notNull(),
+    authorId: text('author_id').references(() => userTable.id,{ onDelete: 'cascade' }).notNull(),
+    articleId: text('article_id').references(() => articleTable.id, { onDelete: 'cascade' }).notNull(),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 });
 
-export const relation = relations(commentTable, ({ one }) => ({
+export const commentsRelation = relations(commentTable, ({ one }) => ({
     author: one(userTable,{
         fields: [commentTable.authorId],
         references: [userTable.id]

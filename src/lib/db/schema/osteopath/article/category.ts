@@ -1,6 +1,6 @@
 import { genId } from "../../../helpers/generate-id";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { categoryToArticle } from "./categoryToArticle";
+import { categoryToArticleTable } from "./categoryToArticle";
 import { relations } from "drizzle-orm";
 
 export const categoryTable = sqliteTable('category', {
@@ -10,6 +10,6 @@ export const categoryTable = sqliteTable('category', {
 });
 
 
-export const relation = relations(categoryTable, ({ many }) => ({
-  articles: many(categoryToArticle),
+export const caretogoriesRelation = relations(categoryTable, ({ many }) => ({
+  articles: many(categoryToArticleTable),
 }));

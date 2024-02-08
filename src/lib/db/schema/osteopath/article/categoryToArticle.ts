@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm";
 import { categoryTable } from "./category";
 import { articleTable } from "./article";
 
-export const categoryToArticle = sqliteTable(
+export const categoryToArticleTable = sqliteTable(
   'category_to_article',
 {
     articleId: text("article_id").notNull().references(() => articleTable.id),
@@ -15,13 +15,13 @@ export const categoryToArticle = sqliteTable(
   })
 );
 
-export const relation = relations(categoryToArticle, ({ one }) => ({
+export const categoriesToArticlesRelation = relations(categoryToArticleTable, ({ one }) => ({
     category: one(categoryTable, {
-      fields: [categoryToArticle.categoryId],
+      fields: [categoryToArticleTable.categoryId],
       references: [categoryTable.id],
     }),
     article: one(articleTable, {
-      fields: [categoryToArticle.articleId],
+      fields: [categoryToArticleTable.articleId],
       references: [articleTable.id],
     }),
 }));

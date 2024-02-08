@@ -11,6 +11,12 @@ export * from "./course"
 export * from "./appointment"
 export * from "./calendar"
 
+export * from "./article/article"
+export * from "./article/articleToOsteopath"
+export * from "./article/category"
+export * from "./article/categoryToArticle"
+export * from "./article/comment"
+
 export const osteopathTable = sqliteTable('osteopath', {
     id: genId(),
     username: text('username'),
