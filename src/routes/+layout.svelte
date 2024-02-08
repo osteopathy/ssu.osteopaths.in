@@ -36,10 +36,9 @@
 			<span class="text-xl font-medium">V2O</span>
 			{:else}
 			<Button
-				class="gap-x-2"
-				size="responsive"
+				class="gap-x-2 p-1 md:p-0"
 				variant="link"
-				on:click={() => goto(previousPage)}
+				on:click={() => previousPage ? goto(previousPage) : goto('/')}
 			>
 				<ArrowLeft />
 				Back
