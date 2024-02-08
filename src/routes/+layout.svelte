@@ -139,9 +139,9 @@
 				Logout
 			</Button>
 		{:else}
-			<a href="/google/login" class="flex items-center gap-x-2 rounded-full border px-3 py-2">
+			<a href="/google/login" class="flex items-center gap-x-2 rounded-full border px-3 py-2 m-2">
 				<Google class="size-5" /> <span class="block sm:hidden">Signup</span>
-				<span class="hidden sm:block"> Continue </span> With Google
+				<span class="hidden sm:block"> Continue With Google </span>
 			</a>
 		{/if}
 	</div>
@@ -149,6 +149,7 @@
 
 <slot />
 
+<div class="pt-6"></div>
 <footer
 	class="bg-layer-2 shadow-layer-6/30 mb-10 mt-auto flex w-full max-w-5xl flex-col rounded-xl border py-2 pl-2 pr-4 shadow-md"
 >

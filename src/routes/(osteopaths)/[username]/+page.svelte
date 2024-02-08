@@ -18,8 +18,7 @@
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
 	<div class="flex w-max flex-col">
-		
-			<Avatar.Root class="size-48">
+			<Avatar.Root class="size-32">
 				<Avatar.Image src={image} alt="@" />
 				<Avatar.Fallback>CN</Avatar.Fallback>
 			</Avatar.Root>
@@ -109,9 +108,9 @@
 			class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-7 shadow-sm outline-none sm:max-w-lg md:w-full"
 		>
 			<div class="flex flex-col gap-4 pb-4">
-				<AlertDialog.Title class="text-lg font-semibold tracking-tight"
-					>You need to Login</AlertDialog.Title
-				>
+				<AlertDialog.Title class="text-lg font-semibold tracking-tight">
+					You need to Login
+				</AlertDialog.Title>
 				<AlertDialog.Description class="text-foreground-alt text-sm">
 					To book an appointment, you need to login with your Google Account first.
 				</AlertDialog.Description>
