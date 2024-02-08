@@ -8,8 +8,8 @@
 	import { fade } from 'svelte/transition';
 	import { flyAndScale } from '$lib/utils/index.js';
 	import { bookAppointment } from '../../(api)/book';
-	import { createAppointment, updateAppointment } from '../../(api)/appointment';
-	
+	import { updateAppointment } from '../../(api)/appointment';
+
 	export let data;
 	let image = data.osteopath.user?.image;
 	let open = false;
@@ -17,12 +17,20 @@
 </script>
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
-	<div class="flex flex-col items-center justify-between">
-		<Avatar.Root class="size-48">
-			<Avatar.Image src={image} alt="@" />
-			<Avatar.Fallback>CN</Avatar.Fallback>
-		</Avatar.Root>
-		<dir class="mt-12 flex p-0">
+	<div class="flex w-max flex-col">
+		
+			<Avatar.Root class="size-48">
+				<Avatar.Image src={image} alt="@" />
+				<Avatar.Fallback>CN</Avatar.Fallback>
+			</Avatar.Root>
+		<div class="flex w-80 flex-col mt-6">
+			<h2 class="mb-1">{data.osteopath.user.name}</h2>
+			<span class="mb-2 text-muted-foreground">{data.osteopath?.course?.label}</span>
+			{#if data.osteopath?.about}
+				<p>{data.osteopath?.about}</p>
+			{/if}
+		</div>
+		<div class="flex w-full mt-6">
 			{#if data.isCurrentUser}
 				<Button
 					size="responsive"
@@ -38,38 +46,8 @@
 			{:else}
 				<Button on:click={() => (open = !open)} size="responsive">Book Appointment</Button>
 			{/if}
-		</dir>
+		</div>
 	</div>
-
-	<ul class="mt-4 flex max-w-96 flex-col rounded-md border">
-		<li class="flex border-b px-2 pb-0.5 pt-1">
-			<span>Name</span>
-			<div class="mr-2 border-r px-1"></div>
-			<span>{data.osteopath.user.name}</span>
-		</li>
-		<li class="flex border-b px-2 py-0.5">
-			<span>Gmail Address</span>
-			<div class="mr-2 border-r px-1"></div>
-			<span>{data.osteopath.user.gmail}</span>
-		</li>
-		<li class="flex border-b px-2 py-0.5">
-			<span>Course</span>
-			<div class="mr-2 border-r px-1"></div>
-			<span>{data.osteopath?.course?.label}</span>
-		</li>
-		<li class="flex border-b px-2 py-0.5">
-			<span>Batch</span>
-			<div class="mr-2 border-r px-1"></div>
-			<span>{data.osteopath?.batch}</span>
-		</li>
-		{#if data.osteopath?.about}
-			<li class="flex px-2 pb-1 pt-0.5">
-				<span>About</span>
-				<div class="mr-2 border-r px-1"></div>
-				<span>{data.osteopath?.about}</span>
-			</li>
-		{/if}
-	</ul>
 </main>
 
 {#if data.isCurrentUser}
@@ -84,28 +62,33 @@
 {#await import('$lib/components/dialogs/schedule/book-schedule.svelte') then { default: BookSchedule }}
 	<BookSchedule
 		on:book={async (e) => {
-			if(!!!(data?.user) || !!!(data?.osteopath) || !!!(data.osteopath?.id)) {
+			if (!!!data?.user || !!!data?.osteopath || !!!data.osteopath?.id) {
 				open = false;
 				alertDialogOpen = true;
-				return
+				return;
 			}
 			await updateAppointment(e.detail.id, {
 				osteopathId: data.osteopath.id,
 				date: e.detail.date,
 				startTime: e.detail.startTime,
 				duration: e.detail.duration
-			})
+			});
 			toast.loading('Booking Appointment...');
 			try {
-				await bookAppointment(data.osteopath.calendarId, data.user.id, {
-					gmail: data.osteopath.user.gmail,
-					id: data.osteopath.id,
-				},e.detail)
+				await bookAppointment(
+					data.osteopath.calendarId,
+					data.user.id,
+					{
+						gmail: data.osteopath.user.gmail,
+						id: data.osteopath.id
+					},
+					e.detail
+				);
 				toast.success(`Appointment Booked!`);
 				open = false;
 			} catch (error) {
 				toast.error('Failed to book appointment!');
-				console.log(error)
+				console.log(error);
 			}
 		}}
 		editable={data.isCurrentUser}
@@ -123,23 +106,25 @@
 		/>
 		<AlertDialog.Content
 			transition={flyAndScale}
-			class="rounded-lg fixed left-[50%] top-[50%] z-50 grid w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-7 shadow-sm outline-none sm:max-w-lg md:w-full"
+			class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-7 shadow-sm outline-none sm:max-w-lg md:w-full"
 		>
 			<div class="flex flex-col gap-4 pb-4">
-				<AlertDialog.Title class="text-lg font-semibold tracking-tight">You need to Login</AlertDialog.Title>
+				<AlertDialog.Title class="text-lg font-semibold tracking-tight"
+					>You need to Login</AlertDialog.Title
+				>
 				<AlertDialog.Description class="text-foreground-alt text-sm">
 					To book an appointment, you need to login with your Google Account first.
 				</AlertDialog.Description>
 			</div>
 			<div class="flex w-full items-center justify-center gap-2">
 				<AlertDialog.Cancel
-					class="rounded-lg shadow-sm active:scale-98 inline-flex w-full items-center justify-center bg-muted text-[15px] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+					class="active:scale-98 inline-flex w-full items-center justify-center rounded-lg bg-muted text-[15px] font-medium shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 				>
 					Cancel
 				</AlertDialog.Cancel>
 				<Button
 					href="/google/login"
-					class="rounded-lg shadow-sm focus-visible:ring-dark active:scale-98 inline-flex w-full items-center justify-center text-[15px] font-semibold text-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+					class="focus-visible:ring-dark active:scale-98 inline-flex w-full items-center justify-center rounded-lg text-[15px] font-semibold text-background shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 				>
 					Continue with Google
 				</Button>
