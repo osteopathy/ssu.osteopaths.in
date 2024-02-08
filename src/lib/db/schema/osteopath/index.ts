@@ -4,12 +4,13 @@ import { userTable } from "../user";
 import { createInsertSchema } from 'drizzle-zod';
 import { genId } from "../../helpers/generate-id";
 import { courseTable } from "./course";
-import { appointmentTable } from "./appointment";
-import { calendarTable } from "./calendar";
+import { appointmentTable } from "./schedule/appointment";
+import { calendarTable } from "./schedule/calendar";
+import { availabilityTable } from "./schedule/availibility";
 
 export * from "./course"
-export * from "./appointment"
-export * from "./calendar"
+export * from "./schedule/appointment"
+export * from "./schedule/calendar"
 
 export * from "./article/article"
 export * from "./article/articleToOsteopath"
@@ -60,4 +61,5 @@ export const osteopathsRelations = relations(osteopathTable, ({ one,many }) => (
         fields: [osteopathTable.calendarId],
         references: [calendarTable.id],
     }),
+    availibility: many(availabilityTable),
 }));

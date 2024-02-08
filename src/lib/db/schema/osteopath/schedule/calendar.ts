@@ -1,8 +1,8 @@
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
-import { osteopathTable } from "./index";
-import { genId } from "../../../db/helpers/generate-id";
+import { osteopathTable } from "../index";
+import { genId } from "../../../helpers/generate-id";
 
 export const calendarTable = sqliteTable('calendar', {
     id: genId(),

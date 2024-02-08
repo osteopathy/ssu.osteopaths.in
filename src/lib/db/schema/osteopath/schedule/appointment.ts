@@ -1,7 +1,7 @@
-import { genId } from "../../helpers/generate-id";
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { userTable } from "../user";
-import { osteopathTable } from "./index";
+import { genId } from "../../../helpers/generate-id";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { userTable } from "../../user";
+import { osteopathTable } from "../index";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 
@@ -14,6 +14,8 @@ export const appointmentTable = sqliteTable('appointment', {
 	osteopathId: text('osteopath_id')
 		.notNull()
 		.references(() => osteopathTable.id, { onDelete: 'cascade' }),
+	status: text('status', { enum: ['idle', 'pending', 'timeout', 'confirmed','completed', 'cancelled'] }).default('idle'),
+	createdAt: integer('created_at', {mode: 'timestamp'}).default(new Date()),
 });
 
 export type Appointment = InferSelectModel<typeof appointmentTable>

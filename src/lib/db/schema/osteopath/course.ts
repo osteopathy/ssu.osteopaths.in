@@ -9,6 +9,7 @@ export const courseTable = sqliteTable('course', {
     description: text('description'),
     // duration in semesters
     // duration: text('duration'),
+    // fee: text('fee'),
     // price: text('price'),
 })
 
