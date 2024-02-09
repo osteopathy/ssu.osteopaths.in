@@ -39,9 +39,9 @@
 					}}>Copy URL</Button
 				>
 				<div class="mr-4 border-r-2 px-2"></div>
-				<Button variant="outline" size="responsive" href="/{$page.params.username}/edit"
-					>Edit</Button
-				>
+				<Button variant="outline" size="responsive" href="/{$page.params.username}/edit">
+					Edit
+				</Button>
 			{:else}
 				<Button on:click={() => (open = !open)} size="responsive">Book Appointment</Button>
 			{/if}

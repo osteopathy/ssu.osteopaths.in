@@ -45,8 +45,8 @@ export const actions: Actions = {
         about: osteopath.about,
         session: {
           location: osteopath.session_location,
-          duration: osteopath.session_duration,
-          daily_limit: osteopath.session_daily_limit,
+          duration: +`${osteopath.session_duration}`,
+          daily_limit: +`${osteopath.session_daily_limit}`,
         }
       }).where(eq(osteopathTable.userId, event.locals.user.id))
     } catch (error) {

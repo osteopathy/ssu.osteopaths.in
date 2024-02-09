@@ -15,7 +15,7 @@ export const appointmentTable = sqliteTable('appointment', {
 		.notNull()
 		.references(() => osteopathTable.id, { onDelete: 'cascade' }),
 	status: text('status', { enum: ['idle', 'pending', 'timeout', 'confirmed','completed', 'cancelled'] }).default('idle'),
-	createdAt: integer('created_at', {mode: 'timestamp'}).default(new Date()),
+	createdAt: integer('created_at', {mode: 'timestamp'}).$default(() => new Date()),
 });
 
 export type Appointment = InferSelectModel<typeof appointmentTable>

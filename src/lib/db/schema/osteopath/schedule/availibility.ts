@@ -1,4 +1,4 @@
-import { genId } from "$lib/db/helpers/generate-id";
+import { genId } from "../../../helpers/generate-id";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { osteopathTable } from "../index";
 import { relations } from "drizzle-orm";
