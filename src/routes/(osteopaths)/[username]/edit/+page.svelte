@@ -33,7 +33,7 @@
 			<!-- <a href="/calendar/disconnect" class="text-primary-foreground">Disconnect your calendar</a> -->
 		{:else}
 			<p class="text-foreground mb-2 text-sm">You can connect your calendar to your account to manage your availability and appointments.</p>
-			<Button size="responsive" variant="secondary" href="/google/login?calendar=true">Connect Google Calendar</Button>
+			<Button size="responsive" variant="default" href="/google/login?calendar=true">Connect Google Calendar</Button>
 		{/if}
 		</div>
 	</div>
