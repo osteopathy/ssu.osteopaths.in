@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Avatar from '$lib/components/ui/avatar';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { ArrowRight, ArrowTopRight } from 'radix-icons-svelte';
 	export let data;
@@ -18,7 +19,7 @@
 		{:then osteopaths}
 			<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-12">
 				{#each osteopaths as osteopath}
-						<div class="group relative rounded-xl border bg-card p-4 text-card-foreground shadow">
+						<Button href="/{osteopath.username}" class="group flex flex-row relative rounded-xl border bg-card hover:bg-card-alt p-4 text-card-foreground shadow h-auto w-auto whitespace-normal items-start justify-normal">
 							<ArrowTopRight
 								class="absolute right-4 top-4 text-card-foreground group-hover:scale-125"
 							/>
@@ -41,16 +42,9 @@
 									{#if osteopath.about}
 										<p class="mt-1 line-clamp-2 text-sm text-foreground/90">{osteopath.about}</p>
 									{/if}
-									<a
-										href="/{osteopath.username}"
-										class="flex items-center gap-x-0.5 text-blue-600 dark:text-sky-500"
-									>
-										<span class="inline-block text-sm/6 hover:underline"> view-profile </span>
-										<ArrowRight />
-									</a>
 								</div>
 							</div>
-						</div>
+						</Button>
 				{/each}
 			</div>
 		{:catch error}

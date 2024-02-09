@@ -9,7 +9,7 @@
 	viewBox="0 0 125 125"
 	fill="none"
 	xmlns="http://www.w3.org/2000/svg"
-	class={`lucide-logo animate-spin [animation-duration:60s] ${$$props.class ?? ''}`}
+	class={`lucide-logo animate-[spin_60s_linear_infinite;] ${$$props.class ?? ''}`}
 >
 	<path
 		d="M63.1067 62.0837L10.8749 62.7007"

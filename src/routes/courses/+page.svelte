@@ -15,7 +15,7 @@
 	{:then courses}
 		<ul class="mt-12 grid sm:grid-cols-2 gap-12">
 			{#each courses as course}
-				<div class="p-6 border shadow-inner shadow-muted/75 rounded-xl">
+				<div class="bg-card-alt p-6 border shadow-inner shadow-muted/75 rounded-xl">
 					<div class="flex flex-col gap-y-1 mb-4">
 						<h2 class="text-2xl sm:text-3xl">{course.label}</h2>
 						<p class="text-xl text-muted-foreground">{course.description}</p>
