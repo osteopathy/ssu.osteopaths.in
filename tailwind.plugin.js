@@ -26,7 +26,7 @@ export default plugin(
                     "--destructive": getRgbChannels(red['red10']),
                     "--destructive-foreground": getRgbChannels(red['red1']),
                 }),
-                "--background": "var(--layer-0)",
+                "--background": "var(--layer-1)",
                 "--background-alt": "var(--layer-1)",
                 "--foreground": "var(--layer-12)",
                 "--foreground-alt": "var(--layer-13)",
