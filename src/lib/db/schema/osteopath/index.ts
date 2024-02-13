@@ -6,17 +6,18 @@ import { genId } from "../../helpers/generate-id";
 import { courseTable } from "./course";
 import { appointmentTable } from "./schedule/appointment";
 import { calendarTable } from "./schedule/calendar";
-import { availabilityTable } from "./schedule/availibility";
+import { availabilityTable } from "./schedule/availability";
 
 export * from "./course"
 export * from "./schedule/appointment"
+export * from "./schedule/availability"
 export * from "./schedule/calendar"
 
-export * from "./article/article"
-export * from "./article/articleToOsteopath"
-export * from "./article/category"
-export * from "./article/categoryToArticle"
-export * from "./article/comment"
+// export * from "./article/article"
+// export * from "./article/articleToOsteopath"
+// export * from "./article/category"
+// export * from "./article/categoryToArticle"
+// export * from "./article/comment"
 
 export const osteopathTable = sqliteTable('osteopath', {
     id: genId(),
@@ -61,5 +62,5 @@ export const osteopathsRelations = relations(osteopathTable, ({ one,many }) => (
         fields: [osteopathTable.calendarId],
         references: [calendarTable.id],
     }),
-    availibility: many(availabilityTable),
+    availabilities: many(availabilityTable),
 }));

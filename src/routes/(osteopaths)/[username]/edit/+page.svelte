@@ -1,41 +1,120 @@
 <script lang="ts">
-	import type { SuperValidated } from "sveltekit-superforms";
-	import OsteopathForm from "./osteopath-form.svelte";
-	import type { FormSchema } from "./schema";
-	import Button from "$lib/components/ui/button/button.svelte";
-	import Google from "$lib/components/ui/icons/google.svelte";
+	import { Dialog } from 'bits-ui';
+	import type { SuperValidated } from 'sveltekit-superforms';
+	import OsteopathForm from './osteopath-form.svelte';
+	import AvailabilityPanel from './availability-panel.svelte';
+	import type { FormSchema } from './schema';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { ArrowRight, Calendar } from 'radix-icons-svelte';
+	import { fade } from 'svelte/transition';
+	import { flyAndScale } from '$lib/utils';
 
-    export let form: SuperValidated<FormSchema>;
-    export let data;
+	export let form: SuperValidated<FormSchema>;
+	export let data;
 </script>
 
 <main class="w-full max-w-5xl p-4">
-    <div class="mb-12 flex flex-col items-start justify-between sm:flex-row">
-		<h2 class="text-4xl mb-4 sm:mb-0">Your Settings</h2>
+	<div class="mb-12 flex flex-col items-start justify-between sm:flex-row">
+		<h2 class="mb-4 text-4xl sm:mb-0">Your Settings</h2>
 		<div class="flex">
 			<Button size="responsive" href="/{data.osteopath?.username}">Public View</Button>
 			{#if data.user?.role === 'osteopath'}
 				<div class="mr-4 border-r-2 px-2"></div>
-				<Button variant="outline" size="responsive" href="/user/{data.user.id}/edit" class="w-max">Edit Profile</Button>
+				<Button variant="outline" size="responsive" href="/user/{data.user.id}/edit" class="w-max"
+					>Edit Profile</Button
+				>
 			{/if}
 		</div>
 	</div>
-    <OsteopathForm session_daily_limit={data.osteopath?.session?.daily_limit} session_duration={data.osteopath?.session?.duration} session_location={data.osteopath?.session?.location} about={data.osteopath?.about ?? ''} form={form} />
-	<div class="p-4 mt-8 border rounded-md flex flex-col gap-y-4">
+	{#if data.user?.role === 'osteopath'}
+			<Dialog.Root>
+				<Dialog.Trigger
+					class="bg-foreground-alt shadow-md hover:bg-foreground-alt/95 active:scale-98 inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full px-[21px] text-[15px] font-semibold text-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+					asChild
+					let:builder
+				>
+					<button
+						use:builder.action
+						{...builder}
+						class="bg-layer-1 w-max shadow-layer-5 border-layer-6 flex items-center gap-x-2 rounded-full border px-3 py-2 text-left font-medium shadow-inner"
+					>
+						<div class="bg-layer-3 flex size-10 items-center justify-center rounded-full">
+							<Calendar />
+						</div>
+						<div class="flex grow flex-col">
+							<h3 class="w-full text-base/6">Weekly Availability</h3>
+							<div class="-mt-1 flex items-center text-sm">
+								<span class=""> change </span>
+								<span> <ArrowRight class="size-4" /> </span>
+							</div>
+						</div>
+					</button>
+				</Dialog.Trigger>
+				<Dialog.Portal>
+					<Dialog.Overlay
+						transition={fade}
+						transitionConfig={{ duration: 150 }}
+						class="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
+					/>
+					<Dialog.Content
+						transition={flyAndScale}
+						class="bg-layer-0 fixed left-[50%] top-[50%] z-50 max-h-[90%] w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-lg border p-5 outline-none sm:max-w-[978px] md:w-full"
+					>
+						<AvailabilityPanel availabilities={data?.availabilities && data.availabilities} />
+					</Dialog.Content>
+				</Dialog.Portal>
+			</Dialog.Root>
+	{/if}
+	<div class="py-4"></div>
+	<OsteopathForm
+		session_daily_limit={data.osteopath?.session?.daily_limit}
+		session_duration={data.osteopath?.session?.duration}
+		session_location={data.osteopath?.session?.location}
+		about={data.osteopath?.about ?? ''}
+		{form}
+	/>
+	<div class="mt-8 flex flex-col gap-y-4 rounded-md border p-4">
 		<div>
-			<h2 class="text-muted-foreground text-xl mb-1">Username</h2>
-			<p class="text-foreground text-sm">Your username is {data.osteopath.username}</p>
+			<h2 class="mb-1 text-xl text-muted-foreground">Username</h2>
+			<p class="text-sm text-foreground">Your username is {data.osteopath.username}</p>
 		</div>
 		<div>
-		<h2 class="text-muted-foreground text-xl mb-1">Calendar</h2>
-		{#if data.calendar}
-			<span>{data.calendar.gmail}</span>
-			<!-- <a href="/calendar/disconnect" class="text-primary-foreground">Disconnect your calendar</a> -->
-		{:else}
-			<p class="text-foreground mb-2 text-sm">You can connect your calendar to your account to manage your availability and appointments.</p>
-			<Button size="responsive" class="gap-x-2"  variant="outline" href="/google/login?calendar=true">
-				<svg xmlns="http://www.w3.org/2000/svg" width="{31.27 / 1.5}" height="{32 / 1.5}" viewBox="0 0 256 262"><path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"/><path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"/><path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z"/><path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"/></svg>
-				Connect Google Calendar</Button>
+			<h2 class="mb-1 text-xl text-muted-foreground">Calendar</h2>
+			{#if data.calendar}
+				<span>{data.calendar.gmail}</span>
+				<!-- <a href="/calendar/disconnect" class="text-primary-foreground">Disconnect your calendar</a> -->
+			{:else}
+				<p class="mb-2 text-sm text-foreground">
+					You can connect your calendar to your account to manage your availability and
+					appointments.
+				</p>
+				<Button
+					size="responsive"
+					class="gap-x-2"
+					variant="outline"
+					href="/google/login?calendar=true"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width={31.27 / 1.5}
+						height={32 / 1.5}
+						viewBox="0 0 256 262"
+						><path
+							fill="#4285F4"
+							d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
+						/><path
+							fill="#34A853"
+							d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"
+						/><path
+							fill="#FBBC05"
+							d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z"
+						/><path
+							fill="#EB4335"
+							d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
+						/></svg
+					>
+					Connect Google Calendar
+				</Button>
 			{/if}
 		</div>
 	</div>
