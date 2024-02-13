@@ -1,6 +1,7 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import F from "@tailwindcss/forms"
 import P from "./tailwind.plugin"
+import T from "@tailwindcss/typography"
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -28,7 +29,8 @@ const config = {
 	},
 	plugins: [
 		F,
-		P
+		P,
+		T,
 		// require("@tailwindcss/forms"),
 	]
 };

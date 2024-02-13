@@ -50,6 +50,7 @@
 		<nav class="hidden gap-x-3 pr-2 sm:flex">
 			<a href="/">Home</a>
 			<a href="/courses">Courses</a>
+			<a href="/articles">Articles</a>
 			{#if data.isLogged}
 				<a href="/user/{data.user?.id}">Profile</a>
 			{/if}
