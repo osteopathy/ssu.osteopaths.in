@@ -58,54 +58,116 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			}
 		).then((res) => res.json())) as GoogleUserResult;
 
-		const existingUser = payload?.email
-			? await db.query.userTable.findFirst({
-				where: eq(userTable.gmail, payload?.email)
-			})
-			: false;
-
-		if (existingUser) {
-
-			if (calendarIntegration && existingUser.role === 'osteopath') {
-
-				const osteopath = await db.query.osteopathTable.findFirst({ where: eq(osteopathTable.userId, existingUser.id) });
-				
-				let calendarId = osteopath?.calendarId ?? generateId(15);
-				
-				const calendarAPI = calendarService({
-					calendarId: calendarId,
-					access_token: tokens.accessToken,
-					refresh_token: tokens.refreshToken,
+		if (!calendarIntegration) {
+			const existingUser = payload?.email
+				? await db.query.userTable.findFirst({
+					where: eq(userTable.gmail, payload?.email)
+				})
+				: false;
+			if (existingUser) {
+				const session = await lucia.createSession(existingUser.id, {});
+				const sessionCookie = lucia.createSessionCookie(session.id);
+				event.cookies.set(sessionCookie.name, sessionCookie.value, {
+					path: '.',
+					...sessionCookie.attributes
 				});
-				
-				let cal = await calendarAPI.getCalendar();
-				if (cal === undefined /* Osteopathy Calendar doesn't exist*/) cal = await calendarAPI.addCalendar()
-				let calendar: Calendar;
-			
-				if (osteopath?.calendarId) {
-					calendar = (await db.update(calendarTable).set({
-						accessToken: tokens.accessToken,
-						accessTokenExpiresAt: tokens.accessTokenExpiresAt,
-						gmail: payload.email,
-						idToken: tokens.idToken,
-						refreshToken: tokens.refreshToken,
-						calendarId: cal.id,
-					}).where(eq(calendarTable.id, calendarId)).returning())[0];
-				} else {
-					calendar = (await db.insert(calendarTable).values({
-						id: calendarId,
-						accessToken: tokens.accessToken,
-						accessTokenExpiresAt: tokens.accessTokenExpiresAt,
-						gmail: payload.email,
-						idToken: tokens.idToken,
-						refreshToken: tokens.refreshToken,
-						calendarId: cal.id,
-					}).returning())[0];
-					if (calendar.id) {
-						await db.update(osteopathTable).set({
-							calendarId: calendar.id,
-						}).where(eq(osteopathTable.userId, existingUser.id))
+				return new Response(null, {
+					status: 302,
+					headers: {
+						Location: '/'
 					}
+				});
+			} else {
+				const userId = generateId(15);
+				const emailDetail = extractFromEmail(payload.email)
+				let r;
+				if (emailDetail) {
+					const { year, batch } = emailDetail;
+					const { role, course } = (batch === 'bos' || batch === 'mos' || batch === 'ios') ? { role: 'osteopath', course: batch } as const : { role: 'student', course: batch } as const;
+					r = role;
+					let calendarId: string | null = null;
+					await Promise.allSettled([db.insert(userTable).values({
+						id: userId,
+						gmail: payload.email,
+						image: payload.picture,
+						name: payload.name,
+						role
+					}), (role === 'osteopath') && db.insert(osteopathTable).values({
+						courseId: course,
+						userId,
+						batch: year,
+						calendarId,
+					})]);
+				} else {
+
+					await db.insert(userTable).values({
+						id: userId,
+						gmail: payload.email,
+						image: payload.picture,
+						name: payload.name,
+						role: 'user'
+					})
+
+					const session = await lucia.createSession(userId, {});
+					const sessionCookie = lucia.createSessionCookie(session.id);
+					event.cookies.set(sessionCookie.name, sessionCookie.value, {
+						path: '.',
+						...sessionCookie.attributes
+					});
+					return new Response(null, {
+						status: 302,
+						headers: {
+							Location: r === 'osteopath' ? `/user/${userId}` : '/',
+						}
+					});
+				}
+			}
+
+		} else {
+			if (!(event.locals.user))
+				return new Response(null, {
+					status: 302,
+					headers: {
+						Location: '/'
+					}
+				});
+			const existingUser = event.locals.user;
+
+			const osteopath = await db.query.osteopathTable.findFirst({ where: eq(osteopathTable.userId, existingUser.id) });
+			let calendarId = osteopath?.calendarId ?? generateId(15);
+			const calendarAPI = calendarService({
+				calendarId: calendarId,
+				access_token: tokens.accessToken,
+				refresh_token: tokens.refreshToken,
+			});
+
+			let cal = await calendarAPI.getCalendar();
+			if (cal === undefined /* Osteopathy Calendar doesn't exist*/) cal = await calendarAPI.addCalendar()
+			let calendar: Calendar;
+
+			if (osteopath?.calendarId) {
+				calendar = (await db.update(calendarTable).set({
+					accessToken: tokens.accessToken,
+					accessTokenExpiresAt: tokens.accessTokenExpiresAt,
+					gmail: payload.email,
+					idToken: tokens.idToken,
+					refreshToken: tokens.refreshToken,
+					calendarId: cal.id,
+				}).where(eq(calendarTable.id, calendarId)).returning())[0];
+			} else {
+				calendar = (await db.insert(calendarTable).values({
+					id: calendarId,
+					accessToken: tokens.accessToken,
+					accessTokenExpiresAt: tokens.accessTokenExpiresAt,
+					gmail: payload.email,
+					idToken: tokens.idToken,
+					refreshToken: tokens.refreshToken,
+					calendarId: cal.id,
+				}).returning())[0];
+				if (calendar.id) {
+					await db.update(osteopathTable).set({
+						calendarId: calendar.id,
+					}).where(eq(osteopathTable.userId, existingUser.id))
 				}
 			}
 
@@ -118,77 +180,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			return new Response(null, {
 				status: 302,
 				headers: {
-					Location: '/'
-				}
-			});
-		} else {
-			const userId = generateId(15);
-			const emailDetail = extractFromEmail(payload.email)
-			let r;
-			if (emailDetail) {
-				const { year, batch } = emailDetail;
-				const { role, course } = (batch === 'bos' || batch === 'mos' || batch === 'ios') ? { role: 'osteopath', course: batch } as const : { role: 'student', course: batch } as const;
-
-				r = role;
-				let calendarId: string | null = null;
-
-				if (role === 'osteopath' && calendarIntegration) {
-					calendarId = generateId(15);
-					const calendarAPI = calendarService({
-						calendarId: calendarId,
-						access_token: tokens.accessToken,
-						refresh_token: tokens.refreshToken,
-					});
-					let cal = await calendarAPI.getCalendar();
-					if (cal === undefined /* Osteopathy Calendar doesn't exist*/) cal = await calendarAPI.addCalendar()
-					await db.insert(calendarTable).values({
-						id: calendarId,
-						accessToken: tokens.accessToken,
-						accessTokenExpiresAt: tokens.accessTokenExpiresAt,
-						gmail: payload.email,
-						idToken: tokens.idToken,
-						refreshToken: tokens.refreshToken,
-						calendarId: cal.id,
-					})
-				}
-
-				await Promise.allSettled([db.insert(userTable).values({
-					id: userId,
-					gmail: payload.email,
-					image: payload.picture,
-					name: payload.name,
-					role
-				}), (role === 'osteopath') && db.insert(osteopathTable).values({
-					courseId: course,
-					userId,
-					batch: year,
-					calendarId,
-				})]);
-
-			} else {
-				await db.insert(userTable).values({
-					id: userId,
-					gmail: payload.email,
-					image: payload.picture,
-					name: payload.name,
-					role: 'user'
-				})
-			}
-
-			const session = await lucia.createSession(userId, {});
-			const sessionCookie = lucia.createSessionCookie(session.id);
-			event.cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
-				...sessionCookie.attributes
-			});
-			return new Response(null, {
-				status: 302,
-				headers: {
-					Location: r === 'osteopath' ? `/user/${userId}` : '/',
+					Location: osteopath?.username ? `/${osteopath.username}` : '/',
 				}
 			});
 		}
-
 	} catch (e) {
 		// the specific error message depends on the provider
 		if (e instanceof OAuth2RequestError) {
@@ -201,4 +196,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			status: 500
 		});
 	}
+	
+	return new Response(null, {
+		status: 302,
+		headers: {
+			Location: '/',
+		}
+	});
 }
