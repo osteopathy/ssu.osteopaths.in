@@ -13,15 +13,17 @@
 	{#await data.courses}
 		Loading ... courses
 	{:then courses}
-		<ul class="mt-12 grid sm:grid-cols-2 gap-12">
+		<ul class="mt-12 grid gap-12 sm:grid-cols-2">
 			{#each courses as course}
-				<div class="bg-card-alt p-6 border shadow-inner shadow-muted/75 rounded-xl">
-					<div class="flex flex-col gap-y-1 mb-4">
+				<div class="rounded-xl border bg-card-alt p-6 shadow-inner shadow-muted/75">
+					<div class="mb-4 flex flex-col gap-y-1">
 						<h2 class="text-2xl sm:text-3xl">{course.label}</h2>
 						<p class="text-xl text-muted-foreground">{course.description}</p>
 					</div>
 					<div>
-						<Button disabled variant="link" class="p-0">Learn More <ArrowRight class="ml-1"/></Button>
+						<Button disabled variant="link" class="p-0"
+							>Learn More <ArrowRight class="ml-1" /></Button
+						>
 					</div>
 				</div>
 			{/each}

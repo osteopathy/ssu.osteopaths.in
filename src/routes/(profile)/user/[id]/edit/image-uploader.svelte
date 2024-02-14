@@ -11,9 +11,9 @@
 	let crop = { x: 0, y: 0 };
 	let zoom: number = 1;
 
-	const dispatch = createEventDispatcher()
-	
-	export let imageSrc: string|null|undefined;
+	const dispatch = createEventDispatcher();
+
+	export let imageSrc: string | null | undefined;
 
 	let image: string | null,
 		fileinput,
@@ -35,7 +35,7 @@
 
 	async function cropImage() {
 		if (image) croppedImage = await getCroppedImg(image, pixelCrop);
-		dispatch('handleUploadImage', croppedImage)
+		dispatch('handleUploadImage', croppedImage);
 	}
 
 	function reset() {
@@ -47,9 +47,13 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Trigger asChild let:builder>
-		<button use:builder.action {...builder} class={buttonVariants({variant:'secondary',class:'gap-x-2'})}>
-            <Upload size={20} /> Upload Photo
-        </button>
+		<button
+			use:builder.action
+			{...builder}
+			class={buttonVariants({ variant: 'secondary', class: 'gap-x-2' })}
+		>
+			<Upload size={20} /> Upload Photo
+		</button>
 	</Dialog.Trigger>
 	<Dialog.Content>
 		<div class="mb-4">
@@ -94,10 +98,12 @@
 			</div>
 		</div>
 		<Dialog.Footer class="relative">
-			<Button on:click={() => {
-				cropImage();
-				open = false;
-			}}>Save</Button>
+			<Button
+				on:click={() => {
+					cropImage();
+					open = false;
+				}}>Save</Button
+			>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>

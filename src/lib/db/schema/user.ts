@@ -1,22 +1,23 @@
-import { relations, type InferSelectModel, eq } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { sessionTable } from "./session";
-import { genId } from "../helpers/generate-id";
-import { createInsertSchema } from "drizzle-zod";
-import { osteopathTable } from ".";
-
+import { relations, type InferSelectModel, eq } from 'drizzle-orm';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sessionTable } from './session';
+import { genId } from '../helpers/generate-id';
+import { createInsertSchema } from 'drizzle-zod';
+import { osteopathTable } from '.';
 
 export const userTable = sqliteTable('user', {
-    id: genId(),
-    name: text('name'),
-    gmail: text('gmail'),
-    image: text('image'),
-    role: text('role', {
-        enum: ['user', 'student', 'osteopath', 'admin']
-    }).notNull().default('user'),
+	id: genId(),
+	name: text('name'),
+	gmail: text('gmail'),
+	image: text('image'),
+	role: text('role', {
+		enum: ['user', 'student', 'osteopath', 'admin']
+	})
+		.notNull()
+		.default('user'),
 
-    phoneNumber: text('phone_number'),
-    phoneNumberVerified: integer('phone_number_verified',{mode:'boolean'}).default(false),
+	phoneNumber: text('phone_number'),
+	phoneNumberVerified: integer('phone_number_verified', { mode: 'boolean' }).default(false)
 });
 
 export type User = InferSelectModel<typeof userTable>;
@@ -25,9 +26,9 @@ export const createUserSchema = createInsertSchema(userTable);
 export type CreateUserSchema = typeof createUserSchema;
 
 export const usersRelations = relations(userTable, ({ many, one }) => ({
-    sessions: many(sessionTable),
-    user: one(osteopathTable,{
-        fields: [userTable.id],
-        references: [osteopathTable.userId],
-    }),
+	sessions: many(sessionTable),
+	user: one(osteopathTable, {
+		fields: [userTable.id],
+		references: [osteopathTable.userId]
+	})
 }));

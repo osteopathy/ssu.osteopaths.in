@@ -39,7 +39,7 @@ export const lucia = new Lucia(adapter, {
 			image: attributes.image,
 			name: attributes.name,
 			phoneNumber: attributes['phone_number'],
-			phoneNumberVerified: attributes['phone_number_verified'],
+			phoneNumberVerified: attributes['phone_number_verified']
 		};
 	}
 });

@@ -3,7 +3,7 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { FormOptions } from 'formsnap';
 	import { toast } from 'svelte-sonner';
-	import { createCourseSchema, type CreateCourseSchema } from '$lib/db/schema'
+	import { createCourseSchema, type CreateCourseSchema } from '$lib/db/schema';
 
 	export let form: SuperValidated<CreateCourseSchema>;
 
@@ -53,6 +53,6 @@
 			<Form.Validation />
 		</Form.Item>
 	</Form.Field>
-	<Form.Button>{ formType === 'create-course' ? 'Submit' : 'Update'}</Form.Button>
+	<Form.Button>{formType === 'create-course' ? 'Submit' : 'Update'}</Form.Button>
 	<Form.Button formmethod="dialog" variant="outline">Cancel</Form.Button>
 </Form.Root>

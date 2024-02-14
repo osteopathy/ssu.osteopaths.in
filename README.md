@@ -41,10 +41,10 @@ This is an opinionated collection of components, hooks, and utilities for your S
 #### Routes and Pages
 
 - `src/routes` – Sveltekit routes
-	- `src/google` - Continue with Google Screen main UI
-		- `src/google/callback` - API Endpoint for Callback
-		- `src/google/login` - API Endpoint for Generate Auth URL
-		- `src/google/logout` - API Endpoint for Logout
+  - `src/google` - Continue with Google Screen main UI
+    - `src/google/callback` - API Endpoint for Callback
+    - `src/google/login` - API Endpoint for Generate Auth URL
+    - `src/google/logout` - API Endpoint for Logout
 
 ## Inspired from
 

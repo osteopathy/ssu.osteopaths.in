@@ -9,7 +9,15 @@
 	import type { PageData } from './$types';
 	import FeedbackDialog from '$lib/components/dialogs/feedback-dialog.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { ChatBubble, DotsVertical, Exit, Gear, Home, Person, ArrowLeft } from 'radix-icons-svelte';
+	import {
+		ChatBubble,
+		DotsVertical,
+		Exit,
+		Gear,
+		Home,
+		Person,
+		ArrowLeft
+	} from 'radix-icons-svelte';
 	import { flyAndScale } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
 
@@ -34,11 +42,11 @@
 		{#if $page.url.pathname === '/'}
 			<Logo size={32} />
 			<span class="text-xl font-medium">V2O</span>
-			{:else}
+		{:else}
 			<Button
 				class="gap-x-2 p-1 md:p-0"
 				variant="link"
-				on:click={() => previousPage ? goto(previousPage) : goto('/')}
+				on:click={() => (previousPage ? goto(previousPage) : goto('/'))}
 			>
 				<ArrowLeft />
 				Back
@@ -65,7 +73,7 @@
 					<DotsVertical class="h-6 w-6 text-foreground" />
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content
-					class="w-max rounded-xl border border-muted bg-popover text-popover-foreground px-1 py-1.5 shadow-popover"
+					class="w-max rounded-xl border border-muted bg-popover px-1 py-1.5 text-popover-foreground shadow-popover"
 					transition={flyAndScale}
 					sideOffset={8}
 				>
@@ -75,7 +83,7 @@
 							href="/"
 						>
 							<div class="flex items-center">
-								<Home class="text-foreground-alt mr-2 size-5" /> Home
+								<Home class="mr-2 size-5 text-foreground-alt" /> Home
 							</div>
 						</DropdownMenu.Item>
 						<DropdownMenu.Item
@@ -83,7 +91,7 @@
 							href="/user/{data.user.id}"
 						>
 							<div class="flex items-center">
-								<Person class="text-foreground-alt mr-2 size-5" />
+								<Person class="mr-2 size-5 text-foreground-alt" />
 								Profile
 							</div>
 						</DropdownMenu.Item>
@@ -92,7 +100,7 @@
 							href="/user/{data.user.id}/edit"
 						>
 							<div class="flex items-center">
-								<Gear class="text-foreground-alt mr-2 size-5" />
+								<Gear class="mr-2 size-5 text-foreground-alt" />
 								Settings
 							</div>
 						</DropdownMenu.Item>
@@ -103,7 +111,7 @@
 						on:click={() => (feedbackDialogOpen = true)}
 					>
 						<div class="flex items-center">
-							<ChatBubble class="text-foreground-alt mr-2 size-5" />
+							<ChatBubble class="mr-2 size-5 text-foreground-alt" />
 							Give Feedback
 						</div>
 						<!-- <div class="ml-auto flex items-center gap-px">
@@ -129,7 +137,7 @@
 						href="/google/logout"
 					>
 						<div class="flex items-center">
-							<Exit class="text-foreground-alt mr-2 size-5" />
+							<Exit class="mr-2 size-5 text-foreground-alt" />
 							Logout
 						</div>
 					</DropdownMenu.Item>
@@ -139,7 +147,7 @@
 				Logout
 			</Button>
 		{:else}
-			<a href="/google/login" class="flex items-center gap-x-2 rounded-full border px-3 py-2 m-2">
+			<a href="/google/login" class="m-2 flex items-center gap-x-2 rounded-full border px-3 py-2">
 				<Google class="size-5" /> <span class="block sm:hidden">Signup</span>
 				<span class="hidden sm:block">Continue With Google </span>
 			</a>
@@ -151,15 +159,15 @@
 
 <div class="py-6"></div>
 <footer
-	class="bg-layer-2 shadow-layer-6/30 mb-10 mt-auto flex w-full max-w-5xl flex-col rounded-xl border py-2 pl-2 pr-4 shadow-md"
+	class="mb-10 mt-auto flex w-full max-w-5xl flex-col rounded-xl border bg-layer-2 py-2 pl-2 pr-4 shadow-md shadow-layer-6/30"
 >
 	<div class="mb-2 flex w-full flex-col items-center justify-between gap-y-4 sm:mb-1 sm:flex-row">
 		<div class="flex items-center gap-x-2">
 			<Logo size={36} />
-			<div class="text-layer-12 whitespace-nowrap text-2xl font-semibold">V2O</div>
+			<div class="whitespace-nowrap text-2xl font-semibold text-layer-12">V2O</div>
 		</div>
 		<div
-			class="xs:flex-row text-layer-11 flex flex-wrap items-center justify-center space-x-4 text-sm font-semibold leading-6"
+			class="xs:flex-row flex flex-wrap items-center justify-center space-x-4 text-sm font-semibold leading-6 text-layer-11"
 		>
 			<a href="https://osteopaths.in/privacy-policy" class="hover:underline">Privacy policy</a>
 			<div class="xs:block hidden h-4 w-px bg-slate-500/20"></div>
@@ -168,7 +176,7 @@
 			<a href="https://osteopaths.in/contact-us" class="hover:underline">Contact Us</a>
 		</div>
 	</div>
-	<span class="text-layer-9 mt-1 p-px text-center text-sm font-medium sm:text-left">
+	<span class="mt-1 p-px text-center text-sm font-medium text-layer-9 sm:text-left">
 		built with sveltekit, typescript,<br class="xs:hidden block" /> tailwindcss and tursodb
 	</span>
 </footer>

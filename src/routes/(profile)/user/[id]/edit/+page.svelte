@@ -2,7 +2,7 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import { uploadFile } from '../../../../(api)/image/upload'
+	import { uploadFile } from '../../../../(api)/image/upload';
 	import ImageUpload from './image-uploader.svelte';
 	import { toast } from 'svelte-sonner';
 	import type { CreateUserSchema } from '$lib/db/schema';
@@ -42,23 +42,25 @@
 		}
 	}
 
-	let usernameForm: Promise<typeof import("$lib/components/dialogs/username-dialog.svelte")>;
+	let usernameForm: Promise<typeof import('$lib/components/dialogs/username-dialog.svelte')>;
 	onMount(() => {
-		if(!!!(data.username) && data.user.role === 'osteopath' && data.isLogged && data.isCurrentUser) {
-			console.log(data.username)
+		if (!!!data.username && data.user.role === 'osteopath' && data.isLogged && data.isCurrentUser) {
+			console.log(data.username);
 			usernameForm = import('$lib/components/dialogs/username-dialog.svelte');
 		}
-	})
+	});
 </script>
 
 <main class="flex w-full max-w-5xl flex-col p-4">
 	<div class="mb-12 flex flex-col items-start justify-between sm:flex-row">
-		<h2 class="text-4xl mb-4 sm:mb-0">Your Profile</h2>
+		<h2 class="mb-4 text-4xl sm:mb-0">Your Profile</h2>
 		<div class="flex">
 			<Button size="responsive" href="/user/{data.user?.id}">Public View</Button>
 			{#if data.user?.role === 'osteopath'}
 				<div class="mr-4 border-r-2 px-2"></div>
-				<Button variant="outline" size="responsive" href="/{data.username}" class="w-max">Osteopathy Profile</Button>
+				<Button variant="outline" size="responsive" href="/{data.username}" class="w-max"
+					>Osteopathy Profile</Button
+				>
 			{/if}
 		</div>
 	</div>

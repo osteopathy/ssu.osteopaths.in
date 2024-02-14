@@ -3,10 +3,10 @@
 	import MultiSelectIcon from '$lib/components/ui/icons/multi-select.svelte';
 	import { Temporal } from 'temporal-polyfill';
 	import { createEventDispatcher } from 'svelte';
-    import type { LayoutServerData } from "./$types"
+	import type { LayoutServerData } from './$types';
 
 	const dispatch = createEventDispatcher<{
-		select: { bydate: (typeof bydates)[string], changed: boolean };
+		select: { bydate: (typeof bydates)[string]; changed: boolean };
 	}>();
 
 	const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -15,7 +15,7 @@
 	let multiSelectable = false;
 
 	export let editable = false;
-    export let availabilities: LayoutServerData['availabilities'];
+	export let availabilities: LayoutServerData['availabilities'];
 
 	export let bydates: Record<
 		string,
@@ -114,7 +114,7 @@
 					booked: [] as (typeof bydates)[string],
 					available: [] as (typeof bydates)[string]
 				};
-				if(disabled === false || editable)
+				if (disabled === false || editable)
 					for (let i = 0; i < bydates[starting_point.toString()]?.length; i++) {
 						if (bydates[starting_point.toString()][i].userId) {
 							seats.booked.push(bydates[starting_point.toString()][i]);
@@ -122,7 +122,12 @@
 							seats.available.push(bydates[starting_point.toString()][i]);
 						}
 					}
-				view.weeks[week][index] = { day: starting_point, seats, disabled, bydate: bydates[starting_point.toString()] };
+				view.weeks[week][index] = {
+					day: starting_point,
+					seats,
+					disabled,
+					bydate: bydates[starting_point.toString()]
+				};
 				starting_point = starting_point.add({ days: 1 });
 			}
 		}
@@ -166,7 +171,7 @@
 					<span class="xs:h-[18px] xs:block hidden">Multi-Select</span>
 					{#if multiSelect}
 						<span
-							class="border-background group-aria-selected:bg-foreground group-aria-selected:text-background text-foreground bg-muted absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border text-sm group-disabled:!invisible"
+							class="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border border-background bg-muted text-sm text-foreground group-disabled:!invisible group-aria-selected:bg-foreground group-aria-selected:text-background"
 						>
 							{selected.length}
 						</span>
@@ -218,7 +223,7 @@
 				</div>
 			{/each}
 		</div>
-		<div role="rowgroup" class="flex w-full flex-col gap-0.5 sm:gap-2 rounded-md">
+		<div role="rowgroup" class="flex w-full flex-col gap-0.5 rounded-md sm:gap-2">
 			{#each view.weeks as week}
 				<div role="row" class="xs:gap-2 flex items-center gap-1 sm:gap-4">
 					{#each week as { day, seats, disabled, bydate }}
@@ -243,9 +248,11 @@
 							aria-selected={multiSelect
 								? selected.findIndex((d) => d.equals(day)) !== -1
 								: selected[0].equals(day)}
-							disabled={editable ? view.date.month !== day.month || day.since(min).sign === -1 : disabled || view.date.month !== day.month || day.since(min).sign === -1}
+							disabled={editable
+								? view.date.month !== day.month || day.since(min).sign === -1
+								: disabled || view.date.month !== day.month || day.since(min).sign === -1}
 							on:click={() => {
-								const changed = selected[0] !== day
+								const changed = selected[0] !== day;
 								if (multiSelect) {
 									const index = selected.findIndex((d) => d.equals(day));
 									if (index !== -1 && selected.length !== 1) {
@@ -259,8 +266,8 @@
 									selected[0] = day;
 								}
 								// TODO: Add support for multiSelect
-								if(!multiSelect) {
-									dispatch('select', { bydate, changed })
+								if (!multiSelect) {
+									dispatch('select', { bydate, changed });
 								}
 							}}
 						>
@@ -272,24 +279,24 @@
 							</time>
 							{#if seats.available.length !== 0 && seats.booked.length !== 0}
 								<span
-									class="border-background group-aria-selected:bg-foreground group-aria-selected:text-background text-foreground absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border bg-yellow-500 text-sm group-disabled:!invisible"
+									class="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border border-background bg-yellow-500 text-sm text-foreground group-disabled:!invisible group-aria-selected:bg-foreground group-aria-selected:text-background"
 								>
 									{seats.available.length}
 								</span>
 							{:else if seats.available.length !== 0}
 								<span
-									class="border-background group-aria-selected:bg-foreground group-aria-selected:text-background text-foreground bg-muted absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border text-sm group-disabled:!invisible"
+									class="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded border border-background bg-muted text-sm text-foreground group-disabled:!invisible group-aria-selected:bg-foreground group-aria-selected:text-background"
 								>
 									{seats.available.length}
 								</span>
 							{:else if seats.booked.length > 0}
 								<span
-									class="border-background group-aria-selected:bg-foreground group-aria-selected:text-background text-foreground bg-muted absolute -right-1 top-0 inline-flex h-4 w-4 items-center justify-center rounded border text-sm group-disabled:!invisible"
+									class="absolute -right-1 top-0 inline-flex h-4 w-4 items-center justify-center rounded border border-background bg-muted text-sm text-foreground group-disabled:!invisible group-aria-selected:bg-foreground group-aria-selected:text-background"
 								>
 									{seats.available.length}
 								</span>
 								<span
-									class="border-background group-aria-selected:text-background text-foreground absolute -right-1 bottom-0 inline-flex h-4 w-4 items-center justify-center rounded border bg-teal-500 text-sm group-disabled:!invisible group-aria-selected:bg-teal-600 dark:group-aria-selected:bg-teal-300"
+									class="absolute -right-1 bottom-0 inline-flex h-4 w-4 items-center justify-center rounded border border-background bg-teal-500 text-sm text-foreground group-disabled:!invisible group-aria-selected:bg-teal-600 group-aria-selected:text-background dark:group-aria-selected:bg-teal-300"
 								>
 									{seats.booked.length}
 								</span>

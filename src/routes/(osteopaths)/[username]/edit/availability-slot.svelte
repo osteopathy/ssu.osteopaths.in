@@ -23,7 +23,7 @@
 		element: HTMLElement | null;
 	}[] = [];
 
-	export let day:string;
+	export let day: string;
 	export let startTime = config.startTime;
 	export let endTime = config.endTime;
 	export let minGap = config.minGap;
@@ -32,7 +32,7 @@
 	let updated = false;
 </script>
 
-<div class="w-full relative overflow-auto pb-4">
+<div class="relative w-full overflow-auto pb-4">
 	<div
 		on:pointermove={(event) => {
 			const rect = container.getBoundingClientRect();
@@ -57,7 +57,7 @@
 		on:pointerleave={() => {
 			pointerVisible = false;
 		}}
-		class="h-12 relative w-full pb-4 shrink min-w-[864px] bg-indigo-200 border-2 border-indigo-600 rounded-md"
+		class="relative h-12 w-full min-w-[864px] shrink rounded-md border-2 border-indigo-600 bg-indigo-200 pb-4"
 	>
 		{#if pointerVisible}
 			<button
@@ -153,7 +153,7 @@
 						];
 					}
 				}}
-				class="absolute h-full rounded-md bg-indigo-400 border flex items-center justify-center"
+				class="absolute flex h-full items-center justify-center rounded-md border bg-indigo-400"
 			>
 				<PlusCircled class="text-white" />
 			</button>
@@ -163,11 +163,11 @@
 				style:left="{marked.start.x}%"
 				style:right="{100 - marked.end.x}%"
 				bind:this={marked.element}
-				class="absolute h-full rounded-md bg-indigo-500 border flex group items-center justify-center @container"
+				class="@container group absolute flex h-full items-center justify-center rounded-md border bg-indigo-500"
 			>
 				{#if marked.element?.offsetWidth > 120}
 					<div
-						class="flex items-center justify-center text-white w-full group-hover:hidden absolute @[6rem]:text-sm text-xs @[12rem]:text-lg @xs:text-xl"
+						class="@[6rem]:text-sm @[12rem]:text-lg @xs:text-xl absolute flex w-full items-center justify-center text-xs text-white group-hover:hidden"
 					>
 						{marked.start.time + ' - ' + marked.end.time}
 					</div>
@@ -181,14 +181,14 @@
 						markedPointers = markedPointers.toSpliced(i, 1);
 						updated = true;
 					}}
-					class="p-1 bg-white/10 hover:bg-rose-400 group-hover:opacity-100 opacity-0 rounded-md"
+					class="rounded-md bg-white/10 p-1 opacity-0 hover:bg-rose-400 group-hover:opacity-100"
 				>
 					<Trash class="text-indigo-950" />
 				</button>
 			</div>
 		{/each}
 	</div>
-	<div class="relative text-xs shrink min-w-[864px]">
+	<div class="relative min-w-[864px] shrink text-xs">
 		{#each view as { x, time }, i}
 			<div class="absolute w-max" style:left="{time.hour === endTime ? x - 1.2 : x}%">
 				{#if time.hour === endTime}

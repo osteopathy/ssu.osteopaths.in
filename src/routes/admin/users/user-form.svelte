@@ -3,7 +3,7 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { FormOptions } from 'formsnap';
 	import { toast } from 'svelte-sonner';
-	import { createUserSchema, type CreateUserSchema } from '$lib/db/schema'
+	import { createUserSchema, type CreateUserSchema } from '$lib/db/schema';
 
 	export let form: SuperValidated<CreateUserSchema>;
 
@@ -54,6 +54,6 @@
 			<Form.Validation />
 		</Form.Item>
 	</Form.Field>
-	<Form.Button>{ formType === 'create-user' ? 'Submit' : 'Update'}</Form.Button>
+	<Form.Button>{formType === 'create-user' ? 'Submit' : 'Update'}</Form.Button>
 	<Form.Button formmethod="dialog" variant="outline">Cancel</Form.Button>
 </Form.Root>

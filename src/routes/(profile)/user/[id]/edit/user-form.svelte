@@ -3,12 +3,12 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { FormOptions } from 'formsnap';
 	import { toast } from 'svelte-sonner';
-	import { createUserSchema, type CreateUserSchema, type User } from '$lib/db/schema'
+	import { createUserSchema, type CreateUserSchema, type User } from '$lib/db/schema';
 
 	export let form: SuperValidated<CreateUserSchema>;
 
 	export let userId: string = '';
-	export let user:User|null = null;
+	export let user: User | null = null;
 
 	const options: FormOptions<CreateUserSchema> = {
 		onSubmit() {
@@ -30,7 +30,7 @@
 	action="/admin/users/?/update-user"
 	class="space-y-6"
 >
-    <input type="hidden" name="id" value={userId}>
+	<input type="hidden" name="id" value={userId} />
 	<Form.Field {config} name="name">
 		<Form.Item>
 			<Form.Label>Full Name</Form.Label>
@@ -43,7 +43,9 @@
 		<Form.Item>
 			<Form.Label>Phone Number</Form.Label>
 			<Form.Input value={user?.phoneNumber} />
-			<Form.Description>Shared with the Osteopath with whom you are going to take future sessions</Form.Description>
+			<Form.Description
+				>Shared with the Osteopath with whom you are going to take future sessions</Form.Description
+			>
 			<Form.Validation />
 		</Form.Item>
 	</Form.Field>

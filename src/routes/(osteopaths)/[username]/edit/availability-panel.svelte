@@ -12,10 +12,10 @@
 		'saturday'
 	] as const;
 
-	export let availabilities: any = []
+	export let availabilities: any = [];
 </script>
 
-<ul class="flex flex-col gap-y-4 grow w-0 min-w-full">
+<ul class="flex w-0 min-w-full grow flex-col gap-y-4">
 	{#each days as day}
 		<li class="">
 			<h3 class="mb-2">Availability {day}</h3>

@@ -11,17 +11,16 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const code = generateCodeVerifier();
 
 	const calendar = event.url.searchParams.get('calendar') === 'true';
-	
+
 	const url = await google.createAuthorizationURL(state, code, {
-		scopes: [...GOOGLE_SCOPES.split(','),...(
-			calendar ? GOOGLE_CALENDAR_SCOPES.split(',') : []
-		)], // Add Google Calendar Scopes
+		// Add Google Calendar Scopes
+		scopes: [...GOOGLE_SCOPES.split(','), ...(calendar ? GOOGLE_CALENDAR_SCOPES.split(',') : [])]
 	});
 
-	// // extra configrations for google
+	// extra configrations for google
 	url.searchParams.set('access_type', 'offline');
 	url.searchParams.set('prompt', 'consent');
-	url.searchParams.set('include_granted_scopes','true');
+	url.searchParams.set('include_granted_scopes', 'true');
 
 	event.cookies.set('google_oauth_state', state, {
 		path: '/',
@@ -39,13 +38,14 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		sameSite: 'lax'
 	});
 
-	if(calendar) event.cookies.set('calendar', 'true', {
-		path: '/',
-		secure: import.meta.env.PROD,
-		httpOnly: true,
-		maxAge: 60 * 10,
-		sameSite: 'lax'
-	});
+	if (calendar)
+		event.cookies.set('calendar', 'true', {
+			path: '/',
+			secure: import.meta.env.PROD,
+			httpOnly: true,
+			maxAge: 60 * 10,
+			sameSite: 'lax'
+		});
 
 	redirect(302, url.toString());
 }

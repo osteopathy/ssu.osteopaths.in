@@ -10,19 +10,19 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { ArrowRight, PlusCircled } from 'radix-icons-svelte';
 	import { buttonVariants } from '$lib/components/ui/button';
-	import { createAppointment } from '../../../../routes/(api)/appointment'
+	import { createAppointment } from '../../../../routes/(api)/appointment';
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher<{
 		book: {
-			id: string,
-			date: string,
-			startTime: string,
-			duration: string
-		}
-	}>()
-	
+			id: string;
+			date: string;
+			startTime: string;
+			duration: string;
+		};
+	}>();
+
 	export let open = false;
 	// editable will make it possible to edit schedule
 	export let editable = true;
@@ -66,10 +66,12 @@
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Content class="max-w-fit max-h-[92%] overflow-auto">
+	<Dialog.Content class="max-h-[92%] max-w-fit overflow-auto">
 		<Dialog.Header>
-			<Dialog.Title>{editable ? 'Edit' : 'Book'} Appointment{editable?'s':''}</Dialog.Title>
-			<Dialog.Description>You can {editable ? 'edit' : 'choose'} a date, and select time.</Dialog.Description>
+			<Dialog.Title>{editable ? 'Edit' : 'Book'} Appointment{editable ? 's' : ''}</Dialog.Title>
+			<Dialog.Description
+				>You can {editable ? 'edit' : 'choose'} a date, and select time.</Dialog.Description
+			>
 		</Dialog.Header>
 		<div class="relative flex flex-col sm:flex-row">
 			<DatePicker
@@ -82,7 +84,7 @@
 				}}
 			/>
 			<div
-				class="xs:p-3 border-layer-6 rounded-b-lg border-2 p-2 sm:rounded-r-lg sm:rounded-bl-none sm:p-4"
+				class="xs:p-3 rounded-b-lg border-2 border-layer-6 p-2 sm:rounded-r-lg sm:rounded-bl-none sm:p-4"
 			>
 				<div class="mb-3 flex w-full items-center justify-between gap-x-2">
 					<h4 class="whitespace-nowrap text-lg font-bold tabular-nums">
@@ -113,7 +115,7 @@
 									loading={loading === 'create-appointment'}
 									on:cancel={() => (popover = false)}
 									on:submit={async (e) => {
-										loading = 'create-appointment'
+										loading = 'create-appointment';
 										const res = await createAppointment({
 											osteopathId: $page.data.osteopath.id,
 											date: selected[0].toString(),
@@ -121,14 +123,14 @@
 											duration: e.detail.duration
 										});
 										if (bydates[selected.toString()]) {
-											bydates[selected.toString()].push({user:null,...res.data});
+											bydates[selected.toString()].push({ user: null, ...res.data });
 										} else {
-											bydates[selected.toString()] = [{user:null,...res.data}];
+											bydates[selected.toString()] = [{ user: null, ...res.data }];
 										}
 										bydates = bydates;
 										selected = selected;
 										bydate = bydates[selected[0].toString()] ? bydates[selected[0].toString()] : [];
-										loading = 'idle'
+										loading = 'idle';
 										setTimeout(() => {
 											popover = false;
 										}, 300);
@@ -154,7 +156,7 @@
 						<Button
 							size="sm"
 							on:click={() => {
-								if(timeslot) {
+								if (timeslot) {
 									dispatch('book', timeslot);
 								}
 							}}

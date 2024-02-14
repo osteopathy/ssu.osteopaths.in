@@ -18,18 +18,18 @@
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
 	<div class="flex w-max flex-col">
-			<Avatar.Root class="size-32">
-				<Avatar.Image src={image} alt="@" />
-				<Avatar.Fallback>CN</Avatar.Fallback>
-			</Avatar.Root>
-		<div class="flex w-80 flex-col mt-6">
+		<Avatar.Root class="size-32">
+			<Avatar.Image src={image} alt="@" />
+			<Avatar.Fallback>CN</Avatar.Fallback>
+		</Avatar.Root>
+		<div class="mt-6 flex w-80 flex-col">
 			<h2 class="mb-1">{data.osteopath.user.name}</h2>
 			<span class="mb-2 text-muted-foreground">{data.osteopath?.course?.label}</span>
 			{#if data.osteopath?.about}
 				<p>{data.osteopath?.about}</p>
 			{/if}
 		</div>
-		<div class="flex w-full mt-6">
+		<div class="mt-6 flex w-full">
 			{#if data.isCurrentUser}
 				<Button
 					size="responsive"
@@ -111,7 +111,7 @@
 				<AlertDialog.Title class="text-lg font-semibold tracking-tight">
 					You need to Login
 				</AlertDialog.Title>
-				<AlertDialog.Description class="text-foreground-alt text-sm">
+				<AlertDialog.Description class="text-sm text-foreground-alt">
 					To book an appointment, you need to login with your Google Account first.
 				</AlertDialog.Description>
 			</div>

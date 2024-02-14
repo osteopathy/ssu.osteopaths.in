@@ -1,5 +1,5 @@
 import { lucia } from '$lib/server/auth';
-import { redirect, error } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 
 export const prerender = false;

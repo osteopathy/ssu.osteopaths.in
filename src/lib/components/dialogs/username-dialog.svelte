@@ -93,35 +93,35 @@
 				</Dialog.Description>
 			</Drawer.Header>
 			<form
-			method="post"
-			action="/?/username"
-			use:enhance={() => {
-				loading = true;
-				toast.loading('Submitting Feedback!');
-				return async ({ result, update }) => {
-					// `result` is an `ActionResult` object
-					// result.status -> status
-					// 400 -> Bad Request
-					// 401 -> unauthorized
-					// 409 -> username already exists
-					// 200 -> username changed successfully
-					// 500 -> server error
-					await update();
-					loading = false;
-					if (result.status === 200) {
-						open = false;
-						toast.success('Username Successfully Updated!');
-					} else {
-						// @ts-ignore
-						toast.error(result.data.message);
-					}
-					// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
-				};
-			}}
-		>
-			<Input id="username" name="username" />
-			<Button disabled={loading} type="submit" class="mt-6">Submit</Button>
-		</form>
+				method="post"
+				action="/?/username"
+				use:enhance={() => {
+					loading = true;
+					toast.loading('Submitting Feedback!');
+					return async ({ result, update }) => {
+						// `result` is an `ActionResult` object
+						// result.status -> status
+						// 400 -> Bad Request
+						// 401 -> unauthorized
+						// 409 -> username already exists
+						// 200 -> username changed successfully
+						// 500 -> server error
+						await update();
+						loading = false;
+						if (result.status === 200) {
+							open = false;
+							toast.success('Username Successfully Updated!');
+						} else {
+							// @ts-ignore
+							toast.error(result.data.message);
+						}
+						// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
+					};
+				}}
+			>
+				<Input id="username" name="username" />
+				<Button disabled={loading} type="submit" class="mt-6">Submit</Button>
+			</form>
 		</Drawer.Content>
 	</Drawer.Root>
 {/if}

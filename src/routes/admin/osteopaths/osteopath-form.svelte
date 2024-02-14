@@ -45,7 +45,7 @@
 			<Form.Label>Batch</Form.Label>
 			<Form.Input type="text" min={4} max={4} />
 			<Form.Description>
-				read as eg. <em>2021</em> batch <br/>
+				read as eg. <em>2021</em> batch <br />
 			</Form.Description>
 			<Form.Validation />
 		</Form.Item>

@@ -40,7 +40,7 @@
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
-		{:else}
+	{:else}
 		<Form.Field {config} name="userId">
 			<Form.Item>
 				<Form.Label>User Id</Form.Label>

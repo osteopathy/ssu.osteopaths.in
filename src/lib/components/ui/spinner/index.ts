@@ -1,6 +1,3 @@
-import Spinner from "./spinner.svelte";
+import Spinner from './spinner.svelte';
 
-export {
-	Spinner as default,
-    Spinner
-};
+export { Spinner as default, Spinner };
