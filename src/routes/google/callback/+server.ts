@@ -39,7 +39,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const storedState = event.cookies.get('google_oauth_state') ?? null;
 	const codeVerifier = event.cookies.get('google_oauth_code')!;
 	const calendarIntegration = event.cookies.get('calendar') === 'true';
-
+	console.log(storedState, state, code, codeVerifier, calendarIntegration);
 	if (!code || !state || !storedState || state !== storedState) {
 		return new Response(null, {
 			status: 400
@@ -59,12 +59,15 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		).then((res) => res.json())) as GoogleUserResult;
 
 		if (!calendarIntegration) {
+			console.log("CALENDAR INTEGRATION IS FALSE")
+
 			const existingUser = payload?.email
 				? await db.query.userTable.findFirst({
 						where: eq(userTable.gmail, payload?.email)
 					})
 				: false;
 			if (existingUser) {
+				console.log("USER IS PRESENT IN DATABASE")
 				const session = await lucia.createSession(existingUser.id, {});
 				const sessionCookie = lucia.createSessionCookie(session.id);
 				event.cookies.set(sessionCookie.name, sessionCookie.value, {
@@ -78,6 +81,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 					}
 				});
 			} else {
+				console.log("USER IS NOT FOUND IN DATABASE")
 				const userId = generateId(15);
 				const emailDetail = extractFromEmail(payload.email);
 				let r;
@@ -129,6 +133,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				}
 			}
 		} else {
+			console.log("CALENDAR INTEGRATION IS TRUE")
+
 			if (!event.locals.user)
 				return new Response(null, {
 					status: 302,
@@ -136,23 +142,37 @@ export async function GET(event: RequestEvent): Promise<Response> {
 						Location: '/'
 					}
 				});
+			
 			const existingUser = event.locals.user;
-
+			console.log("FETCHING OSTEOPATH")
 			const osteopath = await db.query.osteopathTable.findFirst({
 				where: eq(osteopathTable.userId, existingUser.id)
 			});
+			console.log("OSTEOPATH FOUND")
+			console.dir(osteopath, {depth: 3})
+
 			let calendarId = osteopath?.calendarId ?? generateId(15);
+
 			const calendarAPI = calendarService({
 				calendarId: calendarId,
 				access_token: tokens.accessToken,
 				refresh_token: tokens.refreshToken
 			});
-
+			console.log("FETCHING CALENDAR DETAILS")
 			let cal = await calendarAPI.getCalendar();
+			console.log("CALENDAR DETAILS")
+			console.dir(cal,{depth:3})
+			
+			if(cal === undefined) console.log("ADDING CALENDAR");
+
 			if (cal === undefined /* Osteopathy Calendar doesn't exist*/)
 				cal = await calendarAPI.addCalendar();
-			let calendar: Calendar;
 
+			console.log("ADDED CALENDAR")
+			console.dir(cal,{depth:3})
+
+			let calendar: Calendar;
+			console.log("OPERATION: CALENDAR UPDATE")
 			if (osteopath?.calendarId) {
 				calendar = (
 					await db
@@ -192,13 +212,17 @@ export async function GET(event: RequestEvent): Promise<Response> {
 						.where(eq(osteopathTable.userId, existingUser.id));
 				}
 			}
+			console.log("OPERATION: CALENDAR UPDATED")
+			console.dir(calendar,{depth:3})
 
 			const session = await lucia.createSession(existingUser.id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
+			
 			event.cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
 				...sessionCookie.attributes
 			});
+			
 			return new Response(null, {
 				status: 302,
 				headers: {

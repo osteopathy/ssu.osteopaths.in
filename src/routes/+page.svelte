@@ -6,11 +6,6 @@
 	export let data;
 </script>
 
-{#if data.isLogged}
-	<section class="flex flex-col place-items-center gap-y-6 p-10">
-		<h1 class="text-3xl font-bold">Welcome {data.user?.name}</h1>
-	</section>
-{/if}
 <main class="w-full max-w-5xl">
 	<div class="w-full p-3">
 		<h2 class="mb-12 text-5xl">Osteopaths</h2>

@@ -39,7 +39,8 @@ export const actions: Actions = {
 		}
 
 		const osteopath = form.data;
-		console.log(osteopath);
+
+
 		try {
 			await db
 				.update(osteopathTable)

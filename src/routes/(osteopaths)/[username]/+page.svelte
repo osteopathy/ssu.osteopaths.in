@@ -36,8 +36,9 @@
 					on:click={() => {
 						navigator.clipboard.writeText(`https://ssu.osteopaths.in/${$page.params.username}`);
 						toast.info('URL COPIED!');
-					}}>Copy URL</Button
-				>
+				}}>
+					Copy URL
+				</Button>
 				<div class="mr-4 border-r-2 px-2"></div>
 				<Button variant="outline" size="responsive" href="/{$page.params.username}/edit">
 					Edit

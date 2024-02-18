@@ -4,9 +4,10 @@
 	import ThemeButton from '$lib/components/theme-button.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Google from '$lib/components/ui/icons/google.svelte';
+	import { ModeWatcher } from 'mode-watcher';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import '../app.pcss';
-	import type { PageData } from './$types';
+	import type { LayoutData } from './$types';
 	import FeedbackDialog from '$lib/components/dialogs/feedback-dialog.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import {
@@ -22,11 +23,12 @@
 	import { buttonVariants } from '$lib/components/ui/button';
 
 	let feedbackDialogOpen = false;
-	export let data: PageData;
+	export let data: LayoutData;
 
 	import { goto, afterNavigate } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import * as Avatar from '$lib/components/ui/avatar';
 
 	let previousPage: string = base;
 
@@ -37,11 +39,26 @@
 
 <ProgressBar color="#5B5BD6" height="0.250em" exitDelay={250} startPosition={0} />
 <Toaster />
+<ModeWatcher />
+
 <header class="mb-10 mt-4 flex w-full max-w-5xl items-center justify-between">
 	<div class="inline-flex items-center gap-x-2 px-2 py-1">
 		{#if $page.url.pathname === '/'}
-			<Logo size={32} />
-			<span class="text-xl font-medium">V2O</span>
+			{#if data.user}
+				<a
+					href="/user/{data.user?.id}"
+					class="flex w-max items-center gap-x-2"
+				>
+					<Avatar.Root class="size-8">
+						<Avatar.Image src={data.user?.image} alt="@{data.user.name} Profile Pic" />
+						<Avatar.Fallback>{data.user?.name?.at(0)}</Avatar.Fallback>
+					</Avatar.Root>
+					<h3 class="text-lg max-w-40 whitespace-nowrap overflow-auto">{data.user?.name}</h3>
+				</a>
+			{:else}
+				<Logo size={32} />
+				<span class="text-xl font-medium">V2O</span>
+			{/if}
 		{:else}
 			<Button
 				class="gap-x-2 p-1 md:p-0"
@@ -83,7 +100,7 @@
 							href="/"
 						>
 							<div class="flex items-center">
-								<Home class="mr-2 size-5 text-foreground-alt" /> Home
+								<Home class="text-foreground-alt mr-2 size-5" /> Home
 							</div>
 						</DropdownMenu.Item>
 						<DropdownMenu.Item
@@ -91,7 +108,7 @@
 							href="/user/{data.user.id}"
 						>
 							<div class="flex items-center">
-								<Person class="mr-2 size-5 text-foreground-alt" />
+								<Person class="text-foreground-alt mr-2 size-5" />
 								Profile
 							</div>
 						</DropdownMenu.Item>
@@ -100,7 +117,7 @@
 							href="/user/{data.user.id}/edit"
 						>
 							<div class="flex items-center">
-								<Gear class="mr-2 size-5 text-foreground-alt" />
+								<Gear class="text-foreground-alt mr-2 size-5" />
 								Settings
 							</div>
 						</DropdownMenu.Item>
@@ -111,7 +128,7 @@
 						on:click={() => (feedbackDialogOpen = true)}
 					>
 						<div class="flex items-center">
-							<ChatBubble class="mr-2 size-5 text-foreground-alt" />
+							<ChatBubble class="text-foreground-alt mr-2 size-5" />
 							Give Feedback
 						</div>
 						<!-- <div class="ml-auto flex items-center gap-px">
@@ -137,7 +154,7 @@
 						href="/google/logout"
 					>
 						<div class="flex items-center">
-							<Exit class="mr-2 size-5 text-foreground-alt" />
+							<Exit class="text-foreground-alt mr-2 size-5" />
 							Logout
 						</div>
 					</DropdownMenu.Item>
@@ -159,15 +176,15 @@
 
 <div class="py-6"></div>
 <footer
-	class="mb-10 mt-auto flex w-full max-w-5xl flex-col rounded-xl border bg-layer-2 py-2 pl-2 pr-4 shadow-md shadow-layer-6/30"
+	class="bg-layer-2 shadow-layer-6/30 mb-10 mt-auto flex w-full max-w-5xl flex-col rounded-xl border py-2 pl-2 pr-4 shadow-md"
 >
 	<div class="mb-2 flex w-full flex-col items-center justify-between gap-y-4 sm:mb-1 sm:flex-row">
 		<div class="flex items-center gap-x-2">
 			<Logo size={36} />
-			<div class="whitespace-nowrap text-2xl font-semibold text-layer-12">V2O</div>
+			<div class="text-layer-12 whitespace-nowrap text-2xl font-semibold">V2O</div>
 		</div>
 		<div
-			class="xs:flex-row flex flex-wrap items-center justify-center space-x-4 text-sm font-semibold leading-6 text-layer-11"
+			class="xs:flex-row text-layer-11 flex flex-wrap items-center justify-center space-x-4 text-sm font-semibold leading-6"
 		>
 			<a href="https://osteopaths.in/privacy-policy" class="hover:underline">Privacy policy</a>
 			<div class="xs:block hidden h-4 w-px bg-slate-500/20"></div>
@@ -176,7 +193,7 @@
 			<a href="https://osteopaths.in/contact-us" class="hover:underline">Contact Us</a>
 		</div>
 	</div>
-	<span class="mt-1 p-px text-center text-sm font-medium text-layer-9 sm:text-left">
+	<span class="text-layer-9 mt-1 p-px text-center text-sm font-medium sm:text-left">
 		built with sveltekit, typescript,<br class="xs:hidden block" /> tailwindcss and tursodb
 	</span>
 </footer>
