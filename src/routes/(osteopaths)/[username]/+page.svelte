@@ -1,19 +1,37 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { toast } from 'svelte-sonner';
-	import CalendarAdd from '$lib/components/ui/icons/calendar-add.svelte';
-	import { fade } from 'svelte/transition';
-	import { flyAndScale } from '$lib/utils/index.js';
-	import { bookAppointment } from '../../(api)/book';
-	import { updateAppointment } from '../../(api)/appointment';
+	import Calendar from './calendar.svelte';
+	import { Temporal } from 'temporal-polyfill';
+	import { Minus } from 'radix-icons-svelte';
 
 	export let data;
 	let image = data.osteopath.user?.image;
 	let open = false;
-	let alertDialogOpen = false;
+	let selectedDate = Temporal.Now.plainDateISO();
+	let selectedTime = {
+		date: '',
+		startTime: '',
+		endTime: ''
+	};
+	function getAvailableSlots(
+		from: { hour: number; minute: number },
+		to: { hour: number; minute: number }
+	) {
+		let temp = new Temporal.PlainTime(from.hour, from.minute);
+		const stop = new Temporal.PlainTime(to.hour, to.minute);
+		const slots = [];
+		while (stop.until(temp).sign === -1) {
+			slots.push([
+				temp.toLocaleString('en-us', { hour: '2-digit', minute: '2-digit', hour12: false }),
+				temp.add({ minutes: 30 }).toLocaleString('en-us', { hour: '2-digit', minute: '2-digit', hour12: false })
+			]);
+			temp = temp.add({ minutes: 30 });
+		}
+		return slots
+	}
 </script>
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
@@ -36,7 +54,8 @@
 					on:click={() => {
 						navigator.clipboard.writeText(`https://ssu.osteopaths.in/${$page.params.username}`);
 						toast.info('URL COPIED!');
-				}}>
+					}}
+				>
 					Copy URL
 				</Button>
 				<div class="mr-4 border-r-2 px-2"></div>
@@ -49,86 +68,66 @@
 		</div>
 	</div>
 </main>
-
-{#if data.isCurrentUser}
-	<button
-		on:click={() => (open = true)}
-		class="fixed bottom-8 right-8 rounded-full border bg-background p-4"
+<div class="relative flex flex-col sm:flex-row">
+	<Calendar bind:selected={selectedDate} availabilities={data.availabilities} />
+	<div
+		class="xs:p-3 border-layer-6 rounded-b-lg border-2 p-2 sm:rounded-r-lg sm:rounded-bl-none sm:p-4"
 	>
-		<CalendarAdd size={32} />
-	</button>
-{/if}
-
-{#await import('$lib/components/dialogs/schedule/book-schedule.svelte') then { default: BookSchedule }}
-	<BookSchedule
-		on:book={async (e) => {
-			if (!!!data?.user || !!!data?.osteopath || !!!data.osteopath?.id) {
-				open = false;
-				alertDialogOpen = true;
-				return;
-			}
-			await updateAppointment(e.detail.id, {
-				osteopathId: data.osteopath.id,
-				date: e.detail.date,
-				startTime: e.detail.startTime,
-				duration: e.detail.duration
-			});
-			toast.loading('Booking Appointment...');
-			try {
-				await bookAppointment(
-					data.osteopath.calendarId,
-					data.user.id,
-					{
-						gmail: data.osteopath.user.gmail,
-						id: data.osteopath.id
-					},
-					e.detail
-				);
-				toast.success(`Appointment Booked!`);
-				open = false;
-			} catch (error) {
-				toast.error('Failed to book appointment!');
-				console.log(error);
-			}
-		}}
-		editable={data.isCurrentUser}
-		bind:open
-		bydates={data.bydates}
-	/>
-{/await}
-
-<AlertDialog.Root bind:open={alertDialogOpen}>
-	<AlertDialog.Portal>
-		<AlertDialog.Overlay
-			transition={fade}
-			transitionConfig={{ duration: 150 }}
-			class="fixed inset-0 z-10 bg-black/80"
-		/>
-		<AlertDialog.Content
-			transition={flyAndScale}
-			class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-7 shadow-sm outline-none sm:max-w-lg md:w-full"
-		>
-			<div class="flex flex-col gap-4 pb-4">
-				<AlertDialog.Title class="text-lg font-semibold tracking-tight">
-					You need to Login
-				</AlertDialog.Title>
-				<AlertDialog.Description class="text-sm text-foreground-alt">
-					To book an appointment, you need to login with your Google Account first.
-				</AlertDialog.Description>
-			</div>
-			<div class="flex w-full items-center justify-center gap-2">
-				<AlertDialog.Cancel
-					class="active:scale-98 inline-flex w-full items-center justify-center rounded-lg bg-muted text-[15px] font-medium shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-				>
-					Cancel
-				</AlertDialog.Cancel>
-				<Button
-					href="/google/login"
-					class="focus-visible:ring-dark active:scale-98 inline-flex w-full items-center justify-center rounded-lg text-[15px] font-semibold text-background shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-				>
-					Continue with Google
-				</Button>
-			</div>
-		</AlertDialog.Content>
-	</AlertDialog.Portal>
-</AlertDialog.Root>
+		<div class="mb-3 flex w-full items-center justify-between gap-x-2">
+			<h4 class="whitespace-nowrap text-lg font-bold tabular-nums">
+				{selectedDate
+					.toLocaleString('en-us', {
+						day: 'numeric',
+						weekday: 'short'
+					})
+					.split(' ')
+					.reverse()
+					.join(' ')}
+			</h4>
+		</div>
+		<ul class="flex flex-col gap-y-2">
+			<!-- [{"id":"cuy88kbegzzerac","start":{"x":12.5,"time":"10:00"},"end":{"x":37.5,"time":"12:00"}}] -->
+			{#each data.availabilities[selectedDate
+					.toLocaleString('en', { weekday: 'long' })
+					.toLowerCase()] as availability}
+				{@const [startHour, startMinute] = availability.start.time?.split(':').map((v) => +v)}
+				{@const [endHour, endMinute] = availability.end.time?.split(':').map((v) => +v)}
+				<!-- 10:00 - 10:30 10:30 11:00 11:30 11:30 12:00 -->
+				{@const slots = getAvailableSlots({
+					hour: startHour,
+					minute: startMinute
+				},{
+					hour: endHour,
+					minute: endMinute
+				})}
+				{#each slots as slot}
+					<li class="flex items-center gap-x-2">
+						<button
+							aria-pressed={selectedTime.date + selectedTime.startTime + selectedTime.endTime === selectedDate.toString() + slot[0] + slot[1]}
+							on:click={() => {
+								selectedTime = {
+									date: selectedDate.toString(),
+									startTime: slot[0],
+									endTime: slot[1]
+								};
+							}}
+						class="
+						disabled:text-muted-foregound group
+						flex items-center
+						gap-x-1 rounded-md border bg-muted px-1.5 py-0.5 disabled:bg-muted
+						aria-pressed:bg-blue-500 aria-pressed:text-white"
+					>
+						<span class="whitespace-nowrap tabular-nums">{slot[0]}</span>
+						<Minus />
+						<span class="whitespace-nowrap tabular-nums">{slot[1]}</span>
+						</button>
+					</li>
+				{/each}
+			{/each}
+			<li class="flex items-center gap-x-2">
+				<div class="h-[30px] w-[180.66px]"></div>
+				<div class="h-[15px] w-[15px]"></div>
+			</li>
+		</ul>
+	</div>
+</div>
