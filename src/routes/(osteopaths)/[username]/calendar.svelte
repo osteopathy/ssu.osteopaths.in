@@ -6,7 +6,7 @@
 	import type { LayoutServerData } from './$types';
 
 	const dispatch = createEventDispatcher<{
-		select: { changed: boolean; day:string};
+		change: { day: string };
 	}>();
 
 	const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -15,11 +15,11 @@
 
 	const today = Temporal.Now.plainDateISO();
 
-	export let selected = new Temporal.PlainDate(today.year, today.month, today.day);
+	export let selected:Temporal.PlainDate;
 
 	let min = new Temporal.PlainDate(today.year, today.month, today.day);
 	let max = new Temporal.PlainDate(today.year, today.month, today.day).add({
-		months: 1
+		days: 4
 	});
 
 	let view = {
@@ -162,15 +162,17 @@
                             aria-selected:text-white
                             sm:p-2"
 								aria-selected={selected.equals(day)}
-								disabled={view.date.month !== day.month || day.since(min).sign === -1}
+								disabled={view.date.month !== day.month || today.equals(day) || day.since(min).sign === -1 || day.until(max).sign === -1}
 								on:click={() => {
 									const changed = selected !== day;
 									selected = day;
-									dispatch('select', { changed, day: selected.toLocaleString('en',
-										{
-											weekday: 'long'
-										}
-									).toLowerCase()});
+									if(changed) {
+										dispatch('change', { day: selected.toLocaleString('en',
+											{
+												weekday: 'long'
+											}
+										).toLowerCase()})
+									}
 								}}
 							>
 								<time

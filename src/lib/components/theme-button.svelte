@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { toggleMode, mode } from 'mode-watcher';
 
-	export let size = 32;
+	export let size = 24;
 </script>
 
 <button

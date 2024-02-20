@@ -26,45 +26,6 @@
 			{/if}
 		</div>
 	</div>
-	{#if data.user?.role === 'osteopath'}
-		<Dialog.Root>
-			<Dialog.Trigger
-				class="active:scale-98 inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-foreground-alt px-[21px] text-[15px] font-semibold text-background shadow-md transition-colors hover:bg-foreground-alt/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-				asChild
-				let:builder
-			>
-				<button
-					use:builder.action
-					{...builder}
-					class="flex w-max items-center gap-x-2 rounded-full border border-layer-6 bg-layer-1 px-3 py-2 text-left font-medium shadow-inner shadow-layer-5"
-				>
-					<div class="flex size-10 items-center justify-center rounded-full bg-layer-3">
-						<Calendar />
-					</div>
-					<div class="flex grow flex-col">
-						<h3 class="w-full text-base/6">Weekly Availability</h3>
-						<div class="-mt-1 flex items-center text-sm">
-							<span class=""> change </span>
-							<span> <ArrowRight class="size-4" /> </span>
-						</div>
-					</div>
-				</button>
-			</Dialog.Trigger>
-			<Dialog.Portal>
-				<Dialog.Overlay
-					transition={fade}
-					transitionConfig={{ duration: 150 }}
-					class="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
-				/>
-				<Dialog.Content
-					transition={flyAndScale}
-					class="fixed left-[50%] top-[50%] z-50 max-h-[90%] w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-lg border bg-layer-0 p-5 outline-none sm:max-w-[978px] md:w-full"
-				>
-					<AvailabilityPanel availabilities={data?.availabilities && data.availabilities} />
-				</Dialog.Content>
-			</Dialog.Portal>
-		</Dialog.Root>
-	{/if}
 	<div class="py-4"></div>
 	<OsteopathForm
 		session_daily_limit={data.osteopath?.session?.daily_limit}

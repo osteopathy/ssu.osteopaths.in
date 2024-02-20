@@ -6,9 +6,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	let container: HTMLElement;
-	let pointer: HTMLElement;
-	let pointerX = 0;
-	let pointerVisible = false;
 
 	export let markedPointers: {
 		id?: number;
@@ -30,11 +27,15 @@
 	let [view, unit] = divideTimeIntoX(startTime, endTime, minGap);
 	let adding = false;
 	let updated = false;
+
+	let pointer: HTMLElement;
+	let pointerX = 0;
+	let pointerVisible = false;
 </script>
 
 <div class="relative w-full overflow-auto pb-4">
-	<div
-		on:pointermove={(event) => {
+	<button
+		on:mousemove={(event) => {
 			const rect = container.getBoundingClientRect();
 			const endX = rect.width - pointer.offsetWidth;
 			const startX = 0;
@@ -46,117 +47,115 @@
 			});
 			pointerX = view[i - 1].x - 0.05;
 		}}
-		on:focus={() => {}}
-		on:blur={() => {}}
-		role="button"
-		tabindex={0}
-		bind:this={container}
-		on:pointerenter={() => {
+		on:mouseenter={() => {
 			pointerVisible = true;
 		}}
-		on:pointerleave={() => {
+		on:mouseleave={() => {
 			pointerVisible = false;
 		}}
-		class="relative h-12 w-full min-w-[864px] shrink rounded-md border-2 border-indigo-600 bg-indigo-200 pb-4"
+		on:click={(e) => {
+			e.preventDefault();
+			const rect = container.getBoundingClientRect();
+			const endX = rect.width;
+			const startX = 0;
+			const newX = endX < e.x - rect.x ? endX : startX > e.x - rect.x ? startX : e.x - rect.x;
+			const newStartX = Math.ceil((newX / rect.width) * 100);
+			const i = view.findIndex(({ x }) => {
+				return x > newStartX;
+			});
+			// for view obj
+			const start = view[i - 1];
+			const end = view[i];
+			let added = null;
+			let temp = [];
+			for (let index = 0; index < markedPointers.length; index++) {
+				const marked = markedPointers[index];
+				const next = markedPointers[index + 1];
+				const markedEndTime = fromTimeStr(marked.end.time);
+				const markedStartTime = fromTimeStr(marked.start.time);
+				if (next) {
+					const nextStartTime = fromTimeStr(next.start.time);
+					const nextEndTime = fromTimeStr(next.end.time);
+					if (markedEndTime.equals(start.time) && nextStartTime.equals(end.time)) {
+						added = true;
+						marked.end = next.end;
+						index++;
+					}
+					if (markedStartTime.equals(end.time) && nextEndTime.equals(start.time)) {
+						added = true;
+						marked.start = next.start;
+						index++;
+					}
+				} else {
+					if (markedEndTime.equals(start.time) && !added) {
+						added = true;
+						marked.end = {
+							x: end.x,
+							time: end.time.toLocaleString('en', {
+								hour: '2-digit',
+								minute: '2-digit',
+								hour12: false
+							})
+						};
+					}
+					if (markedStartTime.equals(end.time) && !added) {
+						added = true;
+						marked.start = {
+							x: start.x,
+							time: start.time.toLocaleString('en', {
+								hour: '2-digit',
+								minute: '2-digit',
+								hour12: false
+							})
+						};
+					}
+				}
+				temp.push(marked);
+			}
+			updated = true;
+			if (added) {
+				markedPointers = [...temp];
+			} else {
+				markedPointers = [
+					...temp,
+					{
+						start: {
+							x: start.x,
+							time: start.time.toLocaleString('en', {
+								hour: '2-digit',
+								minute: '2-digit',
+								hour12: false
+							})
+						},
+						end: {
+							x: end.x,
+							time: end.time.toLocaleString('en', {
+								hour: '2-digit',
+								minute: '2-digit',
+								hour12: false
+							})
+						},
+						element: null
+					}
+				];
+			}
+		}}
+		on:focus={() => {}}
+		on:blur={() => {}}
+		tabindex={0}
+		bind:this={container}
+		class="relative flex h-12 w-full min-w-[864px] shrink rounded-md border-2 border-indigo-600 bg-indigo-200 pb-4"
 	>
 		{#if pointerVisible}
-			<button
+			<div
 				transition:fade={{ duration: 100, delay: 0 }}
-				type="button"
 				bind:this={pointer}
 				style:left="{pointerX}%"
 				style:width="{unit}%"
-				on:click={(event) => {
-					const rect = container.getBoundingClientRect();
-					const endX = rect.width - pointer.offsetWidth;
-					const startX = 0;
-					const newX =
-						endX < event.x - rect.x ? endX : startX > event.x - rect.x ? startX : event.x - rect.x;
-					const newStartX = Math.ceil((newX / rect.width) * 100);
-					const i = view.findIndex(({ x }) => {
-						return x > newStartX;
-					});
-					// for view obj
-					const start = view[i - 1];
-					const end = view[i];
-					let added = null;
-					let temp = [];
-					for (let index = 0; index < markedPointers.length; index++) {
-						const marked = markedPointers[index];
-						const next = markedPointers[index + 1];
-						const markedEndTime = fromTimeStr(marked.end.time);
-						const markedStartTime = fromTimeStr(marked.start.time);
-						if (next) {
-							const nextStartTime = fromTimeStr(next.start.time);
-							const nextEndTime = fromTimeStr(next.end.time);
-							if (markedEndTime.equals(start.time) && nextStartTime.equals(end.time)) {
-								added = true;
-								marked.end = next.end;
-								index++;
-							}
-							if (markedStartTime.equals(end.time) && nextEndTime.equals(start.time)) {
-								added = true;
-								marked.start = next.start;
-								index++;
-							}
-						} else {
-							if (markedEndTime.equals(start.time) && !added) {
-								added = true;
-								marked.end = {
-									x: end.x,
-									time: end.time.toLocaleString('en', {
-										hour: '2-digit',
-										minute: '2-digit',
-										hour12: false
-									})
-								};
-							}
-							if (markedStartTime.equals(end.time) && !added) {
-								added = true;
-								marked.start = {
-									x: start.x,
-									time: start.time.toLocaleString('en', {
-										hour: '2-digit',
-										minute: '2-digit',
-										hour12: false
-									})
-								};
-							}
-						}
-						temp.push(marked);
-					}
-					updated = true;
-					if (added) {
-						markedPointers = [...temp];
-					} else {
-						markedPointers = [
-							...temp,
-							{
-								start: {
-									x: start.x,
-									time: start.time.toLocaleString('en', {
-										hour: '2-digit',
-										minute: '2-digit',
-										hour12: false
-									})
-								},
-								end: {
-									x: end.x,
-									time: end.time.toLocaleString('en', {
-										hour: '2-digit',
-										minute: '2-digit',
-										hour12: false
-									})
-								},
-								element: null
-							}
-						];
-					}
-				}}
 				class="absolute flex h-full items-center justify-center rounded-md border bg-indigo-400"
 			>
 				<PlusCircled class="text-white" />
-			</button>
+			</div>
 		{/if}
 		{#each markedPointers as marked (marked.start.x)}
 			<div
@@ -173,7 +172,9 @@
 					</div>
 				{/if}
 				<button
-					on:click={() => {
+					on:click={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
 						const i = markedPointers.findIndex(
 							(point) =>
 								point.start.time === marked.start.time && point.end.time === marked.end.time
@@ -187,7 +188,7 @@
 				</button>
 			</div>
 		{/each}
-	</div>
+	</button>
 	<div class="relative min-w-[864px] shrink text-xs">
 		{#each view as { x, time }, i}
 			<div class="absolute w-max" style:left="{time.hour === endTime ? x - 1.2 : x}%">
@@ -202,6 +203,7 @@
 		{/each}
 	</div>
 </div>
+
 {#if updated}
 	<Button
 		class="mt-6"

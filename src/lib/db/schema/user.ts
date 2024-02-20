@@ -3,7 +3,7 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { sessionTable } from './session';
 import { genId } from '../helpers/generate-id';
 import { createInsertSchema } from 'drizzle-zod';
-import { osteopathTable } from '.';
+import { appointmentTable, osteopathTable } from '.';
 
 export const userTable = sqliteTable('user', {
 	id: genId(),
@@ -26,8 +26,9 @@ export const createUserSchema = createInsertSchema(userTable);
 export type CreateUserSchema = typeof createUserSchema;
 
 export const usersRelations = relations(userTable, ({ many, one }) => ({
+	appointments: many(appointmentTable),
 	sessions: many(sessionTable),
-	user: one(osteopathTable, {
+	osteopath: one(osteopathTable, {
 		fields: [userTable.id],
 		references: [osteopathTable.userId]
 	})
