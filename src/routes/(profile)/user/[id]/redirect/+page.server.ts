@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 
 export const load: PageServerLoad = async (e) => {
     if (e.locals.user === null) return redirect(307, '/');
-
+    const to = e.url.searchParams.get('to')
     if (e.locals.user.role === 'osteopath') {
         const osteopath = await db.query.osteopathTable.findFirst({
             where: eq(osteopathTable.userId, e.locals.user.id),
@@ -14,6 +14,8 @@ export const load: PageServerLoad = async (e) => {
                 username: true
             }
         });
+        if(to) redirect(307, `/${osteopath?.username}/${to}`);
+
         redirect(307, `/${osteopath?.username}`);
     }
 }

@@ -44,20 +44,15 @@
 			>
 				Osteopaths
 			</a>
+		{#if data.user?.role === 'osteopath'}
 			<a
-				aria-current={$page.url.pathname === '/courses' ? 'page' : undefined}
+				aria-current={$page.url.pathname.includes('/appointments') ? 'page' : undefined}
 				class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 px-2 py-0.5 hover:bg-layer-4 transition-colors rounded-full"
-				href="/courses"
+				href="/user/{data.user?.id}/redirect?to=appointments"
 			>
-				Courses
+				Appointments
 			</a>
-			<a
-				aria-current={$page.url.pathname === '/articles' ? 'page' : undefined}
-				class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 px-2 py-0.5 hover:bg-layer-4 transition-colors rounded-full"
-				href="/articles"
-			>
-				Articles
-			</a>
+		{/if}
 		</nav>
 		<ThemeButton />
 	</div>

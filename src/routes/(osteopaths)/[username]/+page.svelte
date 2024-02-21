@@ -147,9 +147,7 @@
 				{#each slots as slot}
 					<li class="flex items-center gap-x-2">
 						<button
-							aria-pressed={selectedTime !== null &&
-								selectedTime.date + selectedTime.startTime + selectedTime.endTime ===
-									selectedDate.toString() + slot[0] + slot[1]}
+							aria-pressed={selectedTime !== null && selectedTime.date + selectedTime.startTime + selectedTime.endTime === selectedDate.toString() + slot[0] + slot[1]}
 							on:click={() => {
 								selectedTime = {
 									date: selectedDate.toString(),

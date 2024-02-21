@@ -179,6 +179,7 @@ export const load: LayoutServerLoad = async (event) => {
 		.where(eq(availabilityTable.osteopathId, res.osteopath.id));
 
 	const bydates = groupBy(appointments, (appointment) => appointment.date as string) as ByDatesType;
+	
 	return {
 		isCurrentUser: false,
 		osteopath: {

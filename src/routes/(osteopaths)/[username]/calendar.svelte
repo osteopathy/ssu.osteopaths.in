@@ -12,7 +12,7 @@
 	const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 	export let availabilities: LayoutServerData['availabilities'];
-
+	
 	const today = Temporal.Now.plainDateISO();
 
 	export let selected:Temporal.PlainDate;
