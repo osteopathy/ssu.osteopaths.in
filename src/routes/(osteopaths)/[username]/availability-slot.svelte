@@ -55,7 +55,7 @@
 		on:mouseleave={() => {
 			pointerVisible = false;
 		}}
-		on:pointerdown={(e) => {
+		on:click={(e) => {
 			e.preventDefault();
 			const rect = container.getBoundingClientRect();
 			const endX = rect.width;
