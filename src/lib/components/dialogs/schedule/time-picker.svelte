@@ -12,8 +12,8 @@
 
 	let now = new Temporal.PlainTime(startTime.hour, startTime.minute);
 
-	let fromTime: Temporal.PlainTime = new Temporal.PlainTime(9,0);
-	let toTime: Temporal.PlainTime | undefined = new Temporal.PlainTime(10,0);
+	let fromTime: Temporal.PlainTime = new Temporal.PlainTime(9, 0);
+	let toTime: Temporal.PlainTime | undefined = new Temporal.PlainTime(10, 0);
 
 	function gapBetween(start: Temporal.PlainTime, end: Temporal.PlainTime) {
 		const duration = end.since(start);
@@ -33,13 +33,13 @@
 	}
 
 	const dispatch = createEventDispatcher<{
-		submit: { startTime: string; duration: string },
-		cancel: undefined
+		submit: { startTime: string; duration: string };
+		cancel: undefined;
 	}>();
 	export let loading = false;
 </script>
 
-<div class="grid grid-cols-4 gap-1 pt-32 overflow-y-scroll pb-1 px-1 grow h-0 place-content-center">
+<div class="grid h-0 grow grid-cols-4 place-content-center gap-1 overflow-y-scroll px-1 pb-1 pt-32">
 	{#each times as time}
 		<button
 			type="button"
@@ -52,10 +52,10 @@
 				}
 			}}
 			class={cn(
-				`px-1 text-base cursor-pointer rounded tabular-nums flex items-center justify-center border`,
+				`flex cursor-pointer items-center justify-center rounded border px-1 text-base tabular-nums`,
 				fromTime.equals(time) || (toTime && toTime.equals(time))
 					? 'bg-blue-500 text-white dark:text-[--blue-13]'
-					: 'hover:bg-blue-400 hover:text-white bg-muted text-foreground',
+					: 'bg-muted text-foreground hover:bg-blue-400 hover:text-white',
 				toTime && isBetween(time, fromTime, toTime) && 'bg-blue-500 text-white'
 			)}
 		>
@@ -71,25 +71,25 @@
 <div class="flex gap-x-2">
 	<Button on:click={() => dispatch('cancel')} class="w-full" variant="outline">Cancel</Button>
 	<Button
-	disabled={loading}
-	on:click={async () => {
-		if (!toTime) return;
-		let reverse = fromTime.until(toTime).sign === 1;
-		const startTime = reverse ? fromTime : toTime;
-		const startTimeStr = startTime.toLocaleString('en-us', {
-			hour: '2-digit',
-			minute: '2-digit',
-			hour12: false
-		});
-		const endTime = reverse ? toTime : fromTime;
-		const duration = gapBetween(startTime, endTime).toString();
-		dispatch('submit', { startTime: startTimeStr, duration })
-	}}
-	class="w-full"
->
-	{#if loading}
-		<Spinner />
-	{/if}
-	Submit
-</Button>
+		disabled={loading}
+		on:click={async () => {
+			if (!toTime) return;
+			let reverse = fromTime.until(toTime).sign === 1;
+			const startTime = reverse ? fromTime : toTime;
+			const startTimeStr = startTime.toLocaleString('en-us', {
+				hour: '2-digit',
+				minute: '2-digit',
+				hour12: false
+			});
+			const endTime = reverse ? toTime : fromTime;
+			const duration = gapBetween(startTime, endTime).toString();
+			dispatch('submit', { startTime: startTimeStr, duration });
+		}}
+		class="w-full"
+	>
+		{#if loading}
+			<Spinner />
+		{/if}
+		Submit
+	</Button>
 </div>

@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 export const POST: RequestHandler = (async ({ request }) => {
 	const { userId, url } = await request.json();
 	try {
-		await db.update(userTable).set({ image: url }).where(eq(userTable.id,userId));
+		await db.update(userTable).set({ image: url }).where(eq(userTable.id, userId));
 		return new Response(JSON.stringify({ message: 'Image URL is Updated' }));
 	} catch (error) {
 		return new Response(JSON.stringify({ message: 'Image URL is Failed', error: true }));

@@ -1,67 +1,67 @@
 {
-    "$schema": "https://codesandbox.io/schemas/tasks.json",
-    "setupTasks": [
-        {
-            "name": "Install Dependencies",
-            "command": "npm install"
-        }
-        // {
-        //     "name": "Installing brew",
-        //     "command": "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
-        // },
-        // {
-        //     "name": "Installing brew Dependencies",
-        //     "command": "sudo apt-get install build-essential"
-        // },
-        // {
-        //     "name": "Installing Turso",
-        //     "command": "/home/linuxbrew/.linuxbrew/bin/brew install tursodatabase/tap/turso"
-        // }
-    ],
-    "tasks": {
-        "dev": {
-            "name": "dev",
-            "command": "npm run dev -- --port 3000",
-            "runAtStart": true,
-            "preview": {
-                "port": 3000
-            }
-        },
-        "build": {
-            "name": "build",
-            "command": "npm run build"
-        },
-        "preview": {
-            "name": "preview",
-            "command": "npm run preview"
-        },
-        "check": {
-            "name": "check",
-            "command": "npm run check"
-        },
-        "check:watch": {
-            "name": "check:watch",
-            "command": "npm run check:watch"
-        },
-        "generate": {
-            "name": "generate",
-            "command": "npm run generate"
-        },
-        "push": {
-            "name": "push",
-            "command": "npm run push"
-        },
-        "studio": {
-            "name": "studio",
-            "command": "npm run studio"
-        },
-        "lint": {
-            "name": "lint",
-            "command": "npm run lint"
-        },
-        "format": {
-            "name": "format",
-            "command": "npm run format"
-        }
-    }
+	"$schema": "https://codesandbox.io/schemas/tasks.json",
+	"setupTasks": [
+		{
+			"name": "Install Dependencies",
+			"command": "npm install"
+		}
+		// {
+		//     "name": "Installing brew",
+		//     "command": "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+		// },
+		// {
+		//     "name": "Installing brew Dependencies",
+		//     "command": "sudo apt-get install build-essential"
+		// },
+		// {
+		//     "name": "Installing Turso",
+		//     "command": "/home/linuxbrew/.linuxbrew/bin/brew install tursodatabase/tap/turso"
+		// }
+	],
+	"tasks": {
+		"dev": {
+			"name": "dev",
+			"command": "npm run dev -- --port 3000",
+			"runAtStart": true,
+			"preview": {
+				"port": 3000
+			}
+		},
+		"build": {
+			"name": "build",
+			"command": "npm run build"
+		},
+		"preview": {
+			"name": "preview",
+			"command": "npm run preview"
+		},
+		"check": {
+			"name": "check",
+			"command": "npm run check"
+		},
+		"check:watch": {
+			"name": "check:watch",
+			"command": "npm run check:watch"
+		},
+		"generate": {
+			"name": "generate",
+			"command": "npm run generate"
+		},
+		"push": {
+			"name": "push",
+			"command": "npm run push"
+		},
+		"studio": {
+			"name": "studio",
+			"command": "npm run studio"
+		},
+		"lint": {
+			"name": "lint",
+			"command": "npm run lint"
+		},
+		"format": {
+			"name": "format",
+			"command": "npm run format"
+		}
+	}
 }

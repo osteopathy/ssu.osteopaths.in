@@ -1,106 +1,85 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
-	import type { SuperValidated } from 'sveltekit-superforms';
-	import type { FormOptions } from 'formsnap';
-	import { toast } from 'svelte-sonner';
+	import * as Select from '$lib/components/ui/select';
+	import { Textarea } from '$lib/components/ui/textarea';
 	import { formSchema, type FormSchema } from './schema';
-	import { ArrowRight } from 'radix-icons-svelte';
+	import { toast } from 'svelte-sonner';
+	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	export let form: SuperValidated<FormSchema>;
-	export let about = '';
-	export let session_duration = 45;
-	export let session_location = 'Shruti Building, 2nd Floor';
-	export let session_daily_limit = 4;
+	export let data: SuperValidated<Infer<FormSchema>>;
 
-	// key value pair for select options generate for duration
-	const duration_options = new Map([
-		['30', { label: '30 minutes', value: "30", disabled: false }],
-		['45', { label: '45 minutes', value: "45", disabled: false }],
-		['60', { label: '60 minutes', value: "60", disabled: false }]
-	]);
-
-	const limit_options = new Map([
-		['1', { label: '1 session', value:"1", disabled: false }],
-		['2', { label: '2 sessions', value:"2" , disabled: false }],
-		['3', { label: '3 sessions', value:"3" , disabled: false }],
-		['4', { label: '4 sessions', value:"4" , disabled: false }],
-		['5', { label: '5 sessions', value:"5" , disabled: false }],
-		['6', { label: '6 sessions', value:"6" , disabled: false }],
-		['7', { label: '7 sessions', value:"7" , disabled: false }],
-	]);
-
-	let selected_duration = duration_options.get(session_duration.toString());
-	let selected_limit = limit_options.get(session_daily_limit.toString());
-
-	const options: FormOptions<FormSchema> = {
+	const form = superForm(data, {
+		validators: zodClient(formSchema),
 		onSubmit() {
 			toast.info('Submitting...');
 		},
 		onResult({ result }) {
 			if (result.status === 200) toast.success('Success!');
 			if (result.status === 400) toast.error('Error!');
-		},
-	};
+		}
+	});
+
+	const { form: formData, enhance } = form;
+
+	$: selectedSessionDailyLimit = $formData.session_daily_limit
+		? {
+				label: `${$formData.session_daily_limit} sessions`,
+				value: $formData.session_daily_limit
+			}
+		: undefined;
 </script>
 
-<Form.Root schema={formSchema} {form} {options} let:config method="POST">
-	<div class="p-4 border rounded-md">
-		<h2 class="text-muted-foreground text-xl mb-1">Session</h2>
-		<Form.Field {config} name="session_daily_limit">
-			<Form.Item>
+<form method="POST" use:enhance>
+	<div class="rounded-md border p-4">
+		<h2 class="mb-1 text-xl text-muted-foreground">Osteopath</h2>
+		<Form.Field {form} name="about">
+			<Form.Control let:attrs>
+				<Form.Label>About</Form.Label>
+				<Textarea
+					{...attrs}
+					placeholder="Tell us a little bit about yourself"
+					class="resize-none"
+					bind:value={$formData.about}
+				/>
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+		<Form.Field {form} name="session_daily_limit">
+			<Form.Control let:attrs>
 				<Form.Label class="mr-4">Daily Limit</Form.Label>
-				<Form.Select bind:selected={selected_limit}>
-					<Form.SelectTrigger value={session_daily_limit} icon={ArrowRight} placeholder="Select Maximum" />
-					<Form.SelectContent>
-						{#each limit_options as [limit_value,limit]}
-							<Form.SelectItem value={limit_value}>{limit.label}</Form.SelectItem>
-						{/each}
-					</Form.SelectContent>
-				</Form.Select>
-				<Form.Description>
-					Maximum number of sessions you can give in a day.
-				</Form.Description>
-				<Form.Validation />
-			</Form.Item>
+				<Select.Root
+					selected={selectedSessionDailyLimit}
+					onSelectedChange={(v) => {
+						v && ($formData.session_daily_limit = v.value);
+					}}
+				>
+					<Select.Trigger {...attrs}>
+						<Select.Value placeholder="Select a verified email to display" />
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Item value={1} label="1 sessions" />
+						<Select.Item value={2} label="2 sessions" />
+						<Select.Item value={3} label="3 sessions" />
+						<Select.Item value={4} label="4 sessions" />
+						<Select.Item value={5} label="5 sessions" />
+						<Select.Item value={6} label="6 sessions" />
+						<Select.Item value={7} label="7 sessions" />
+					</Select.Content>
+				</Select.Root>
+                <input hidden bind:value={$formData.session_daily_limit} name={attrs.name} />
+				<Form.Description>Maximum number of sessions you can give in a day.</Form.Description>
+				<Form.FieldErrors />
+			</Form.Control>
 		</Form.Field>
-		<Form.Field {config} name="session_duration">
-			<Form.Item>
-				<Form.Label class="mr-4">Duration</Form.Label>
-				<Form.Select bind:selected={selected_duration}>
-					<Form.SelectTrigger value={session_duration} placeholder="Select Total Time it takes to give one session" />
-					<Form.SelectContent>
-						{#each duration_options as [duration_value,duration]}
-							<Form.SelectItem value={duration_value}>{duration.label}</Form.SelectItem>
-						{/each}
-					</Form.SelectContent>
-				</Form.Select>
-				<Form.Description>
-					Total time it takes to give one session.
-				</Form.Description>
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-		<Form.Field {config} name="session_location">
-			<Form.Item class="mt-4">
+		<Form.Field {form} name="session_location">
+			<Form.Control let:attrs>
 				<Form.Label>Location</Form.Label>
-				<Form.Textarea value={session_location} />
-				<Form.Description>
-					Location where you give sessions.
-				</Form.Description>
-				<Form.Validation />
-			</Form.Item>
+				<Textarea {...attrs} bind:value={$formData.session_location} />
+				<Form.Description>Location where you give sessions.</Form.Description>
+				<Form.FieldErrors />
+			</Form.Control>
 		</Form.Field>
+        <Form.Button class="mt-4">Update</Form.Button>
 	</div>
-	<div class="p-4 mt-8 border rounded-md">
-		<h2 class="text-muted-foreground text-xl mb-1">Personal Details</h2>
-	<Form.Field {config} name="about">
-		<Form.Item>
-			<Form.Label>About</Form.Label>
-			<Form.Textarea value={about} />
-			<Form.Description>Write few sentences about yourself.</Form.Description>
-			<Form.Validation />
-		</Form.Item>
-	</Form.Field>
-	</div>
-	<Form.Button class="mt-4">Update</Form.Button>
-</Form.Root>
+</form>

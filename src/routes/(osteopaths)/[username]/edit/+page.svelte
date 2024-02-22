@@ -1,79 +1,110 @@
 <script lang="ts">
-	import { Dialog } from 'bits-ui';
-	import type { SuperValidated } from 'sveltekit-superforms';
+	import { toast } from 'svelte-sonner';
+	import UserForm from '../../../(profile)/user/[id]/edit/user-form.svelte';
+	import type { PageData } from './$types';
 	import OsteopathForm from './osteopath-form.svelte';
-	import AvailabilityPanel from './availability-panel.svelte';
-	import type { FormSchema } from './schema';
+	import * as Avatar from '$lib/components/ui/avatar';
+	import ImageUpload from '../../../(profile)/user/[id]/edit/image-uploader.svelte';
+	import { uploadFile } from '../../../(api)/image/upload';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { ArrowRight, Calendar } from 'radix-icons-svelte';
-	import { fade } from 'svelte/transition';
-	import { flyAndScale } from '$lib/utils';
 
-	export let form: SuperValidated<FormSchema>;
-	export let data;
+	export let data: PageData;
+	async function syncImageUrl(image_url: string) {
+		await fetch('/image', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId: data.user?.id, url: image_url })
+		});
+
+		// deleting the previous image from cloudinary
+		const regex = /\/v\d+\/([^/]+)\.\w{3,4}$/;
+		const getPublicIdFromUrl = (cloudinaryUrl: string) => {
+			const match = cloudinaryUrl.match(regex);
+			return match ? match[1] : null;
+		};
+
+		if (data.user?.image) {
+			const publicID = getPublicIdFromUrl(data.user.image);
+			toast.loading('Transforming Image!');
+			if (publicID) {
+				const res = await fetch('/image', {
+					method: 'DELETE',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ id: publicID })
+				});
+			} else {
+				console.log('Maybe Google Profile Image');
+			}
+		}
+	}
+	let image = data.user?.image;
 </script>
 
-<main class="w-full max-w-5xl p-4">
-	<div class="mb-12 flex flex-col items-start justify-between sm:flex-row">
-		<h2 class="mb-4 text-4xl sm:mb-0">Your Settings</h2>
-		<div class="flex">
-			<Button size="responsive" href="/{data.osteopath?.username}">Public View</Button>
-			{#if data.user?.role === 'osteopath'}
-				<div class="mr-4 border-r-2 px-2"></div>
-				<Button variant="outline" size="responsive" href="/user/{data.user.id}/edit" class="w-max"
-					>Edit Profile</Button
-				>
-			{/if}
-		</div>
+<main class="w-full max-w-xl">
+	<div class="mb-8 rounded-md border p-4">
+		<h2 class="mb-1 text-xl text-muted-foreground">Personal Details</h2>
+<div class="flex items-center gap-x-4 my-4">
+    <Avatar.Root class="size-20">
+        <Avatar.Image src={image} alt="@" />
+        <Avatar.Fallback>CN</Avatar.Fallback>
+      </Avatar.Root>
+      <ImageUpload
+        on:handleUploadImage={async (e) => {
+          image = e.detail;
+          toast.loading('Uploading image');
+          if (!image) {
+            toast.error('No Image selected');
+            return;
+          }
+          const file = await fetch(image)
+            .then((r) => r.blob())
+            .then((blobFile) => new File([blobFile], 'avatar', { type: blobFile.type }));
+  
+          if (!file) {
+            toast.error('No file selected');
+            return;
+          }
+          const fileName = file.name.split('.')[0] || '';
+          const isImage = file.type.includes('image');
+          const fileSizeInMB = file.size / (1024 * 1024); // Convert bytes to MB
+          console.log(`File Size: ${fileSizeInMB}`);
+  
+          const limit = 2 * 1024 * 1024; // 2MB
+          if (file.size > limit) {
+            toast.error(
+              `File size should be less than 2MB, size of your file is ${fileSizeInMB} in MBs`
+            );
+            return;
+          }
+  
+          if (!isImage) {
+            toast.error('Video is not supported');
+            return;
+          }
+  
+          const url = await uploadFile(file);
+          if (url) {
+            toast.success('Image uploaded Cloudinary');
+            image = url;
+            toast.loading('Syncing with Database');
+            try {
+              await syncImageUrl(url);
+              toast.success('Successfully synced with Database');
+            } catch (error) {
+              toast.error('Something went wrong');
+              console.log(error);
+            }
+          } else {
+            toast.error('Something went wrong');
+          }
+        }}
+        imageSrc={image}
+      />
+</div>
+		<UserForm data={data.userForm} />
 	</div>
-	{#if data.user?.role === 'osteopath'}
-			<Dialog.Root>
-				<Dialog.Trigger
-					class="bg-foreground-alt shadow-md hover:bg-foreground-alt/95 active:scale-98 inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full px-[21px] text-[15px] font-semibold text-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-					asChild
-					let:builder
-				>
-					<button
-						use:builder.action
-						{...builder}
-						class="bg-layer-1 w-max shadow-layer-5 border-layer-6 flex items-center gap-x-2 rounded-full border px-3 py-2 text-left font-medium shadow-inner"
-					>
-						<div class="bg-layer-3 flex size-10 items-center justify-center rounded-full">
-							<Calendar />
-						</div>
-						<div class="flex grow flex-col">
-							<h3 class="w-full text-base/6">Weekly Availability</h3>
-							<div class="-mt-1 flex items-center text-sm">
-								<span class=""> change </span>
-								<span> <ArrowRight class="size-4" /> </span>
-							</div>
-						</div>
-					</button>
-				</Dialog.Trigger>
-				<Dialog.Portal>
-					<Dialog.Overlay
-						transition={fade}
-						transitionConfig={{ duration: 150 }}
-						class="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
-					/>
-					<Dialog.Content
-						transition={flyAndScale}
-						class="bg-layer-0 fixed left-[50%] top-[50%] z-50 max-h-[90%] w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-lg border p-5 outline-none sm:max-w-[978px] md:w-full"
-					>
-						<AvailabilityPanel availabilities={data?.availabilities && data.availabilities} />
-					</Dialog.Content>
-				</Dialog.Portal>
-			</Dialog.Root>
-	{/if}
-	<div class="py-4"></div>
-	<OsteopathForm
-		session_daily_limit={data.osteopath?.session?.daily_limit}
-		session_duration={data.osteopath?.session?.duration}
-		session_location={data.osteopath?.session?.location}
-		about={data.osteopath?.about ?? ''}
-		{form}
-	/>
-	<div class="mt-8 flex flex-col gap-y-4 rounded-md border p-4">
+	<OsteopathForm data={data.osteopathForm} />
+    <div class="mt-8 flex flex-col gap-y-4 rounded-md border p-4">
 		<div>
 			<h2 class="mb-1 text-xl text-muted-foreground">Username</h2>
 			<p class="text-sm text-foreground">Your username is {data.osteopath.username}</p>

@@ -47,21 +47,23 @@
 					minute: '2-digit'
 				})}
 			{#if user}
-			<li class="flex flex-col">
-				<div class="flex gap-x-2">
-					<Avatar.Root class="size-12">
-						<Avatar.Image src={user.image} alt="@" />
-						<Avatar.Fallback>{user.name}</Avatar.Fallback>
-					</Avatar.Root>
-					<div class="max-w-32 overflow-auto">
-						<h3>{user.name}</h3>
-						<div class="flex items-center text-sm">
-							<span class="whitespace-nowrap tabular-nums">{formattedStartTime.split(' ')[0]}</span>
-							<Minus />
-							<span class="whitespace-nowrap tabular-nums">{formattedEndAt}</span>
+				<li class="flex flex-col">
+					<div class="flex gap-x-2">
+						<Avatar.Root class="size-12">
+							<Avatar.Image src={user.image} alt="@" />
+							<Avatar.Fallback>{user.name}</Avatar.Fallback>
+						</Avatar.Root>
+						<div class="max-w-32 overflow-auto">
+							<h3>{user.name}</h3>
+							<div class="flex items-center text-sm">
+								<span class="whitespace-nowrap tabular-nums"
+									>{formattedStartTime.split(' ')[0]}</span
+								>
+								<Minus />
+								<span class="whitespace-nowrap tabular-nums">{formattedEndAt}</span>
+							</div>
 						</div>
 					</div>
-				</div>
 				</li>
 			{:else}
 				<li class="flex items-center {editable && 'gap-x-2'}">

@@ -1,55 +1,18 @@
 <script lang="ts">
-	import { localStorage } from '$lib/utils';
-	import { onMount } from 'svelte';
-	/* BROWSER THEME STATE */
-	const storageKey = 'theme-preference';
-	let theme: 'light' | 'dark' = 'light';
-	const getColorPreference = (): 'dark' | 'light' => {
-		let colorPreference = localStorage.getItem(storageKey) as 'dark' | 'light' | null;
-		if (!colorPreference)
-			colorPreference = window.matchMedia('(prefers-color-scheme: dark)').matches
-				? 'dark'
-				: 'light';
-		return colorPreference;
-	};
+	import { toggleMode, mode } from 'mode-watcher';
 
-	const reflectPreference = () => {
-		if (
-			localStorage.getItem(storageKey) === 'dark' ||
-			(!(storageKey in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		)
-			document.documentElement.classList.toggle('dark');
-		else document.documentElement.classList.toggle('dark');
-		document.querySelector('#theme-toggle')?.setAttribute('aria-label', theme);
-	};
-
-	export let size = 32;
-
-	onMount(() => {
-		theme = getColorPreference();
-		window
-			.matchMedia('(prefers-color-scheme: dark)')
-			.addEventListener('change', ({ matches: isDark }) => {
-				theme = isDark ? 'dark' : 'light';
-				localStorage.setItem(storageKey, theme);
-				reflectPreference();
-			});
-	});
+	export let size = 24;
 </script>
 
 <button
-	on:click={() => {
-		theme = theme === 'dark' ? 'light' : 'dark';
-		reflectPreference();
-	}}
+	on:click={toggleMode}
 	class="tab-highlight-none theme-toggle relative"
 	id="theme-toggle"
 	title="Toggles light & dark"
 	aria-label="auto"
-	aria-live="polite"
 	style:--size="{size ? size : 32}px"
-	style:--icon-fill={theme === 'dark' ? '#3dcfcf' : '#ff9200'}
-	style:--icon-fill-hover={theme === 'dark' ? '#53dbdb' : '#ff9200'}
+	style:--icon-fill={$mode === 'dark' ? '#3dcfcf' : '#ff9200'}
+	style:--icon-fill-hover={$mode === 'dark' ? '#53dbdb' : '#ff9200'}
 >
 	<svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
 		<mask class="moon" id="moon-mask">

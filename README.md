@@ -50,7 +50,11 @@ A Online Platform for making it easy for people to find and book osteopathy appo
 #### Routes and Pages
 
 - `src/routes` – Sveltekit routes
-	- `src/google` - Continue with Google Screen main UI
-		- `src/google/callback` - API Endpoint for Callback
-		- `src/google/login` - API Endpoint for Generate Auth URL
-		- `src/google/logout` - API Endpoint for Logout
+  - `src/google` - Continue with Google Screen main UI
+    - `src/google/callback` - API Endpoint for Callback
+    - `src/google/login` - API Endpoint for Generate Auth URL
+    - `src/google/logout` - API Endpoint for Logout
+
+## Inspired from
+
+- [Precedent](https://github.com/steven-tey/precedent/blob/main/README.md) Next.js Tempalte by Steven Tey ([@steventey](https://twitter.com/steventey))

@@ -19,9 +19,7 @@ export async function handleUpdate(data: { id: string; startTime: string; endTim
 	return res;
 }
 
-export async function handleDelete(data: {
-	id:string;
-}) {
+export async function handleDelete(data: { id: string }) {
 	const res = await fetch('/availability', {
 		method: 'DELETE',
 		body: JSON.stringify(data)
