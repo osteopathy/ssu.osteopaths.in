@@ -38,9 +38,8 @@ export const osteopathTable = sqliteTable('osteopath', {
 	session: text('config', {
 		mode: 'json'
 	})
-		.$type<{ duration: number; location: string; daily_limit: number }>()
+		.$type<{ location: string; daily_limit: number }>()
 		.default({
-			duration: 45,
 			location: 'Shruti Building, 2nd Floor',
 			daily_limit: 4
 		}),

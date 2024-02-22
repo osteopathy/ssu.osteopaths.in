@@ -35,8 +35,8 @@
 <ModeWatcher />
 
 <header class="mt-4 mb-6 flex w-full max-w-5xl items-center justify-between">
-	<div class="flex w-full pl-4 items-center gap-x-4">
-		<nav class="hidden gap-x-3 sm:flex">
+	<div class="flex w-full pl-1 sm:pl-4 items-center gap-x-4">
+		<nav class="flex sm:gap-x-3">
 			<a
 				aria-current={$page.url.pathname === '/' ? 'page' : undefined}
 				class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 px-2 py-0.5 hover:bg-layer-4 transition-colors rounded-full"

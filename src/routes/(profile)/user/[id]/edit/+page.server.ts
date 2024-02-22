@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
 import { createUserSchema, osteopathTable } from '$lib/db/schema';
 import { db } from '$lib/db';
 import { eq } from 'drizzle-orm';
@@ -19,17 +20,12 @@ export const load: PageServerLoad = async (event) => {
 				username: true
 			}
 		});
-		return {
-			isCurrentUser,
-			user: event.locals.user,
-			form: await superValidate(createUserSchema),
-			username: osteopath?.username
-		};
+		redirect(307, `/${osteopath?.username}/edit`);
 	}
 	return {
 		isCurrentUser,
 		user: event.locals.user,
-		form: await superValidate(createUserSchema),
+		form: await superValidate(zod(createUserSchema)),
 		username: null
 	};
 };

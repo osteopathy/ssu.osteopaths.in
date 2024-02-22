@@ -12,7 +12,7 @@ import {
 import { error } from '@sveltejs/kit';
 import { Temporal } from 'temporal-polyfill';
 import groupBy from 'just-group-by';
-import { config, fromTimeStr } from './edit/utils';
+import { config, fromTimeStr } from './utils';
 
 type ByDatesType = Record<
 	string,

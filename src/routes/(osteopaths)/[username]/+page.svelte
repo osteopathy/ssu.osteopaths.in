@@ -1,20 +1,17 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { toast } from 'svelte-sonner';
 	import Calendar from './calendar.svelte';
 	import { Temporal } from 'temporal-polyfill';
-	import { ArrowRight, Minus, Plus } from 'radix-icons-svelte';
+	import { ArrowRight, Minus, Calendar as CalendarIcon } from 'radix-icons-svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { fade, fly } from 'svelte/transition';
 	import { flyAndScale } from '$lib/utils';
-	import AvailabilityPanel from './edit/availability-panel.svelte';
+	import AvailabilityPanel from './availability-panel.svelte';
 	import { quintInOut } from 'svelte/easing';
 
 	export let data;
 	let image = data.osteopath.user?.image;
-	let open = false;
 	let selectedDate = Temporal.Now.plainDateISO().add({days: 1});
 	let selectedTime: {
 		date: string;
@@ -56,54 +53,9 @@
 			{/if}
 		</div>
 		</div>
-		<div class="mt-6 flex w-full">
-			{#if data.isCurrentUser}
-				<Dialog.Root>
-					<Dialog.Trigger
-						class="active:scale-98 bg-foreground-alt hover:bg-foreground-alt/95 inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full px-[21px] text-[15px] font-semibold text-background shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-						asChild
-						let:builder
-					>
-						<button
-							use:builder.action
-							{...builder}
-							class="border-layer-6 bg-layer-1 shadow-layer-5 flex w-max items-center gap-x-2 rounded-full border px-3 py-2 text-left font-medium shadow-inner"
-						>
-							<div class="bg-layer-3 flex size-10 items-center justify-center rounded-full">
-								<Plus />
-							</div>
-							<div class="flex grow flex-col">
-								<h3 class="w-full text-base/6">Update Availability</h3>
-								<div class="-mt-1 flex items-center text-sm">
-									<span class=""> change </span>
-									<span> <ArrowRight class="size-4" /> </span>
-								</div>
-							</div>
-						</button>
-					</Dialog.Trigger>
-					<Dialog.Portal>
-						<Dialog.Overlay
-							transition={fade}
-							transitionConfig={{ duration: 150 }}
-							class="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"
-						/>
-						<Dialog.Content
-							transition={flyAndScale}
-							class="bg-layer-0 fixed left-[50%] top-[50%] z-50 max-h-[90%] w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-lg border p-5 outline-none sm:max-w-[978px] md:w-full"
-						>
-							<AvailabilityPanel availabilities={data?.availabilities && data.availabilities} />
-						</Dialog.Content>
-					</Dialog.Portal>
-				</Dialog.Root>
-				<div class="mr-4 border-r-2 px-2"></div>
-				<Button variant="outline" size="responsive" href="/{$page.params.username}/edit">
-					Edit
-				</Button>
-			{/if}
-		</div>
 	</div>
 </main>
-<div class="relative flex flex-col sm:flex-row">
+<div class="relative mt-6 flex flex-col sm:flex-row">
 	<Calendar
 		on:change={(e) => {
 			selectedTime = null;
@@ -173,7 +125,7 @@
 				<div class="h-[15px] w-[15px]"></div>
 			</li>
 		</ul>
-		<div class="absolute bottom-4 right-4">
+		<div class="absolute bottom-12 right-4">
 			{#if selectedTime !== null}
 				<div
 					transition:fly={{
@@ -197,4 +149,44 @@
 			{/if}
 		</div>
 	</div>
+	{#if data.isCurrentUser}
+	<Dialog.Root>
+		<Dialog.Trigger
+			class="active:scale-98 bg-foreground-alt hover:bg-foreground-alt/95 inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full px-[21px] text-[15px] font-semibold text-background shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+			asChild
+			let:builder
+		>
+			<button
+				use:builder.action
+				{...builder}
+				class="border-layer-6 absolute -bottom-10 left-1/2 -translate-x-1/2 bg-layer-2 shadow-layer-5 flex w-max items-center gap-x-2 rounded-full border px-3 py-2 text-left font-medium shadow-inner"
+			>
+				<div class="bg-layer-3 flex size-10 items-center justify-center rounded-full">
+					<CalendarIcon />
+				</div>
+				<div class="flex grow flex-col">
+					<h3 class="w-full text-base/6">Update Availability</h3>
+					<div class="-mt-1 flex items-center text-sm">
+						<span class=""> change </span>
+						<span> <ArrowRight class="size-4" /> </span>
+					</div>
+				</div>
+			</button>
+		</Dialog.Trigger>
+		<Dialog.Portal>
+			<Dialog.Overlay
+				transition={fade}
+				transitionConfig={{ duration: 150 }}
+				class="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"
+			/>
+			<Dialog.Content
+				transition={flyAndScale}
+				class="bg-layer-0 fixed left-[50%] top-[50%] z-50 max-h-[90%] w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-lg border p-5 outline-none sm:max-w-[978px] md:w-full"
+			>
+				<AvailabilityPanel availabilities={data?.availabilities && data.availabilities} />
+			</Dialog.Content>
+		</Dialog.Portal>
+	</Dialog.Root>
+	{/if}
+	<div class="py-4"></div>
 </div>
