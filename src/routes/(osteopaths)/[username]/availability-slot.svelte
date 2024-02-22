@@ -4,6 +4,8 @@
 	import { config, divideTimeIntoX } from './utils';
 	import { fromTimeStr } from './utils';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { createPress } from 'svelte-interactions';
+	const { pressAction } = createPress();
 
 	let container: HTMLElement;
 
@@ -53,7 +55,7 @@
 		on:mouseleave={() => {
 			pointerVisible = false;
 		}}
-		on:click={(e) => {
+		on:pointerdown={(e) => {
 			e.preventDefault();
 			const rect = container.getBoundingClientRect();
 			const endX = rect.width;
