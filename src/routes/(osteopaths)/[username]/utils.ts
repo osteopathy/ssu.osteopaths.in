@@ -3,7 +3,9 @@ import { Temporal } from 'temporal-polyfill';
 export const config = {
 	startTime: 9,
 	endTime: 17,
-	minGap: 30
+	minGap: 30,
+	// Total number of days within which the user can book an appointment
+	maxDaysWithinWhichUserCanBookAppointment: 4,
 };
 
 const cacheMap = new Map<string | number, Temporal.PlainTime>();

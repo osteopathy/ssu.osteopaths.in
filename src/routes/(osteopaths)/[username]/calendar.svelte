@@ -4,6 +4,7 @@
 	import { Temporal } from 'temporal-polyfill';
 	import { createEventDispatcher } from 'svelte';
 	import type { LayoutServerData } from './$types';
+	import { config } from './utils';
 
 	const dispatch = createEventDispatcher<{
 		change: { day: string };
@@ -18,8 +19,8 @@
 	export let selected:Temporal.PlainDate;
 
 	let min = new Temporal.PlainDate(today.year, today.month, today.day);
-	let max = new Temporal.PlainDate(today.year, today.month, today.day).add({
-		days: 4
+	let max = today.add({
+		days: config.maxDaysWithinWhichUserCanBookAppointment
 	});
 
 	let view = {

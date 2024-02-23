@@ -5,6 +5,7 @@
 	import { fromTimeStr } from './utils';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { createPress } from 'svelte-interactions';
+	import { onMount } from 'svelte';
 	const { pressAction } = createPress();
 
 	let container: HTMLElement;
@@ -33,28 +34,42 @@
 	let pointer: HTMLElement;
 	let pointerX = 0;
 	let pointerVisible = false;
+	onMount(() => {
+		container.addEventListener('mouseenter', () => {
+			pointerVisible = true;
+			container.addEventListener(
+				'mouseleave',
+				() => {
+					pointerVisible = false;
+				},
+				{
+					passive: true,
+					once: true
+				}
+			);
+			container.addEventListener('mousemove', (event) => {
+				const rect = container.getBoundingClientRect();
+				const endX = rect.width - pointer.offsetWidth;
+				const startX = 0;
+				const newX =
+					endX < event.x - rect.x ? endX : startX > event.x - rect.x ? startX : event.x - rect.x;
+				const start = Math.ceil((newX / rect.width) * 100);
+				const i = view.findIndex(({ x }) => {
+					return x > start;
+				});
+				pointerX = view[i - 1].x - 0.05;
+			},{
+				passive: true,
+			});
+		},{
+			passive: true,
+		});
+	});
 </script>
 
 <div class="relative w-full overflow-auto pb-4">
 	<button
-		on:mousemove={(event) => {
-			const rect = container.getBoundingClientRect();
-			const endX = rect.width - pointer.offsetWidth;
-			const startX = 0;
-			const newX =
-				endX < event.x - rect.x ? endX : startX > event.x - rect.x ? startX : event.x - rect.x;
-			const start = Math.ceil((newX / rect.width) * 100);
-			const i = view.findIndex(({ x }) => {
-				return x > start;
-			});
-			pointerX = view[i - 1].x - 0.05;
-		}}
-		on:mouseenter={() => {
-			pointerVisible = true;
-		}}
-		on:mouseleave={() => {
-			pointerVisible = false;
-		}}
+		type="button"
 		on:click={(e) => {
 			e.preventDefault();
 			const rect = container.getBoundingClientRect();
@@ -142,8 +157,6 @@
 				];
 			}
 		}}
-		on:focus={() => {}}
-		on:blur={() => {}}
 		tabindex={0}
 		bind:this={container}
 		class="relative flex h-12 w-full min-w-[864px] shrink rounded-md border-2 border-indigo-600 bg-indigo-200 pb-4"
@@ -174,8 +187,8 @@
 					</div>
 				{/if}
 				<button
+					type="button"
 					on:click={(e) => {
-						e.preventDefault();
 						e.stopPropagation();
 						const i = markedPointers.findIndex(
 							(point) =>

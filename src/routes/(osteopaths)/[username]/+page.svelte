@@ -11,7 +11,7 @@
 	import { quintInOut } from 'svelte/easing';
 
 	export let data;
-	let image = data.osteopath.user?.image;
+
 	let selectedDate = Temporal.Now.plainDateISO().add({days: 1});
 	let selectedTime: {
 		date: string;
@@ -42,7 +42,7 @@
 	<div class="flex flex-col">
 		<div class="flex gap-6 flex-col sm:flex-row">
 		<Avatar.Root class="size-32">
-			<Avatar.Image src={image} alt="@" />
+			<Avatar.Image src={data.osteopath.user?.image} alt="@" />
 			<Avatar.Fallback>CN</Avatar.Fallback>
 		</Avatar.Root>
 		<div class="flex sm:max-w-80 flex-col">
@@ -125,7 +125,7 @@
 				<div class="h-[15px] w-[15px]"></div>
 			</li>
 		</ul>
-		<div class="absolute bottom-12 right-4">
+		<div class="absolute sm:bottom-4 bottom-12 right-4">
 			{#if selectedTime !== null}
 				<div
 					transition:fly={{

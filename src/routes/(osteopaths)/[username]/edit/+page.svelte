@@ -7,6 +7,7 @@
 	import ImageUpload from '../../../(profile)/user/[id]/edit/image-uploader.svelte';
 	import { uploadFile } from '../../../(api)/image/upload';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 	async function syncImageUrl(image_url: string) {
@@ -107,7 +108,7 @@
     <div class="mt-8 flex flex-col gap-y-4 rounded-md border p-4">
 		<div>
 			<h2 class="mb-1 text-xl text-muted-foreground">Username</h2>
-			<p class="text-sm text-foreground">Your username is {data.osteopath.username}</p>
+			<p class="text-sm text-foreground">Your username is {$page.params.username}</p>
 		</div>
 		<div>
 			<h2 class="mb-1 text-xl text-muted-foreground">Calendar</h2>
