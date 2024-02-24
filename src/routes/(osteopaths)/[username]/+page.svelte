@@ -99,7 +99,8 @@
 					}
 				)}
 				{#each slots as slot}
-					{@const isConfirmed = data.appointments[selectedDate.toString()]?.length !== 0 && data.appointments[selectedDate.toString()]?.findIndex((a) => a.startTime === slot[0]) !== -1}
+					{@const isConfirmed = data.appointments[selectedDate.toString()] && data.appointments[selectedDate.toString()].findIndex((a) => a.startTime === slot[0])}
+					
 					<li class="flex items-center gap-x-2">
 						<button
 							aria-pressed={selectedTime !== null && selectedTime.date + selectedTime.startTime + selectedTime.endTime === selectedDate.toString() + slot[0] + slot[1]}
@@ -110,7 +111,7 @@
 									endTime: slot[1]
 								};
 							}}
-							disabled={isConfirmed}
+							disabled={isConfirmed !== -1 && isConfirmed !== undefined}
 							class="
 								group
 								flex items-center
