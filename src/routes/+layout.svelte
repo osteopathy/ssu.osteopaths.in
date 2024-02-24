@@ -77,7 +77,7 @@
 					<DropdownMenu.Group>
 						<DropdownMenu.Item
 							class="flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-							href="/user/{data.user.id}/{data.user.role === 'osteopath' && 'redirect'}"
+							href="/user/{data.user.id}/{data.user.role === 'osteopath' ? 'redirect': ''}"
 						>
 							<div class="flex items-center">
 								<Person class="text-foreground-alt mr-2 size-5" />

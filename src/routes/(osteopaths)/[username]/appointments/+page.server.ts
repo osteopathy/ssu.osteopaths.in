@@ -1,10 +1,29 @@
-import type { PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+import { db } from "$lib/server/db";
+import { and, asc, eq, gte } from "drizzle-orm";
+import { appointmentTable } from "$lib/db/schema";
+import groupBy from "just-group-by";
+import { Temporal } from "temporal-polyfill";
 
 export const load: PageServerLoad = async (event) => {
-    const result = await event.parent();
-    const [_,username,appointments,dashboard] = event.url.pathname.split('/');
-    if(!dashboard) redirect(307,`/${username}/appointments/requests`)
-    if(!result.isCurrentUser) redirect(307,'/');
-    if(!result.osteopath?.id) redirect(307,'/');
+    const { osteopath } = await event.parent()
+    if (!osteopath?.id) redirect(307, `/${event.params.username}`)
+    const from = Temporal.Now.plainDateISO()
+
+    const appointments = await db.query.appointmentTable.findMany({
+        where: and(
+            eq(appointmentTable.osteopathId, osteopath.id),
+            gte(appointmentTable.date, from.toString()),
+        ),
+        with: {
+            user: true
+        },
+        orderBy: [asc(appointmentTable.startTime), asc(appointmentTable.date)],
+
+    });
+    
+    return {
+        appointments: groupBy(appointments, (appointment) => (appointment.date) as string)
+    }
 };

@@ -25,7 +25,10 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		isCurrentUser,
 		user: event.locals.user,
-		form: await superValidate(zod(createUserSchema)),
+		form: await superValidate(zod(createUserSchema.default({
+			name: event.locals.user.name,
+			phoneNumber: event.locals.user.phoneNumber,
+		}))),
 		username: null
 	};
 };

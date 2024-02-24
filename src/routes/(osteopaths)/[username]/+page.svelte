@@ -9,6 +9,8 @@
 	import { flyAndScale } from '$lib/utils';
 	import AvailabilityPanel from './availability-panel.svelte';
 	import { quintInOut } from 'svelte/easing';
+	import { appointment } from '../../(api)/api/v1/appointment';
+	import { toast } from 'svelte-sonner';
 
 	export let data;
 
@@ -97,6 +99,7 @@
 					}
 				)}
 				{#each slots as slot}
+					{@const isConfirmed = data.appointments[selectedDate.toString()]?.findIndex((a) => a.startTime === slot[0]) !== -1}
 					<li class="flex items-center gap-x-2">
 						<button
 							aria-pressed={selectedTime !== null && selectedTime.date + selectedTime.startTime + selectedTime.endTime === selectedDate.toString() + slot[0] + slot[1]}
@@ -107,11 +110,14 @@
 									endTime: slot[1]
 								};
 							}}
+							disabled={isConfirmed}
 							class="
-						disabled:text-muted-foregound group
-						flex items-center
-						gap-x-1 rounded-md border bg-muted px-1.5 py-0.5 disabled:bg-muted
-						aria-pressed:bg-blue-500 aria-pressed:text-white"
+								group
+								flex items-center
+								gap-x-1 rounded-md border bg-muted px-1.5 py-0.5 
+								aria-pressed:bg-blue-500 aria-pressed:text-white
+								disabled:opacity-50
+								"
 						>
 							<span class="whitespace-nowrap tabular-nums">{slot[0]}</span>
 							<Minus />
@@ -138,9 +144,19 @@
 				>
 					<Button
 						size="sm"
-						on:click={() => {
-							console.log(selectedTime);
-							console.log(data.user?.id);
+						on:click={async () => {
+							if(data.osteopath?.id) {
+								toast.loading('Sending Request')
+								const newAppointment = await appointment.new({
+									osteopathId: data.osteopath.id,
+									date: selectedTime?.date,
+									startTime: selectedTime?.startTime,
+									duration: '30',
+									userId: data.user?.id,
+									status: 'pending'
+								})
+								toast.success('Your Request has been sent')
+							}
 						}}
 					>
 						Send Request <ArrowRight class="h-4 w-4" />

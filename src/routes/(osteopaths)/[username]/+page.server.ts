@@ -3,10 +3,9 @@ import type { PageServerLoad } from "./$types";
 import { Temporal } from "temporal-polyfill";
 import { config, fromTimeStr } from "./utils";
 import { error } from "@sveltejs/kit";
-import { getUserIdByUsername } from "$lib/server/kv";
 import { db } from "$lib/server/db";
-import { appointmentTable, availabilityTable, calendarTable, courseTable, osteopathTable, userTable } from "$lib/db/schema";
-import { and, eq, gte, lte } from "drizzle-orm";
+import { appointmentTable, availabilityTable, calendarTable, courseTable } from "$lib/db/schema";
+import { and, eq, gte, lte, not } from "drizzle-orm";
 
 function flatToWeeks(availabilities: any[]) {
     const grouped = groupBy(availabilities, (availability) =>
@@ -95,81 +94,57 @@ function flatToWeeks(availabilities: any[]) {
 // This file is used to fetch the details of osteopath from there [username]
 // then, it fetches the availabilities and appointments of the osteopath in upcoming days
 export const load: PageServerLoad = async (event) => {
-    const userId = await getUserIdByUsername(event.params.username);
+    const { osteopath } = await event.parent();
 
     const from = Temporal.Now.plainDateISO()
     const to = from.add({
         days: config.maxDaysWithinWhichUserCanBookAppointment,
     });
 
-    if (!userId)
-        error(404, {
-            message: 'Username Not found'
-        });
+    if (!osteopath.id) return error(404, { message: "Osteopath ID undefined" });
+    // if (!osteopath?.courseId) return error(404, { message: "Osteopath hasn't register for a course" });
+    const response =
+        await Promise.allSettled(
+            [
+                db.query.appointmentTable.findMany({
+                    where: and(
+                        eq(appointmentTable.osteopathId, osteopath.id),
+                        gte(appointmentTable.date, from.toString()),
+                        eq(appointmentTable.status, 'confirmed')
+                        // lte(appointmentTable, `${to.year}-${to.month.toString().padStart(2,'0')}-${to.day.toString().padStart(2,'0')}`)
+                    )
+                }),
+                db
+                    .select()
+                    .from(availabilityTable)
+                    .where(
+                        eq(availabilityTable.osteopathId, osteopath.id)
+                    ),
+                osteopath?.courseId &&
+                db.query.courseTable.findFirst({
+                    where: eq(courseTable.id, osteopath.courseId)
+                }),
+                osteopath?.calendarId &&
+                db.query.calendarTable.findFirst({
+                    where: eq(calendarTable.id, osteopath.calendarId)
+                })
+            ]
+        )
 
-    if (userId === event.locals.user?.id) {
-        const osteopath = await db.query.osteopathTable.findFirst({
-            where: eq(osteopathTable.userId, userId),
-            with: {
-                course: true,
-                appointments: {
-                    where: and(gte(appointmentTable.date, `${from.year}-${from.month}-${from.day}`), lte(appointmentTable, `${to.year}-${to.month}-${to.day}`)),
-                    with: {
-                        user: true
-                    }
-                },
-                availabilities: true,
-                calendar: true
-            }
-        })
-
-        const appointments = groupBy(
-            osteopath?.appointments || [],
-            (appointment) => appointment.date as string
-        );
-
-        return {
-            isCurrentUser: true,
-            osteopath: {
-                user: event.locals.user,
-                ...osteopath
-            },
-            availabilities: flatToWeeks(osteopath?.availabilities || []),
-            appointments,
-            calendar: osteopath?.calendar ? osteopath.calendar : null
-        };
-    }
-    const res = (
-        await db
-            .select()
-            .from(userTable)
-            .where(eq(userTable.id, userId))
-            .leftJoin(osteopathTable, eq(userTable.id, osteopathTable.userId))
-            .leftJoin(courseTable, eq(courseTable.id, osteopathTable.courseId))
-            .leftJoin(calendarTable, eq(calendarTable.id, osteopathTable.calendarId))
-    )[0];
-
-    if (!res?.osteopath) return error(404, { message: 'Osteopath Not found' });
-
-    const db_appointments = await db
-        .select()
-        .from(appointmentTable)
-        .where(and(eq(appointmentTable.osteopathId, res.osteopath.id), and(gte(appointmentTable.date, `${from.year}-${from.month}-${from.day}`), lte(appointmentTable, `${to.year}-${to.month}-${to.day}`))));
-    const availabilities = await db
-        .select()
-        .from(availabilityTable)
-        .where(eq(availabilityTable.osteopathId, res.osteopath.id));
+    const db_appointments = response[0].status === 'fulfilled' ? response[0].value : [];
+    const availabilities = response[1].status === 'fulfilled' ? response[1].value : [];
+    const course = response[2].status === 'fulfilled' ? response[2].value : null;
+    const calendar = response[3].status === 'fulfilled' ? response[3].value : null;
     
     const appointments = groupBy(db_appointments, (appointment) => appointment.date as string);
+
     return {
-		isCurrentUser: false,
-		osteopath: {
-			user: res.user,
-			...res.osteopath,
-			course: res.course
-		},
-		availabilities: flatToWeeks(availabilities || []),
-		appointments,
-        calendar: res.calendar
-	};
+        osteopath: {
+			...osteopath,
+            course: course
+        },
+        availabilities: flatToWeeks(availabilities || []),
+        appointments,
+        calendar
+    };
 };

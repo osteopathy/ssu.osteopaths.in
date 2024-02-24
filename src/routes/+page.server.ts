@@ -9,7 +9,6 @@ import slugify from '$lib/utils/slugify';
 export const load: PageServerLoad = async () => {
 	return {
 		osteopaths: db.query.osteopathTable.findMany({
-			where: not(eq(osteopathTable.username, 'vishnu')),
 			with: {
 				user: true,
 				course: true

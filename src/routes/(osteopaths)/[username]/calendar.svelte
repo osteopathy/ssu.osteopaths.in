@@ -3,7 +3,7 @@
 	import MultiSelectIcon from '$lib/components/ui/icons/multi-select.svelte';
 	import { Temporal } from 'temporal-polyfill';
 	import { createEventDispatcher } from 'svelte';
-	import type { LayoutServerData } from './$types';
+	import type { LayoutServerData, PageServerData } from './$types';
 	import { config } from './utils';
 
 	const dispatch = createEventDispatcher<{
@@ -12,8 +12,9 @@
 
 	const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
-	export let availabilities: LayoutServerData['availabilities'];
-	
+	export let availabilities: PageServerData['availabilities'];
+	// export let appointments: PageServerData['appointments'];
+
 	const today = Temporal.Now.plainDateISO();
 
 	export let selected:Temporal.PlainDate;

@@ -8,14 +8,19 @@ export const config = {
 	maxDaysWithinWhichUserCanBookAppointment: 4,
 };
 
-const cacheMap = new Map<string | number, Temporal.PlainTime>();
+const cacheTimeMap = new Map<string | number, Temporal.PlainTime>();
+
+export const fromDateStr = (str: string): Temporal.PlainDate => {
+	const [year,month,day] = str?.split('-').map((v) => +v) ?? [2024,1,1];
+	return new Temporal.PlainDate(year, month,day);
+};
 
 export const fromTimeStr = (str: string): Temporal.PlainTime => {
-	const r = cacheMap.get(str);
+	const r = cacheTimeMap.get(str);
 	if (r) return r;
 	const [hour, min] = str.split(':').map((e) => +e);
 	const v = new Temporal.PlainTime(hour, min);
-	cacheMap.set(str, v);
+	cacheTimeMap.set(str, v);
 	return v;
 };
 
