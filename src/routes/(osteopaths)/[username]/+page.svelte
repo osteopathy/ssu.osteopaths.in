@@ -168,7 +168,7 @@
 							Send Request <ArrowRight class="h-4 w-4" />
 						</Button>
 						{:else}
-						<Button size="sm" href="/login">
+						<Button size="sm" href="/google/login">
 							Login to Book <ArrowRight class="h-4 w-4" />
 						</Button>
 					{/if}
