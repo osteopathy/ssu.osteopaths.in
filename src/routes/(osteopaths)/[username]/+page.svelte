@@ -38,6 +38,7 @@
 		}
 		return slots;
 	}
+	let loading = false;
 </script>
 
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
@@ -153,17 +154,24 @@
 							on:click={async () => {
 								if (data.osteopath?.id) {
 									toast.loading('Sending Request');
-									const newAppointment = await appointment.new({
-										osteopathId: data.osteopath.id,
-										date: selectedTime?.date,
-										startTime: selectedTime?.startTime,
-										duration: '30',
-										userId: data.user?.id,
-										status: 'pending'
-									});
-									toast.success('Your Request has been sent');
+									loading = true;
+									try {
+										await appointment.new({
+											osteopathId: data.osteopath.id,
+											date: selectedTime?.date,
+											startTime: selectedTime?.startTime,
+											duration: '30',
+											userId: data.user?.id,
+											status: 'pending'
+										});
+										toast.success('Your Request has been sent');
+									} catch (error) {
+										toast.error('Failed to send request')
+									}
+									loading = false;
 								}
 							}}
+							disabled={loading}
 						>
 							Send Request <ArrowRight class="h-4 w-4" />
 						</Button>
