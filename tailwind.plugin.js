@@ -47,7 +47,7 @@ export default plugin(
 				'--secondary-foreground': 'var(--layer-12)',
 				'--accent': 'var(--layer-5)',
 				'--accent-foreground': 'var(--layer-12)',
-				'--ring': 'var(--layer-12)',
+				'--ring': 'var(--layer-8)',
 				'--radius': '0.5rem'
 			},
 			'.dark': {
@@ -76,7 +76,7 @@ export default plugin(
 				'--secondary-foreground': 'var(--layer-12)',
 				'--accent': 'var(--layer-5)',
 				'--accent-foreground': 'var(--layer-12)',
-				'--ring': 'var(--layer-12)'
+				'--ring': 'var(--layer-8)'
 			}
 		});
 	},

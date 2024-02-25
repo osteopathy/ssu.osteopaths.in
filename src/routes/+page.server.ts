@@ -55,12 +55,14 @@ export const actions: Actions = {
 
 		if (!event.locals.user?.id || event.locals.user.role !== 'osteopath') {
 			return fail(401, {
+				username: username?.toString(),
 				message: 'unauthorized'
 			});
 		}
 
 		if (!username) {
 			return fail(400, {
+				username: username?.toString(),
 				message: 'username undefined'
 			});
 		}
@@ -71,6 +73,7 @@ export const actions: Actions = {
 
 		if (exist) {
 			return fail(409, {
+				username: username?.toString(),
 				message: `username already exist ${username}`
 			});
 		}
@@ -81,6 +84,7 @@ export const actions: Actions = {
 
 		if (!osteopath) {
 			return fail(400, {
+				username: username?.toString(),
 				message: 'osteopath not found'
 			});
 		}
@@ -98,6 +102,7 @@ export const actions: Actions = {
 					.where(eq(osteopathTable.id, osteopath.id));
 
 			return fail(500, {
+				username: username?.toString(),
 				message: 'failed to create username'
 			});
 		} else if (res1.status === 'fulfilled' && res2.status === 'fulfilled') {
@@ -112,15 +117,18 @@ export const actions: Actions = {
 					deleteUsername(username)
 				]);
 				return fail(500, {
+					username: username?.toString(),
 					message: 'failed to delete old username'
 				});
 			}
 			return {
-				username
+				username: username?.toString(),
+				message: 'username created'
 			};
 		} else {
 			if (res2.status === 'rejected') await deleteUsername(username);
 			return fail(500, {
+				username: username?.toString(),
 				message: 'failed to create username'
 			});
 		}

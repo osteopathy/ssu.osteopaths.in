@@ -9,6 +9,7 @@ import { eq } from "drizzle-orm";
 // This file is used to fetch the details of osteopath from there [username]
 export const load: LayoutServerLoad = async (event) => {
     const userId = await getUserIdByUsername(event.params.username);
+    
     if (!userId)
         error(404, {
             message: 'Username Not found'

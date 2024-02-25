@@ -16,6 +16,7 @@ export const load: PageServerLoad = async (e) => {
         });
         if(to) redirect(307, `/${osteopath?.username}/${to}`);
 
-        redirect(307, `/${osteopath?.username}`);
+        if(osteopath?.username !== null) redirect(307, `/${osteopath?.username}`);
+        redirect(307, '/setup-username');
     }
 }

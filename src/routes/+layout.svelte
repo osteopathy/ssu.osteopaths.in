@@ -60,7 +60,7 @@
 		{#if data.user}
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger
-					class="focus-visible border-border-input shadow-btn active:scale-98 m-2 inline-flex h-10 w-10 items-center justify-center rounded-full border bg-background text-sm font-medium text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background "
+					class="border inline-flex size-10 items-center justify-center rounded-full bg-background text-sm font-medium text-foreground hover:border-input focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 				>
 					<Avatar.Root class="size-9">
 						<Avatar.Image src={data.user?.image} alt="@{data.user.name} Profile Pic" />

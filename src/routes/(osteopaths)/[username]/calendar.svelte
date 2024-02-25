@@ -10,7 +10,7 @@
 		change: { day: string };
 	}>();
 
-	const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+	const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday','sunday'];
 
 	export let availabilities: PageServerData['availabilities'];
 	// export let appointments: PageServerData['appointments'];
