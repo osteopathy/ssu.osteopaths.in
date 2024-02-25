@@ -34,6 +34,7 @@
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
+		"firebase": "^10.8.0",
 		"hex-rgb": "^5.0.0",
 		"just-group-by": "^2.2.0",
 		"lucia": "^3.0.1",

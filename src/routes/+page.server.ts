@@ -5,7 +5,7 @@ import { createUsername, deleteUsername, doesUsernameExist } from '$lib/server/k
 import { eq, not } from 'drizzle-orm';
 import { feedbackTable, osteopathTable } from '$lib/db/schema';
 import slugify from '$lib/utils/slugify';
-import { email } from './(api)/api/v1/email';
+
 
 export const load: PageServerLoad = async () => {
 	return {
