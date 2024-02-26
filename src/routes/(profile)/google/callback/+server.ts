@@ -93,22 +93,20 @@ export async function GET(event: RequestEvent): Promise<Response> {
 							: ({ role: 'student', course: batch } as const);
 					r = role;
 					let calendarId: string | null = null;
-					await Promise.allSettled([
-						db.insert(userTable).values({
-							id: userId,
-							gmail: payload.email,
-							image: payload.picture,
-							name: payload.name,
-							role
-						}),
-						role === 'osteopath' &&
-							db.insert(osteopathTable).values({
-								courseId: course,
-								userId,
-								batch: year,
-								calendarId
-							})
-					]);
+					await db.insert(userTable).values({
+						id: userId,
+						gmail: payload.email,
+						image: payload.picture,
+						name: payload.name,
+						role
+					})
+					if(role === 'osteopath')
+						await db.insert(osteopathTable).values({
+							courseId: course,
+							userId,
+							batch: year,
+							calendarId
+						})
 				} else {
 					await db.insert(userTable).values({
 						id: userId,
@@ -127,7 +125,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 					return new Response(null, {
 						status: 302,
 						headers: {
-							Location: r === 'osteopath' ? `/user/${userId}` : '/'
+							Location: '/'
 						}
 					});
 				}
