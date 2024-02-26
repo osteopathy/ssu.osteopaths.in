@@ -3,9 +3,12 @@
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import Label from '$lib/components/ui/label/label.svelte';
 	import { toast } from 'svelte-sonner';
+	import slugify from '$lib/utils/slugify';
 
 	let loading = false;
+	let username = '';
 </script>
 
 <main class="w-full max-w-5xl p-4">
@@ -27,7 +30,7 @@
 				loading = false;
 				if (result.status === 200) {
 					toast.success('Username Successfully Updated!');
-					goto(`/${result.data.username}`)
+					goto(`/${result.data.username}`);
 				} else {
 					// @ts-ignore
 					toast.error(result.data.message);
@@ -36,7 +39,8 @@
 			};
 		}}
 	>
-		<Input id="username" name="username" />
+		<Label for="username">Username</Label>
+		<Input id="username" bind:value={username} name="username" />
 		<Button disabled={loading} type="submit" class="mt-6">Submit</Button>
 	</form>
 </main>

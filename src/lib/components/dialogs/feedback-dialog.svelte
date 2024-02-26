@@ -76,12 +76,7 @@
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root
-		bind:open
-		shouldScaleBackground
-		direction="left"
-		onOutsideClick={() => (open = !open)}
-	>
+	<Drawer.Root bind:open direction="left" onOutsideClick={() => (open = !open)}>
 		{#if buttonVisible}
 			<Drawer.Trigger
 				class={buttonVariants({

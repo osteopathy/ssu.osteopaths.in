@@ -34,25 +34,25 @@
 <Toaster />
 <ModeWatcher />
 
-<header class="mt-4 mb-6 flex w-full max-w-5xl items-center justify-between">
-	<div class="flex w-full pl-1 sm:pl-4 items-center gap-x-4">
+<header class="mb-6 mt-4 flex w-full max-w-5xl items-center justify-between">
+	<div class="flex w-full items-center gap-x-4 pl-1 sm:pl-4">
 		<nav class="flex sm:gap-x-3">
 			<a
 				aria-current={$page.url.pathname === '/' ? 'page' : undefined}
-				class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 px-2 py-0.5 hover:bg-layer-4 transition-colors rounded-full"
+				class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 hover:bg-layer-4 rounded-full px-2 py-0.5 transition-colors"
 				href="/"
 			>
 				Osteopaths
 			</a>
-		{#if data.user?.role === 'osteopath'}
-			<a
-				aria-current={$page.url.pathname.includes('/appointments') ? 'page' : undefined}
-				class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 px-2 py-0.5 hover:bg-layer-4 transition-colors rounded-full"
-				href="/user/{data.user?.id}/redirect?to=appointments"
-			>
-				Appointments
-			</a>
-		{/if}
+			{#if data.user?.role === 'osteopath'}
+				<a
+					aria-current={$page.url.pathname.includes('/requests') ? 'page' : undefined}
+					class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 hover:bg-layer-4 rounded-full px-2 py-0.5 transition-colors"
+					href="/user/{data.user?.id}/redirect?to=requests"
+				>
+					Requests
+				</a>
+			{/if}
 		</nav>
 		<ThemeButton />
 	</div>
@@ -60,7 +60,7 @@
 		{#if data.user}
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger
-					class="border inline-flex size-10 items-center justify-center rounded-full bg-background text-sm font-medium text-foreground hover:border-input focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+					class="bg-background text-foreground hover:border-input focus-visible:ring-ring focus-visible:ring-offset-background inline-flex size-10 items-center justify-center rounded-full border text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2"
 				>
 					<Avatar.Root class="size-9">
 						<Avatar.Image src={data.user?.image} alt="@{data.user.name} Profile Pic" />
@@ -68,7 +68,7 @@
 					</Avatar.Root>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content
-					class="w-max rounded-xl border border-muted bg-popover px-1 py-1.5 text-popover-foreground shadow-popover"
+					class="border-muted bg-popover text-popover-foreground shadow-popover w-max rounded-xl border px-1 py-1.5"
 					transition={flyAndScale}
 					sideOffset={8}
 					side="bottom"
@@ -76,8 +76,8 @@
 				>
 					<DropdownMenu.Group>
 						<DropdownMenu.Item
-							class="flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
-							href="/user/{data.user.id}/{data.user.role === 'osteopath' ? 'redirect': ''}"
+							class="data-[highlighted]:bg-muted flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent"
+							href="/user/{data.user.id}/{data.user.role === 'osteopath' ? 'redirect' : ''}"
 						>
 							<div class="flex items-center">
 								<Person class="text-foreground-alt mr-2 size-5" />
@@ -85,7 +85,7 @@
 							</div>
 						</DropdownMenu.Item>
 						<DropdownMenu.Item
-							class="flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+							class="data-[highlighted]:bg-muted flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent"
 							href="/user/{data.user.id}/edit"
 						>
 							<div class="flex items-center">
@@ -96,7 +96,7 @@
 					</DropdownMenu.Group>
 					<DropdownMenu.Separator />
 					<DropdownMenu.Item
-						class="flex h-10 select-none items-center rounded-md py-1 pl-3 pr-4 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-muted"
+						class="data-[highlighted]:bg-muted flex h-10 select-none items-center rounded-md py-1 pl-3 pr-4 text-sm font-medium !ring-0 !ring-transparent"
 						on:click={() => (feedbackDialogOpen = true)}
 					>
 						<div class="flex items-center">
@@ -109,7 +109,7 @@
 						class={buttonVariants({
 							variant: 'destructive',
 							class:
-								'data-[highlighted]:text-destructive-foregound flex h-10 select-none items-center justify-start rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent data-[highlighted]:bg-destructive/80'
+								'data-[highlighted]:text-destructive-foregound data-[highlighted]:bg-destructive/80 flex h-10 select-none items-center justify-start rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent'
 						})}
 						href="/google/logout"
 					>

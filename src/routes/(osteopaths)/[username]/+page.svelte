@@ -50,7 +50,7 @@
 			</Avatar.Root>
 			<div class="flex flex-col sm:max-w-80">
 				<h2 class="mb-1">{data.osteopath.user.name}</h2>
-				<span class="mb-2 text-muted-foreground">{data.osteopath?.course?.label}</span>
+				<span class="text-muted-foreground mb-2">{data.osteopath?.course?.label}</span>
 				{#if data.osteopath?.about}
 					<p>{data.osteopath?.about}</p>
 				{/if}
@@ -118,9 +118,9 @@
 							}}
 							disabled={isConfirmed !== -1 && isConfirmed !== undefined}
 							class="
-								group
-								flex items-center
-								gap-x-1 rounded-md border bg-muted px-1.5 py-0.5
+								bg-muted
+								group flex
+								items-center gap-x-1 rounded-md border px-1.5 py-0.5
 								disabled:opacity-50 aria-pressed:bg-blue-500
 								aria-pressed:text-white
 								"
@@ -166,7 +166,7 @@
 										});
 										toast.success('Your Request has been sent');
 									} catch (error) {
-										toast.error('Failed to send request')
+										toast.error('Failed to send request');
 									}
 									loading = false;
 								}
@@ -175,7 +175,7 @@
 						>
 							Send Request <ArrowRight class="h-4 w-4" />
 						</Button>
-						{:else}
+					{:else}
 						<Button size="sm" href="/google/login">
 							Login to Book <ArrowRight class="h-4 w-4" />
 						</Button>
@@ -187,7 +187,7 @@
 	{#if data.isCurrentUser}
 		<Dialog.Root>
 			<Dialog.Trigger
-				class="active:scale-98 bg-foreground-alt hover:bg-foreground-alt/95 inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full px-[21px] text-[15px] font-semibold text-background shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+				class="active:scale-98 bg-foreground-alt hover:bg-foreground-alt/95 text-background focus-visible:ring-foreground focus-visible:ring-offset-background inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full px-[21px] text-[15px] font-semibold shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
 				asChild
 				let:builder
 			>
@@ -212,7 +212,7 @@
 				<Dialog.Overlay
 					transition={fade}
 					transitionConfig={{ duration: 150 }}
-					class="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"
+					class="bg-background/80 fixed inset-0 z-40 backdrop-blur-sm"
 				/>
 				<Dialog.Content
 					transition={flyAndScale}
