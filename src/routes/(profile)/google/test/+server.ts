@@ -1,7 +1,8 @@
-import { generateId } from "lucia";
-import type { RequestHandler } from "./$types";
-import { db } from "$lib/server/db";
-import { osteopathTable, userTable } from "$lib/db/schema";
+import { generateId } from 'lucia';
+import type { RequestHandler } from './$types';
+import { db } from '$lib/server/db';
+import { osteopathTable, userTable } from '$lib/db/schema';
+import { json } from '@sveltejs/kit';
 
 function extractFromEmail(email_id: string | undefined | null) {
 	let group;
@@ -18,47 +19,46 @@ function extractFromEmail(email_id: string | undefined | null) {
 }
 
 export const GET: RequestHandler = async (event) => {
-    const userId = generateId(15);
-    const emailDetail = extractFromEmail('rishi.s2022mos@srisriuniversity.edu.in');
-    let r;
-    if (emailDetail) {
-        const { year, batch } = emailDetail;
-        const { role, course } =
-            batch === 'bos' || batch === 'mos' || batch === 'ios'
-                ? ({ role: 'osteopath', course: batch } as const)
-                : ({ role: 'student', course: batch } as const);
-        r = role;
-        let calendarId: string | null = null;
-        const settled = await Promise.allSettled([
-            db.insert(userTable).values({
-                id: userId,
-                gmail: 'rishi.s2022mos@srisriuniversity.edu.in',
-                image: null,
-                name: 'DR. RISHI RAJ SINGH',
-                role
-            }),
-            role === 'osteopath' &&
-            db.insert(osteopathTable).values({
-                courseId: course,
-                userId,
-                batch: year,
-                calendarId
-            })
-        ]);
-        if (settled[0].status === 'rejected') {
-            console.log("FAILED TO INSERT USER");
-        }
-        if (settled[1].status === 'rejected') {
-            console.log("FAILED TO INSERT OSTEOPATH");
-        }
-    } else {
-        await db.insert(userTable).values({
-            id: userId,
-            gmail: payload.email,
-            image: payload.picture,
-            name: payload.name,
-            role: 'user'
-        });
-
-        return new Response();
-    };
+	const payload = {
+		email: 'sejal.k2023mos@srisriuniversity.edu.in',
+		name: 'Sejal Shivdas Kadam',
+		picture:
+			'https://lh3.googleusercontent.com/a/ACg8ocKdVgo0T4M7xTsdLtLOC5_839lPb8kvjhaYFaddWg2J=s96-c'
+	};
+	const userId = generateId(15);
+	const emailDetail = extractFromEmail(payload.email);
+	let r;
+	if (emailDetail) {
+		const { year, batch } = emailDetail;
+		const { role, course } =
+			batch === 'bos' || batch === 'mos' || batch === 'ios'
+				? ({ role: 'osteopath', course: batch } as const)
+				: ({ role: 'student', course: batch } as const);
+		r = role;
+		let calendarId: string | null = null;
+		await db.insert(userTable).values({
+			id: userId,
+			gmail: payload.email,
+			image: payload.picture,
+			name: payload.name,
+			role
+		});
+		await db.insert(osteopathTable).values({
+			courseId: course as 'mos',
+			userId,
+			batch: year
+		});
+	} else {
+		await db.insert(userTable).values({
+			id: userId,
+			gmail: payload.email,
+			image: payload.picture,
+			name: payload.name,
+			role: 'user'
+		});
+	}
+	return json({
+		userId,
+		role: r
+	});
+};
