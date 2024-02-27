@@ -3,10 +3,13 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
-	const { osteopath } = await event.parent();
+	const { osteopath, isCurrentUser } = await event.parent();
 	if (!osteopath.id) redirect(307, '/');
-	const articles = await articleAPI.getAll(osteopath.id);
+	const articles = await articleAPI.getAll({
+		osteopathId: osteopath.id
+	});
 	return {
+		isCurrentUser,
 		osteopath,
 		articles: articles
 	};

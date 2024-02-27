@@ -24,7 +24,7 @@
 <main class="flex flex-col w-full relative p-6 max-w-5xl mt-8">
 	<div class="flex justify-between">
 		<div></div>
-		{#if data.osteopath?.id === data.article?.author_id}
+		{#if data.isCurrentUser}
 			<Button on:click={() => goto(r)} class="flex gap-x-2">
 				<span>Edit</span>
 				<span><PenIcon size={16} /></span>

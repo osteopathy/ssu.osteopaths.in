@@ -62,11 +62,19 @@ const processedData = (d:any) => {
 }
 
 export const articleAPI = {
-	getAll: async (osteopathId?: string) => {
+	getAll: async ({osteopathId, onlyPublished}:{
+		osteopathId?: string;
+		onlyPublished?: boolean;
+	}) => {
 		const articlesRef = collection(db, 'articles');
-		const articles = await getDocs(
-			osteopathId ? query(articlesRef, where('author_id', '==', osteopathId)) : articlesRef
-		);
+		let articles;
+		if(osteopathId) {
+			articles = await getDocs(query(articlesRef, where('author_id', '==', osteopathId)));
+		} else if (onlyPublished) {
+			articles = await getDocs(query(articlesRef, where('draft', '==', false)));
+		} else {
+			articles = await getDocs(articlesRef);
+		}
 
 		return articles.docs.map((d) => (processedData(d)))as Data[];
 	},
