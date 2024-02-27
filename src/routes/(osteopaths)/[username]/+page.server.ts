@@ -5,7 +5,7 @@ import { config, fromTimeStr } from "./utils";
 import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { appointmentTable, availabilityTable, calendarTable, courseTable } from "$lib/db/schema";
-import { and, eq, gte, lte, not } from "drizzle-orm";
+import { and, eq, gte } from "drizzle-orm";
 
 function flatToWeeks(availabilities: any[]) {
     const grouped = groupBy(availabilities, (availability) =>
@@ -97,9 +97,6 @@ export const load: PageServerLoad = async (event) => {
     const { osteopath } = await event.parent();
 
     const from = Temporal.Now.plainDateISO()
-    const to = from.add({
-        days: config.maxDaysWithinWhichUserCanBookAppointment,
-    });
 
     if (!osteopath.id) return error(404, { message: "Osteopath ID undefined" });
     // if (!osteopath?.courseId) return error(404, { message: "Osteopath hasn't register for a course" });

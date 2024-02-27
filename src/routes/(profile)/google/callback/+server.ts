@@ -73,6 +73,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 			const emailDetail = extractFromEmail(payload.email);
 
+			let r: 'osteopath' | 'student' | 'user' = 'user';
+			
 			if (!existingUser) {
 				if (emailDetail) {
 					const { year, batch } = emailDetail;
@@ -80,7 +82,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 						batch === 'bos' || batch === 'mos' || batch === 'ios'
 							? ({ role: 'osteopath', course: batch } as const)
 							: ({ role: 'student', course: batch } as const);
-
+					r = role;
 					await db.insert(userTable).values({
 						id: userId,
 						gmail: payload.email,
@@ -112,10 +114,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				path: '.',
 				...sessionCookie.attributes
 			});
+			
 			return new Response(null, {
 				status: 302,
 				headers: {
-					Location: '/'
+					Location: r === 'osteopath' ? '/setup-username' : '/'
 				}
 			});
 		} else {
