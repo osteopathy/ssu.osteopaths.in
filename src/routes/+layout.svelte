@@ -17,7 +17,10 @@
 		Gear,
 		Home,
 		Person,
-		ArrowLeft
+		ArrowLeft,
+
+		Reader
+
 	} from 'radix-icons-svelte';
 	import { flyAndScale } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
@@ -84,6 +87,15 @@
 								Profile
 							</div>
 						</DropdownMenu.Item>
+						<DropdownMenu.Item
+						class="data-[highlighted]:bg-muted flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent"
+						href={data.user?.role === 'osteopath' ? `/user/${data.user?.id}/redirect?to=articles` : '/articles'}
+					>
+						<div class="flex items-center">
+							<Reader class="text-foreground-alt mr-2 size-5" />
+							Articles
+						</div>
+					</DropdownMenu.Item>
 						<DropdownMenu.Item
 							class="data-[highlighted]:bg-muted flex h-10 select-none items-center rounded-md py-3 pl-3 pr-1.5 text-sm font-medium !ring-0 !ring-transparent"
 							href="/user/{data.user.id}/edit"

@@ -10,10 +10,12 @@ import { eq } from 'drizzle-orm';
 export const load: PageServerLoad = (async (e) => {
 	let calendar: Calendar | undefined;
 	if (!e.locals.user?.id) error(401, 'Unauthorized');
-
-	const osteopath = await db.query.osteopathTable.findFirst({
-		where: eq(osteopathTable.userId, e.locals.user?.id)
-	})
+	
+	const { osteopath } = await e.parent();
+	
+	// const osteopath = await db.query.osteopathTable.findFirst({
+	// 	where: eq(osteopathTable.userId, e.locals.user?.id)
+	// })
 
 	if (osteopath?.calendarId) {
 		calendar = await db.query.calendarTable.findFirst({

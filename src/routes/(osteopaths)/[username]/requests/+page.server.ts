@@ -7,6 +7,6 @@ export const load: PageServerLoad = async (event) => {
 		event.url.pathname === `/${event.params.username}/requests/`
 	)
 		if (event.locals.user?.role === 'osteopath')
-			redirect(307, `/${event.params.username}/requests/incoming`);
-		else redirect(307, `/${event.params.username}/requests/outgoing`);
+			redirect(303, `/${event.params.username}/requests/incoming`);
+		else redirect(303, `/${event.params.username}/requests/outgoing`);
 };
