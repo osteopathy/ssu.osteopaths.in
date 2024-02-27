@@ -4,7 +4,13 @@
 	import type { PageServerData } from './$types';
 	import { enhance } from '$app/forms';
 	import { ArrowRight } from 'lucide-svelte';
+	import { resolveRoute } from '$app/paths';
+	import { page } from '$app/stores';
 
+	const r = resolveRoute('/[username]/articles/[article_id]/', {
+		article_id: $page.params.article_id,
+        username: $page.params.username
+	});
 	export let data: PageServerData;
 </script>
 
@@ -51,7 +57,7 @@
 					</p>
 				</div>
 				<div>
-					<Button href="/articles/{article.id}" variant="link" class="p-0">
+					<Button href={r} variant="link" class="p-0">
 						Read More <ArrowRight class="ml-1" />
 					</Button>
 				</div>
