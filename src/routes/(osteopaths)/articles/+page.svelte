@@ -6,6 +6,11 @@
 	export let data: PageServerData;
 </script>
 
+<svelte:head>
+	<title>Articles About Osteopathy & Health</title>
+	<meta name="description" content="Quality Content around osteopathy, What is Osteopathy ?">
+</svelte:head>
+
 <main class="w-full max-w-5xl p-4">
 	<div class="w-full">
 		<h2 class="mb-4 text-5xl">Articles</h2>
