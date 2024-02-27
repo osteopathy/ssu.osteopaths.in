@@ -41,6 +41,15 @@
 	let loading = false;
 </script>
 
+<svelte:head>
+	<title>{data.osteopath.user.name} | Osteopath</title>
+	<meta property="og:title" content={data.osteopath.user.name} />
+	{#if data.osteopath?.about}
+	<meta name="description" content={data.osteopath?.about} />
+		<meta property="og:description" content={data.osteopath.about} />
+	{/if}
+</svelte:head>
+
 <main class="flex w-full max-w-5xl flex-col items-center p-4">
 	<div class="flex flex-col">
 		<div class="flex flex-col gap-6 sm:flex-row">

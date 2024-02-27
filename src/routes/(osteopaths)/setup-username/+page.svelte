@@ -5,7 +5,6 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { toast } from 'svelte-sonner';
-	import slugify from '$lib/utils/slugify';
 
 	let loading = false;
 	let username = '';

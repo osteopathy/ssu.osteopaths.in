@@ -44,11 +44,11 @@
 			>
 				Osteopaths
 			</a>
-			{#if data.user?.role === 'osteopath'}
+			{#if data.isLogged}
 				<a
 					aria-current={$page.url.pathname.includes('/requests') ? 'page' : undefined}
 					class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 hover:bg-layer-4 rounded-full px-2 py-0.5 transition-colors"
-					href="/user/{data.user?.id}/redirect?to=requests"
+					href="/user/{data.user?.id}/{data.user?.role === 'osteopath' ? 'redirect?to=requests' : 'requests'}"
 				>
 					Requests
 				</a>

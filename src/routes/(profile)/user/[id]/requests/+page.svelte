@@ -1,14 +1,11 @@
 <script lang="ts">
 	import * as Avatar from '$lib/components/ui/avatar';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import { fromDateStr, fromTimeStr } from '../../utils';
 	import ordinal from 'ordinal';
 	import groupBy from 'just-group-by';
 	import { Minus } from 'radix-icons-svelte';
-	import { appointment as api } from '../../../../(api)/api/v1/appointment';
-	import { toast } from 'svelte-sonner';
 	import type { PageServerData } from './$types';
-	
+	import { fromDateStr, fromTimeStr } from '../../../../(osteopaths)/[username]/utils';
+
 	export let data: PageServerData;
 </script>
 
@@ -46,50 +43,29 @@
 							{#if confirmed}
 								<li class="flex w-full items-center gap-x-2">
 									<Avatar.Root>
-										<Avatar.Image src={confirmed.user?.image} alt={confirmed.user?.name} />
+										<Avatar.Image
+											src={confirmed.osteopath.user?.image}
+											alt={confirmed.osteopath.user?.name}
+										/>
 										<Avatar.Fallback>CN</Avatar.Fallback>
 									</Avatar.Root>
-									<span>{confirmed.user?.name}</span>
-									<span>{confirmed.user?.phoneNumber}</span>
+									<span>{confirmed.osteopath.user?.name}</span>
+									<span>{confirmed.osteopath.user?.phoneNumber}</span>
 									<span class="text-green-500">Confirmed</span>
 								</li>
 							{:else}
 								{#each byTime[time] as appointment}
 									<li class="flex w-full items-center gap-x-2">
 										<Avatar.Root>
-											<Avatar.Image src={appointment.user?.image} alt={appointment.user?.name} />
+											<Avatar.Image
+												src={appointment.osteopath.user?.image}
+												alt={appointment.osteopath.user?.name}
+											/>
 											<Avatar.Fallback>CN</Avatar.Fallback>
 										</Avatar.Root>
-										<span>{appointment.user?.name}</span>
-										<span>{appointment.user?.phoneNumber}</span>
-										<Button
-											on:click={async () => {
-												toast.loading('Accepting appointment');
-												await api.put(appointment.id, { status: 'confirmed' });
-												toast.info('Appointment accepted');
-												toast.loading('Cancelling other appointments');
-												await Promise.allSettled(
-													byTime[time].map((a) => {
-														if (a.id !== appointment.id) {
-															return api.put(a.id, { status: 'cancelled' });
-														}
-													})
-												);
-												data.appointments[date] = data.appointments[date].map((a) => {
-													if (a.startTime === time)
-														return {
-															...a,
-															status: a.id === appointment.id ? 'confirmed' : 'cancelled'
-														};
-													else return a;
-												});
-												toast.success('Other appointments cancelled');
-											}}
-											size="sm"
-											class="ml-auto"
-										>
-											Accept
-										</Button>
+										<span>{appointment.osteopath.user?.name}</span>
+										<span>{appointment.osteopath.user?.phoneNumber}</span>
+										<span class="text-amber-500">Pending</span>
 									</li>
 								{/each}
 							{/if}
