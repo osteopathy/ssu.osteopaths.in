@@ -41,7 +41,7 @@
 			<p class="text-xl sm:text-2xl md:text-3xl lg:text-4xl">Learn more about Osteopathy</p>
 		</div>
 	{/if}
-	<div class="grid w-full grid-cols-2 gap-12">
+	<div class="grid w-full grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12">
 		{#each data.articles as article}
 			<div class="bg-card-alt rounded-xl border p-6 shadow-inner shadow-muted/75">
 				<div class="mb-4 flex flex-col gap-y-1">
