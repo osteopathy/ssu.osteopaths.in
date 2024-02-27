@@ -10,7 +10,7 @@
 	<div class="w-full">
 		<h2 class="mb-4 text-5xl">Articles</h2>
 	</div>
-	<div class="mt-12 grid gap-12 sm:grid-cols-2">
+	<div class="mt-12 grid gap-12 sm:grid-cols-2 sm:gap-8">
 		{#each data.articles as article}
 			<div class="bg-card-alt rounded-xl border p-6 shadow-inner shadow-muted/75">
 				<div class="mb-4 flex flex-col gap-y-1">
