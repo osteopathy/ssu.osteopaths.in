@@ -31,7 +31,7 @@
 			</Button>
 		{/if}
 	</div>
-	<div class="prose max-w-none">
+	<div class="prose max-w-none dark:prose-invert">
 		{@html output}
 	</div>
 </main>
