@@ -49,7 +49,7 @@
 			</a>
 			<a
 				aria-current={$page.url.pathname === '/articles' ? 'page' : undefined}
-				class="aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 hover:bg-layer-4 rounded-full px-2 py-0.5 transition-colors"
+				class="hidden sm:block aria-[current]:text-layer-12 aria-[current]:bg-layer-4 text-layer-11 hover:bg-layer-4 rounded-full px-2 py-0.5 transition-colors"
 				href="/articles"
 			>
 				Articles
