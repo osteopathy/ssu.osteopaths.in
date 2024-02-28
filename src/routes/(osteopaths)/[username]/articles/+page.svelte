@@ -28,7 +28,11 @@
 	{:else}
 		<div class="mb-12">
 			<div class="flex justify-between">
-				<h2 class="mb-6 text-3xl font-semibold sm:text-4xl md:text-5xl lg:text-6xl">Articles</h2>
+				<h2 class="mb-6 text-3xl font-semibold sm:text-4xl md:text-5xl lg:text-6xl">
+					{#if data.isCurrentUser}
+						Your
+					{/if} Articles
+				</h2>
 				{#if data.isCurrentUser}
 					<form method="post" use:enhance>
 						<input type="hidden" name="osteopath-id" value={data.osteopath.id} />
