@@ -45,10 +45,10 @@
 
 <svelte:head>
 	{#if pwaAssetsHead.themeColor}
-	<meta name="theme-color" content={pwaAssetsHead.themeColor.content} />
+		<meta name="theme-color" content={pwaAssetsHead.themeColor.content} />
 	{/if}
 	{#each pwaAssetsHead.links as link}
-	<link {...link} />
+		<link {...link} />
 	{/each}
 	{@html webManifestLink}
 </svelte:head>

@@ -6,6 +6,11 @@
 	export let data;
 </script>
 
+<svelte:head>
+	<title>V2O Osteopathy App</title>
+	<meta name="description" content="A Online Platform for making it easy for people to find and book osteopathy appointments online." />
+</svelte:head>
+
 <main class="w-full max-w-5xl">
 	<div class="w-full p-3">
 		<h2 class="mb-12 text-5xl">Osteopaths</h2>
