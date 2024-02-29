@@ -6,7 +6,8 @@ export const load: PageServerLoad = async (event) => {
 	const { osteopath, isCurrentUser } = await event.parent();
 	if (!osteopath.id) redirect(307, '/');
 	const articles = await articleAPI.getAll({
-		osteopathId: osteopath.id
+		osteopathId: osteopath.id,
+		onlyPublished: !isCurrentUser
 	});
 	return {
 		isCurrentUser,

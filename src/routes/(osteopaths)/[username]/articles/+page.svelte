@@ -47,7 +47,10 @@
 	{/if}
 	<div class="grid w-full grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12">
 		{#each data.articles as article}
-			<div class="bg-card-alt rounded-xl border p-6 shadow-inner shadow-muted/75">
+			<div class="bg-card-alt rounded-xl border p-6 shadow-inner shadow-muted/75 relative">
+				{#if article.draft}
+					<span class="px-1.5 text-xs py-0.5 bg-layer-2/30 border border-layer-7 rounded-full text-layer-11 absolute right-2 top-2">Not Published</span>
+				{/if}
 				<div class="mb-4 flex flex-col gap-y-1">
 					<h2 class="text-2xl sm:text-3xl">{article.title}</h2>
 					<p class="text-xl text-muted-foreground">

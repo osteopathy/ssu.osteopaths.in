@@ -12,6 +12,7 @@ import { initializeApp } from 'firebase/app';
 import {
 	Timestamp,
 	addDoc,
+	and,
 	collection,
 	deleteDoc,
 	doc,
@@ -68,7 +69,9 @@ export const articleAPI = {
 	}) => {
 		const articlesRef = collection(db, 'articles');
 		let articles;
-		if(osteopathId) {
+		if( osteopathId && onlyPublished) {
+			articles = await getDocs(query(articlesRef, and(where('draft', '==', false),where('author_id', '==', osteopathId))));
+		}else if(osteopathId) {
 			articles = await getDocs(query(articlesRef, where('author_id', '==', osteopathId)));
 		} else if (onlyPublished) {
 			articles = await getDocs(query(articlesRef, where('draft', '==', false)));
