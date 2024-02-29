@@ -88,7 +88,6 @@
 		"svelte-headless-table": "^0.18.2",
 		"svelte-interactions": "^0.2.0",
 		"svelte-legos": "^0.2.2",
-		"svelte-markdoc-preprocess": "^2.0.0-rc.4",
 		"svelte-moveable": "^0.45.0",
 		"svelte-render": "^2.0.1",
 		"svelte-sonner": "^0.3.18",
