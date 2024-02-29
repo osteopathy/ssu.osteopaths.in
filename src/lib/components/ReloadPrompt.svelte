@@ -7,10 +7,10 @@
 	} = useRegisterSW({
 		onRegistered(r) {
 		// uncomment following code if you want check for updates
-		// r && setInterval(() => {
-		//    console.log('Checking for sw update')
-		//    r.update()
-		// }, 20000 /* 20s for testing purposes */)
+		r && setInterval(() => {
+		   console.log('Checking for sw update')
+		   r.update()
+		}, 20000 /* 20s for testing purposes */)
 			console.log(`SW Registered: ${r}`)
 		},
 		onRegisterError(error) {
@@ -55,18 +55,18 @@
 		bottom: 0;
 		margin: 16px;
 		padding: 12px;
-		border: 1px solid var(--layer-8);
+		border: 1px solid rgb(var(--layer-8));
 		border-radius: 4px;
 		z-index: 2;
 		text-align: left;
-		box-shadow: 3px 4px 5px 0 var(--layer-8);
+		box-shadow: 3px 4px 5px 0 rgb(var(--layer-8));
 		background-color: var(--layer-1);
 	}
 	.pwa-toast .message {
 		margin-bottom: 8px;
 	}
 	.pwa-toast button {
-		border: 1px solid var(--layer-8);
+		border: 1px solid rgb(var(--layer-8));
 		outline: none;
 		margin-right: 5px;
 		border-radius: 2px;
