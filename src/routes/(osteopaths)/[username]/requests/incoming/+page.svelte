@@ -42,25 +42,25 @@
 								})}
 							</span>
 						</h3>
-						<ul class="flex w-max flex-col gap-y-6">
+						<ul class="flex w-max flex-col gap-y-8">
 							{#if confirmed}
-								<li class="flex w-full items-center gap-x-2">
+								<li class="flex flex-col items-start sm:flex-row sm:gap-x-2 sm:items-center w-full">
 									<Avatar.Root>
 										<Avatar.Image src={confirmed.user?.image} alt={confirmed.user?.name} />
 										<Avatar.Fallback>CN</Avatar.Fallback>
 									</Avatar.Root>
-									<span>{confirmed.user?.name}</span>
+									<span class="my-1">{confirmed.user?.name}</span>
 									<span>{confirmed.user?.phoneNumber}</span>
 									<span class="text-green-500">Confirmed</span>
 								</li>
 							{:else}
 								{#each byTime[time] as appointment}
-									<li class="flex w-full items-center gap-x-2">
+									<li class="flex flex-col items-start sm:flex-row sm:gap-x-2 sm:items-center w-full">
 										<Avatar.Root>
 											<Avatar.Image src={appointment.user?.image} alt={appointment.user?.name} />
 											<Avatar.Fallback>CN</Avatar.Fallback>
 										</Avatar.Root>
-										<span>{appointment.user?.name}</span>
+										<span class="my-1">{appointment.user?.name}</span>
 										<span>{appointment.user?.phoneNumber}</span>
 										<Button
 											on:click={async () => {
@@ -86,7 +86,7 @@
 												toast.success('Other appointments cancelled');
 											}}
 											size="sm"
-											class="ml-auto"
+											class="mt-2 sm:ml-auto"
 										>
 											Accept
 										</Button>

@@ -39,9 +39,9 @@
 								})}
 							</span>
 						</h3>
-						<ul class="flex w-max flex-col gap-y-6">
+						<ul class="flex w-max flex-col gap-y-8">
 							{#if confirmed}
-								<li class="flex w-full items-center gap-x-2">
+								<li class="flex flex-col items-start sm:flex-row sm:gap-x-2 sm:items-center w-full">
 									<Avatar.Root>
 										<Avatar.Image
 											src={confirmed.osteopath.user?.image}
@@ -49,13 +49,13 @@
 										/>
 										<Avatar.Fallback>CN</Avatar.Fallback>
 									</Avatar.Root>
-									<span>{confirmed.osteopath.user?.name}</span>
+									<span class="my-1 sm:my-0">{confirmed.osteopath.user?.name}</span>
 									<span>{confirmed.osteopath.user?.phoneNumber}</span>
 									<span class="text-green-500">Confirmed</span>
 								</li>
 							{:else}
 								{#each byTime[time] as appointment}
-									<li class="flex w-full items-center gap-x-2">
+								<li class="flex flex-col items-start sm:flex-row sm:gap-x-2 sm:items-center w-full">
 										<Avatar.Root>
 											<Avatar.Image
 												src={appointment.osteopath.user?.image}
@@ -63,7 +63,7 @@
 											/>
 											<Avatar.Fallback>CN</Avatar.Fallback>
 										</Avatar.Root>
-										<span>{appointment.osteopath.user?.name}</span>
+										<span class="my-1 sm:my-0">{appointment.osteopath.user?.name}</span>
 										<span>{appointment.osteopath.user?.phoneNumber}</span>
 										<span class="text-amber-500">Pending</span>
 									</li>
