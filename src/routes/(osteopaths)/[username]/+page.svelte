@@ -164,8 +164,17 @@
 								if (data.osteopath?.id) {
 									toast.loading('Sending Request');
 									loading = true;
+									const appointmentRef = data.appointments[selectedDate.toString()];
+									if (
+										appointmentRef &&
+										appointmentRef.findIndex((a) => a.startTime === selectedTime?.startTime) !== -1
+									) {
+										toast.error('Slot is already booked');
+										loading = false;
+										return;
+									}
 									try {
-										await appointment.new({
+										const res = await appointment.new({
 											osteopathId: data.osteopath.id,
 											date: selectedTime?.date,
 											startTime: selectedTime?.startTime,
@@ -173,6 +182,19 @@
 											userId: data.user?.id,
 											status: 'pending'
 										});
+										data.appointments[selectedDate.toString()] = [
+											...(data.appointments[selectedDate.toString()] || []),
+											{
+												id: res.data.id,
+												osteopathId: data.osteopath.id,
+												date: selectedTime?.date ? selectedTime.date : null,
+												startTime: selectedTime?.startTime ? selectedTime.startTime : null,
+												duration: '30',
+												userId: data.user?.id ? data.user.id : null,
+												status: 'pending',
+												createdAt: new Date(),
+											}
+										];
 										toast.success('Your Request has been sent');
 									} catch (error) {
 										toast.error('Failed to send request');

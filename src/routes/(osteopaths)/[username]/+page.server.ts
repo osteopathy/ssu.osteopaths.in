@@ -5,7 +5,7 @@ import { config, fromTimeStr } from "./utils";
 import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { appointmentTable, availabilityTable, calendarTable, courseTable } from "$lib/db/schema";
-import { and, eq, gte } from "drizzle-orm";
+import { and, eq, gte, or } from "drizzle-orm";
 
 function flatToWeeks(availabilities: any[]) {
     const grouped = groupBy(availabilities, (availability) =>
@@ -99,17 +99,24 @@ export const load: PageServerLoad = async (event) => {
     const from = Temporal.Now.plainDateISO()
 
     if (!osteopath.id) return error(404, { message: "Osteopath ID undefined" });
+    if (!event.locals.user?.id) return error(404, { message: "User ID undefined" });
+
     // if (!osteopath?.courseId) return error(404, { message: "Osteopath hasn't register for a course" });
+
     const response =
         await Promise.allSettled(
             [
                 db.query.appointmentTable.findMany({
-                    where: and(
+                    where: or(and(
                         eq(appointmentTable.osteopathId, osteopath.id),
                         gte(appointmentTable.date, from.toString()),
-                        eq(appointmentTable.status, 'confirmed')
+                        eq(appointmentTable.status, 'confirmed'),
                         // lte(appointmentTable, `${to.year}-${to.month.toString().padStart(2,'0')}-${to.day.toString().padStart(2,'0')}`)
-                    )
+                      ),and(
+                        eq(appointmentTable.userId, event.locals.user?.id),
+                        gte(appointmentTable.date, from.toString()),
+                        eq(appointmentTable.status, 'pending'),
+                    ))
                 }),
                 db
                     .select()
