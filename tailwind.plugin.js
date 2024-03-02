@@ -1,4 +1,4 @@
-import { irisDark as darkShade, gray as lightShade, redDark, red } from '@radix-ui/colors';
+import { goldDark as darkShade, gray as lightShade, redDark, red } from '@radix-ui/colors';
 import hexRgb from 'hex-rgb';
 import plugin from 'tailwindcss/plugin';
 
