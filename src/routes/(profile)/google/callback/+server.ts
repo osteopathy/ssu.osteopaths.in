@@ -4,8 +4,9 @@ import { OAuth2RequestError } from 'arctic';
 import { generateId } from 'lucia';
 import { db } from '$lib/db';
 import { eq } from 'drizzle-orm';
-import { calendarTable, osteopathTable, userTable, type Calendar } from '$lib/db/schema';
+import { availabilityTable, calendarTable, osteopathTable, userTable, type Calendar } from '$lib/db/schema';
 import calendarService from '$lib/server/calendar';
+import { availabilityAPI } from '$lib/db/default-availabilities';
 
 type GoogleUserResult = {
 	id: string;
@@ -91,12 +92,29 @@ export async function GET(event: RequestEvent): Promise<Response> {
 						role
 					});
 
-					if (role === 'osteopath')
-						await db.insert(osteopathTable).values({
+					if (role === 'osteopath') {
+						const osteopath = await db.insert(osteopathTable).values({
 							courseId: course,
 							userId,
 							batch: year
-						});
+						}).returning();
+						const availability = await availabilityAPI.get(course, year);
+						const days = Object.keys(availability);
+						const promises = []
+						for (let index = 0; index < days.length; index++) {
+							const day = days[index] as keyof typeof availability;
+							const dayAvailability = availability[day];
+							promises.push(...dayAvailability.map(({ startTime, endTime }) => {
+								return db.insert(availabilityTable).values({
+									startTime,
+									endTime,
+									osteopathId: osteopath[0].id,
+									day,
+								})
+							}))
+						}
+						await Promise.all(promises);
+					}
 				} else {
 					await db.insert(userTable).values({
 						id: userId,
