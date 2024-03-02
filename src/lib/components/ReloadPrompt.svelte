@@ -60,7 +60,7 @@
 		z-index: 2;
 		text-align: left;
 		box-shadow: 3px 4px 5px 0 rgb(var(--layer-8));
-		background-color: var(--layer-1);
+		background-color: rgb(var(--layer-1));
 	}
 	.pwa-toast .message {
 		margin-bottom: 8px;
