@@ -10,7 +10,7 @@ import {
 import type { JSONContent } from "@tiptap/core";
 import { initializeApp } from 'firebase/app';
 import {
-	Timestamp,
+	type Timestamp,
 	addDoc,
 	and,
 	collection,

@@ -1,4 +1,4 @@
-import { calendar_v3, auth as google, calendar as googleCalendar } from '@googleapis/calendar';
+import { type calendar_v3, auth as google, calendar as googleCalendar } from '@googleapis/calendar';
 import {
 	GOOGLE_CLIENT_ID,
 	GOOGLE_CLIENT_SECRET,

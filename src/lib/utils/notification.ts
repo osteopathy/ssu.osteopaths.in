@@ -1,3 +1,5 @@
+
+
 export async function requestNotificationPermission(): Promise<boolean> {
     try {
         const permission = await Notification.requestPermission();

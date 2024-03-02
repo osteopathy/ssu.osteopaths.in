@@ -8,6 +8,7 @@
 	import { uploadFile } from '../../../(api)/image/upload';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 	async function syncImageUrl(image_url: string) {
@@ -38,74 +39,144 @@
 			}
 		}
 	}
+
 	let image = data.user?.image;
+	let notification_permission = false;
+	let isSubscribed = false;
+
+	onMount(async () => {
+		notification_permission = Notification.permission === 'granted';
+		if(notification_permission) {
+			isSubscribed = await checkSubscriptionStatus();
+			if(!isSubscribed) {
+				await subscribeUser();
+			}
+		}
+	});
+
+	async function subscribeUser() {
+		if('serviceWorker' in navigator) {
+			try {
+				const res = await fetch('/api/v1/get-public-vapid');
+				const { data } = await res.json()
+				const registration = await navigator.serviceWorker.ready;
+				const subscription = await registration.pushManager.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey: data
+				});
+				console.log("Subscription:",subscription)
+			} catch (err) {
+				console.error("Error Subscribing:",err)
+			}
+		}
+	}
+
+	async function unsubscribe() {
+		if('serviceWorker' in navigator) {
+			const registration = await navigator.serviceWorker.ready;
+			const subscription = await registration.pushManager.getSubscription();
+			if(subscription) {
+				await subscription.unsubscribe();
+				isSubscribed = false;
+			}
+		}
+	}
+	
+	async function checkSubscriptionStatus() {
+		if('serviceWorker' in navigator) {
+			const registration = await navigator.serviceWorker.ready;
+			const subscription = await registration.pushManager.getSubscription();
+			console.log("Subscription:",subscription)
+			return subscription !== null;
+		}
+		return false;
+	}
 </script>
 
 <main class="w-full max-w-xl">
 	<div class="mb-8 rounded-md border p-4">
 		<h2 class="mb-1 text-xl text-muted-foreground">Personal Details</h2>
-<div class="flex items-center gap-x-4 my-4">
-    <Avatar.Root class="size-20">
-        <Avatar.Image src={image} alt="@" />
-        <Avatar.Fallback>CN</Avatar.Fallback>
-      </Avatar.Root>
-      <ImageUpload
-        on:handleUploadImage={async (e) => {
-          image = e.detail;
-          toast.loading('Uploading image');
-          if (!image) {
-            toast.error('No Image selected');
-            return;
-          }
-          const file = await fetch(image)
-            .then((r) => r.blob())
-            .then((blobFile) => new File([blobFile], 'avatar', { type: blobFile.type }));
-  
-          if (!file) {
-            toast.error('No file selected');
-            return;
-          }
-          const fileName = file.name.split('.')[0] || '';
-          const isImage = file.type.includes('image');
-          const fileSizeInMB = file.size / (1024 * 1024); // Convert bytes to MB
-          console.log(`File Size: ${fileSizeInMB}`);
-  
-          const limit = 2 * 1024 * 1024; // 2MB
-          if (file.size > limit) {
-            toast.error(
-              `File size should be less than 2MB, size of your file is ${fileSizeInMB} in MBs`
-            );
-            return;
-          }
-  
-          if (!isImage) {
-            toast.error('Video is not supported');
-            return;
-          }
-  
-          const url = await uploadFile(file);
-          if (url) {
-            toast.success('Image uploaded Cloudinary');
-            image = url;
-            toast.loading('Syncing with Database');
-            try {
-              await syncImageUrl(url);
-              toast.success('Successfully synced with Database');
-            } catch (error) {
-              toast.error('Something went wrong');
-              console.log(error);
-            }
-          } else {
-            toast.error('Something went wrong');
-          }
-        }}
-        imageSrc={image}
-      />
-</div>
+		<div class="my-4 flex items-center gap-x-4">
+			<Avatar.Root class="size-20">
+				<Avatar.Image src={image} alt="@" />
+				<Avatar.Fallback>CN</Avatar.Fallback>
+			</Avatar.Root>
+			<ImageUpload
+				on:handleUploadImage={async (e) => {
+					image = e.detail;
+					toast.loading('Uploading image');
+					if (!image) {
+						toast.error('No Image selected');
+						return;
+					}
+					const file = await fetch(image)
+						.then((r) => r.blob())
+						.then((blobFile) => new File([blobFile], 'avatar', { type: blobFile.type }));
+
+					if (!file) {
+						toast.error('No file selected');
+						return;
+					}
+					const fileName = file.name.split('.')[0] || '';
+					const isImage = file.type.includes('image');
+					const fileSizeInMB = file.size / (1024 * 1024); // Convert bytes to MB
+					console.log(`File Size: ${fileSizeInMB}`);
+
+					const limit = 2 * 1024 * 1024; // 2MB
+					if (file.size > limit) {
+						toast.error(
+							`File size should be less than 2MB, size of your file is ${fileSizeInMB} in MBs`
+						);
+						return;
+					}
+
+					if (!isImage) {
+						toast.error('Video is not supported');
+						return;
+					}
+
+					const url = await uploadFile(file);
+					if (url) {
+						toast.success('Image uploaded Cloudinary');
+						image = url;
+						toast.loading('Syncing with Database');
+						try {
+							await syncImageUrl(url);
+							toast.success('Successfully synced with Database');
+						} catch (error) {
+							toast.error('Something went wrong');
+							console.log(error);
+						}
+					} else {
+						toast.error('Something went wrong');
+					}
+				}}
+				imageSrc={image}
+			/>
+		</div>
 		<UserForm data={data.userForm} />
 	</div>
+	<div></div>
 	<OsteopathForm data={data.osteopathForm} />
-    <div class="mt-8 flex flex-col gap-y-4 rounded-md border p-4">
+	<div class="mt-8 flex flex-col gap-y-4 rounded-md border p-4">
+		<div>
+			<h2 class="mb-1 text-xl text-muted-foreground">Notification</h2>
+			{#if notification_permission}
+				<button>Notification Enabled</button>
+			{:else}
+				<Button
+					on:click={() => {
+						Notification.requestPermission().then((permission) => {
+							if (permission === 'granted') {
+								new Notification('Notification Enabled');
+								console.log('Notification Enabled');
+							}
+						});
+					}}>
+					Enable Notification
+				</Button>
+			{/if}
+		</div>
 		<div>
 			<h2 class="mb-1 text-xl text-muted-foreground">Username</h2>
 			<p class="text-sm text-foreground">Your username is {$page.params.username}</p>

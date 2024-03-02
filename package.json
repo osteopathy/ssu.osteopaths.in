@@ -40,7 +40,8 @@
 		"tailwindcss": "^3.4.1",
 		"tslib": "^2.6.2",
 		"typescript": "^5.3.3",
-		"vite": "^5.1.4"
+		"vite": "^5.1.4",
+		"workbox-precaching": "^7.0.0"
 	},
 	"dependencies": {
 		"@epic-web/remember": "^1.0.2",
@@ -101,6 +102,9 @@
 		"tippy.js": "^6.3.7",
 		"tiptap-markdown": "^0.8.9",
 		"vaul-svelte": "^0.2.4",
+		"web-push": "^3.6.7",
+		"workbox-build": "^7.0.0",
+		"workbox-window": "^7.0.0",
 		"zod": "^3.22.4"
 	}
 }

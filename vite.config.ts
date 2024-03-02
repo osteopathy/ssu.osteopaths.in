@@ -12,6 +12,7 @@ export default defineConfig({
 		sveltekit(),
 		SvelteKitPWA(
 			{
+				strategies: 'injectManifest',
 				pwaAssets: {
 					config: true
 				},
@@ -26,13 +27,11 @@ export default defineConfig({
 					orientation: 'portrait',
 					scope: '/',
 				},
-				// devOptions: {
-				// 	enabled: false,
-				// 	suppressWarnings: process.env.SUPPRESS_WARNING === 'true',
-				// 	type: 'module',
-				// 	navigateFallback: '/',
-				// },
-				// if you have shared info in svelte config file put in a separate module and use it also here
+				devOptions: {
+					enabled: false,
+					type: 'module',
+					navigateFallback: '/',
+				},
 				kit: {
 					includeVersionFile: true,
 				},
