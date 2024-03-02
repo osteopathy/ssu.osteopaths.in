@@ -5,9 +5,9 @@
   import type { PageData } from "./$types";
 	import ImageUpload from "./image-uploader.svelte";
   import UserForm from "./user-form.svelte";
-  import { uploadFile } from '../../../../(api)/image/upload';
+  import { uploadFile } from '../../../../(api)/api/v1/image/upload';
 	async function syncImageUrl(image_url: string) {
-		await fetch('/image', {
+		await fetch('/api/v1/image', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ userId: data.user?.id, url: image_url })
@@ -24,7 +24,7 @@
 			const publicID = getPublicIdFromUrl(data.user.image);
 			toast.loading('Transforming Image!');
 			if (publicID) {
-				const res = await fetch('/image', {
+				const res = await fetch('/api/v1/image', {
 					method: 'DELETE',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ id: publicID })

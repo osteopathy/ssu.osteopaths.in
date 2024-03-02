@@ -5,13 +5,13 @@
 	import OsteopathForm from './osteopath-form.svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import ImageUpload from '../../../(profile)/user/[id]/edit/image-uploader.svelte';
-	import { uploadFile } from '../../../(api)/image/upload';
+	import { uploadFile } from '../../../(api)/api/v1/image/upload';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { page } from '$app/stores';
 
 	export let data: PageData;
 	async function syncImageUrl(image_url: string) {
-		await fetch('/image', {
+		await fetch('/api/v1/image', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ userId: data.user?.id, url: image_url })
@@ -28,7 +28,7 @@
 			const publicID = getPublicIdFromUrl(data.user.image);
 			toast.loading('Transforming Image!');
 			if (publicID) {
-				const res = await fetch('/image', {
+				const res = await fetch('/api/v1/image', {
 					method: 'DELETE',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ id: publicID })

@@ -1,7 +1,7 @@
 // import { BlobResult } from "@vercel/blob";
 // import { toast } from "sonner";
 // import { addToast } from '$lib/ui/toasts.svelte';
-import { EditorState, Plugin, PluginKey } from '@tiptap/pm/state';
+import { type EditorState, Plugin, PluginKey } from '@tiptap/pm/state';
 import { Decoration, DecorationSet, EditorView } from '@tiptap/pm/view';
 
 const uploadKey = new PluginKey('upload-image');
