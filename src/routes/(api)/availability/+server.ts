@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
-import { osteopathTable, availabilityTable } from '$lib/db/schema';
+import { osteopathTable, availabilityTable } from '$lib/db/sqlite/schema';
 
 export const POST: RequestHandler = (async ({ request, locals }) => {
 	const { startTime, endTime, day, osteopathId } = await request.json();

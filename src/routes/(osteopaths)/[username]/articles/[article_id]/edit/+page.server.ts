@@ -1,6 +1,6 @@
 import { fail } from "@sveltejs/kit";
 import type { Actions } from "./$types";
-import { articleAPI } from "$lib/db/article";
+import { articleAPI } from "$lib/db/firebase/article";
 import type { PageServerLoad } from "../$types";
 
 export const load: PageServerLoad = async (event) => {

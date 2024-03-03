@@ -2,9 +2,9 @@ import { google, lucia } from '$lib/server/auth';
 import type { RequestEvent } from '@sveltejs/kit';
 import { OAuth2RequestError } from 'arctic';
 import { generateId } from 'lucia';
-import { db } from '$lib/db';
+import { db } from '$lib/db/sqlite';
 import { eq } from 'drizzle-orm';
-import { calendarTable, osteopathTable, userTable, type Calendar } from '$lib/db/schema';
+import { calendarTable, osteopathTable, userTable, type Calendar } from '$lib/db/sqlite/schema';
 import calendarService from '$lib/server/calendar';
 
 type GoogleUserResult = {

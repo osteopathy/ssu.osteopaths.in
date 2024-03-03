@@ -1,4 +1,4 @@
-import { articleAPI } from '$lib/db/article';
+import { articleAPI } from '$lib/db/firebase/article';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 

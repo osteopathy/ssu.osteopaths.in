@@ -1,7 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server/db";
-import { osteopathTable } from "$lib/db/schema";
+import { osteopathTable } from "$lib/db/sqlite/schema";
 import { eq } from "drizzle-orm";
 
 export const load: PageServerLoad = async (e) => {

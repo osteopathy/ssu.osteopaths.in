@@ -26,6 +26,7 @@ export default defineConfig({
 					lang: 'en',
 					orientation: 'portrait',
 					scope: '/',
+					start_url: '/',
 				},
 				devOptions: {
 					enabled: false,

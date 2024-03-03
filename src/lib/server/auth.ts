@@ -4,7 +4,7 @@ import { Google } from 'arctic';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI } from '$env/static/private';
 import { LibSQLAdapter } from '@lucia-auth/adapter-sqlite';
 import { client } from './db';
-import type { User } from '$lib/db/schema';
+import type { User } from '$lib/db/sqlite/schema';
 import { dev } from '$app/environment';
 
 declare module 'lucia' {

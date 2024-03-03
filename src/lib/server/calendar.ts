@@ -7,7 +7,7 @@ import {
 	GOOGLE_CALENDAR_SCOPES
 } from '$env/static/private';
 import { db } from './db';
-import { calendarTable } from '$lib/db/schema';
+import { calendarTable } from '$lib/db/sqlite/schema';
 import { eq } from 'drizzle-orm';
 
 export const CalendarName = 'Osteopathy Appointment Calendar';

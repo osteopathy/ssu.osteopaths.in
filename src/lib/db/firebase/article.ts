@@ -1,14 +1,5 @@
 // Import the functions you need from the SDKs you need
-import {
-	PUBLIC_FIREBASE_API_KEY as FIREBASE_API_KEY,
-	PUBLIC_FIREBASE_APP_ID as FIREBASE_APP_ID,
-	PUBLIC_FIREBASE_AUTH_DOMAIN as FIREBASE_AUTH_DOMAIN,
-	PUBLIC_FIREBASE_MESSAGING_SENDER_ID as FIREBASE_MESSAGING_SENDER_ID,
-	PUBLIC_FIREBASE_PROJECT_ID as FIREBASE_PROJECT_ID,
-	PUBLIC_FIREBASE_STORAGE_BUCKET as FIREBASE_STORAGE_BUCKET,
-} from "$env/static/public"
 import type { JSONContent } from "@tiptap/core";
-import { initializeApp } from 'firebase/app';
 import {
 	type Timestamp,
 	addDoc,
@@ -18,27 +9,12 @@ import {
 	doc,
 	getDoc,
 	getDocs,
-	getFirestore,
 	query,
 	serverTimestamp,
 	updateDoc,
 	where
 } from 'firebase/firestore';
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-	apiKey: FIREBASE_API_KEY,
-	authDomain: FIREBASE_AUTH_DOMAIN,
-	projectId: FIREBASE_PROJECT_ID,
-	storageBucket: FIREBASE_STORAGE_BUCKET,
-	messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-	appId: FIREBASE_APP_ID
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// Initialize Cloud Firestore and get a reference to the service
-const db = getFirestore(app);
+import { db } from ".";
 
 type Data = {
 	id: string;

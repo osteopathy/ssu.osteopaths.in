@@ -2,7 +2,13 @@
 /// <reference types="vite/client" />
 import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
-// import { CacheableResponsePlugin } from 'workbox-cacheable-response'
+
+import { initializeFirebaseIfNeeded } from "$lib/db/firebase";
+import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+const app = initializeFirebaseIfNeeded();
+const messaging = getMessaging(app);
+
+// import { CacheableResponsePlugin } from 'workbox-cacheable-response'A
 // import { NetworkFirst } from 'workbox-strategies'
 // import { ExpirationPlugin } from 'workbox-expiration'
 // import { build, files, prerendered, version } from "$service-worker";
@@ -107,9 +113,32 @@ registerRoute(new NavigationRoute(
 ))
 
 // self.addEventListener('push', onPush)
+
+// self.addEventListener('push', function (event: any) {
+// 	const payload = event.data?.text() ?? 'no payload';
+// 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// 	const registration = (self as any).registration as ServiceWorkerRegistration;
+// 	event.waitUntil(
+// 		registration.showNotification('SvelteKit APP', {
+// 			body: payload
+// 		})
+// 	);
+// } as EventListener);
+
 // self.addEventListener('notificationclick', onNotificationClick)
 // self.addEventListener('fetch', onShareTarget)
 
-// import { precacheAndRoute } from 'workbox-precaching'
+onBackgroundMessage(messaging, (payload) => {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+  // Customize notification here
+  const notificationTitle = 'Background Message Title';
+  const notificationOptions = {
+    body: 'Background Message body.'
+  };
 
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+
+// import { precacheAndRoute } from 'workbox-precaching'
 // precacheAndRoute(self.__WB_MANIFEST)

@@ -1,4 +1,4 @@
-import { createUserSchema, userTable } from "$lib/db/schema";
+import { createUserSchema, userTable } from "$lib/db/sqlite/schema";
 import { db } from "$lib/server/db";
 import { fail, type Actions } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";

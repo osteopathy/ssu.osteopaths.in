@@ -1,4 +1,4 @@
-import type { Appointment, InsertAppointment } from "$lib/db/schema";
+import type { Appointment, InsertAppointment } from "$lib/db/sqlite/schema";
 
 export const appointment = {
 	new: async (values: InsertAppointment) => {

@@ -1,7 +1,7 @@
-import { db } from '$lib/db';
+import { db } from '$lib/db/sqlite';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
-import { userTable } from '$lib/db/schema';
+import { userTable } from '$lib/db/sqlite/schema';
 
 export const load: PageServerLoad = async (event) => {
 	const isCurrentUser = event.params.id === event.locals.user?.id;

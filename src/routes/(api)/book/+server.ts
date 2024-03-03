@@ -1,6 +1,6 @@
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { appointmentTable, calendarTable } from '$lib/db/schema';
+import { appointmentTable, calendarTable } from '$lib/db/sqlite/schema';
 import { eq } from 'drizzle-orm';
 import { Temporal } from 'temporal-polyfill';
 import calendarService from '$lib/server/calendar';

@@ -2,8 +2,8 @@ import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { createUserSchema, osteopathTable } from '$lib/db/schema';
-import { db } from '$lib/db';
+import { createUserSchema, osteopathTable } from '$lib/db/sqlite/schema';
+import { db } from '$lib/db/sqlite';
 import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async (event) => {

@@ -4,7 +4,7 @@ import { Temporal } from "temporal-polyfill";
 import { config, fromTimeStr } from "./utils";
 import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
-import { appointmentTable, availabilityTable, calendarTable, courseTable } from "$lib/db/schema";
+import { appointmentTable, availabilityTable, calendarTable, courseTable } from "$lib/db/sqlite/schema";
 import { and, eq, gte, or } from "drizzle-orm";
 
 function flatToWeeks(availabilities: any[]) {

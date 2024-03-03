@@ -9,6 +9,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { firebaseCloudMessaging } from '$lib/db/firebase';
 
 	export let data: PageData;
 	async function syncImageUrl(image_url: string) {
@@ -42,54 +43,14 @@
 
 	let image = data.user?.image;
 	let notification_permission = false;
-	let isSubscribed = false;
 
 	onMount(async () => {
 		notification_permission = Notification.permission === 'granted';
-		if(notification_permission) {
-			isSubscribed = await checkSubscriptionStatus();
-			if(!isSubscribed) {
-				await subscribeUser();
-			}
-		}
 	});
-
-	async function subscribeUser() {
-		if('serviceWorker' in navigator) {
-			try {
-				const res = await fetch('/api/v1/get-public-vapid');
-				const { data } = await res.json()
-				const registration = await navigator.serviceWorker.ready;
-				const subscription = await registration.pushManager.subscribe({
-					userVisibleOnly: true,
-					applicationServerKey: data
-				});
-				console.log("Subscription:",subscription)
-			} catch (err) {
-				console.error("Error Subscribing:",err)
-			}
+	$: {
+		if(notification_permission) {
+			firebaseCloudMessaging.init()
 		}
-	}
-
-	async function unsubscribe() {
-		if('serviceWorker' in navigator) {
-			const registration = await navigator.serviceWorker.ready;
-			const subscription = await registration.pushManager.getSubscription();
-			if(subscription) {
-				await subscription.unsubscribe();
-				isSubscribed = false;
-			}
-		}
-	}
-	
-	async function checkSubscriptionStatus() {
-		if('serviceWorker' in navigator) {
-			const registration = await navigator.serviceWorker.ready;
-			const subscription = await registration.pushManager.getSubscription();
-			console.log("Subscription:",subscription)
-			return subscription !== null;
-		}
-		return false;
 	}
 </script>
 

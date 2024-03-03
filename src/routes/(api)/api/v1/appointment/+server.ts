@@ -1,6 +1,6 @@
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { appointmentTable, type Appointment, type InsertAppointment } from '$lib/db/schema';
+import { appointmentTable, type Appointment, type InsertAppointment } from '$lib/db/sqlite/schema';
 import { eq } from 'drizzle-orm';
 
 export const POST: RequestHandler = async (event) => {

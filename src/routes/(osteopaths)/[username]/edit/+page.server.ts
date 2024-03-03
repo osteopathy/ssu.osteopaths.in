@@ -4,7 +4,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { formSchema } from './schema';
 import { error, fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { createUserSchema, osteopathTable, type Calendar, calendarTable } from '$lib/db/schema';
+import { createUserSchema, osteopathTable, type Calendar, calendarTable } from '$lib/db/sqlite/schema';
 import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = (async (e) => {

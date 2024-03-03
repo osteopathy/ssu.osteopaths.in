@@ -1,7 +1,7 @@
 import { getUserIdByUsername } from "$lib/server/kv";
 import { error } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
-import { osteopathTable, userTable } from "$lib/db/schema";
+import { osteopathTable, userTable } from "$lib/db/sqlite/schema";
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
 

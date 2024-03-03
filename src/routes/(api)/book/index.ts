@@ -1,4 +1,4 @@
-import type { Appointment, Osteopath } from '$lib/db/schema';
+import type { Appointment, Osteopath } from '$lib/db/sqlite/schema';
 
 export const bookAppointment = async (
 	calendarId: string | undefined | null,

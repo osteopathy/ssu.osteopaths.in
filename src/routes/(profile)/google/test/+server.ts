@@ -1,7 +1,7 @@
 import { generateId } from 'lucia';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db';
-import { osteopathTable, userTable } from '$lib/db/schema';
+import { osteopathTable, userTable } from '$lib/db/sqlite/schema';
 import { json } from '@sveltejs/kit';
 
 function extractFromEmail(email_id: string | undefined | null) {

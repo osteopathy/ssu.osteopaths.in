@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { and, asc, eq, gte } from 'drizzle-orm';
-import { appointmentTable } from '$lib/db/schema';
+import { appointmentTable } from '$lib/db/sqlite/schema';
 import groupBy from 'just-group-by';
 import { Temporal } from 'temporal-polyfill';
 

@@ -3,7 +3,7 @@ import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { createUsername, deleteUsername, doesUsernameExist } from '$lib/server/kv';
 import { eq } from 'drizzle-orm';
-import { feedbackTable, osteopathTable } from '$lib/db/schema';
+import { feedbackTable, osteopathTable } from '$lib/db/sqlite/schema';
 import slugify from '$lib/utils/slugify';
 
 

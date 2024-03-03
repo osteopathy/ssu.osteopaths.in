@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client/web';
-import * as schema from '../db/schema';
+import * as schema from '../db/sqlite/schema';
 import { DATABASE_URL, DATABASE_AUTH_TOKEN } from '$env/static/private';
 import { remember } from '@epic-web/remember';
 
