@@ -2,7 +2,7 @@ import { Temporal } from 'temporal-polyfill';
 
 export const config = {
 	startTime: 9,
-	endTime: 17,
+	endTime: 20,
 	minGap: 30,
 	// Total number of days within which the user can book an appointment
 	maxDaysWithinWhichUserCanBookAppointment: 4,
