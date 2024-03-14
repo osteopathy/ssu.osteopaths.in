@@ -76,7 +76,7 @@
 		availabilities={data.availabilities}
 	/>
 	<div
-		class="xs:p-3 border-layer-6 rounded-b-lg border-2 p-2 sm:rounded-r-lg sm:rounded-bl-none sm:p-4"
+		class="xs:p-3 border-layer-6 rounded-b-lg border-2 grow p-2 sm:rounded-r-lg sm:rounded-bl-none sm:p-4"
 	>
 		<div class="mb-3 flex w-full items-center justify-between gap-x-2">
 			<h4 class="whitespace-nowrap text-lg font-bold tabular-nums">
@@ -90,11 +90,9 @@
 					.join(' ')}
 			</h4>
 		</div>
-		<ul class="flex flex-col gap-y-2">
+		<ul class="flex flex-col gap-y-2 overflow-y-auto max-h-[354px]">
 			<!-- [{"id":"cuy88kbegzzerac","start":{"x":12.5,"time":"10:00"},"end":{"x":37.5,"time":"12:00"}}] -->
-			{#each data.availabilities[selectedDate
-					.toLocaleString('en', { weekday: 'long' })
-					.toLowerCase()] as availability}
+			{#each data.availabilities[selectedDate.toLocaleString('en', { weekday: 'long' }).toLowerCase()] as availability}
 				{@const [startHour, startMinute] = availability.start.time?.split(':').map((v) => +v)}
 				{@const [endHour, endMinute] = availability.end.time?.split(':').map((v) => +v)}
 				<!-- 10:00 - 10:30 10:30 11:00 11:30 11:30 12:00 -->

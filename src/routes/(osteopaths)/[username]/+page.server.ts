@@ -141,7 +141,6 @@ export const load: PageServerLoad = async (event) => {
     const calendar = response[3].status === 'fulfilled' ? response[3].value : null;
     
     const appointments = groupBy(db_appointments, (appointment) => appointment.date as string);
-
     return {
         osteopath: {
 			...osteopath,
