@@ -17,7 +17,7 @@ A Online Platform for making it easy for people to find and book osteopathy appo
 - Google Auth
 - Google Calendar Integration
 - Users can book Appointment
-- Availability ( soon )
+- Availability
 - Osteopath's can edit appointments
 
 ## Tech Stack + Features
@@ -44,17 +44,3 @@ A Online Platform for making it easy for people to find and book osteopathy appo
 - [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
 - [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
 - [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
-
-### File Structure
-
-#### Routes and Pages
-
-- `src/routes` – Sveltekit routes
-  - `src/google` - Continue with Google Screen main UI
-    - `src/google/callback` - API Endpoint for Callback
-    - `src/google/login` - API Endpoint for Generate Auth URL
-    - `src/google/logout` - API Endpoint for Logout
-
-## Inspired from
-
-- [Precedent](https://github.com/steven-tey/precedent/blob/main/README.md) Next.js Tempalte by Steven Tey ([@steventey](https://twitter.com/steventey))

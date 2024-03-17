@@ -10,7 +10,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"generate": "drizzle-kit generate:sqlite",
 		"push": "drizzle-kit push:sqlite",
-		"studio": "drizzle-kit studio --port 3000 --verbose",
+		"studio": "drizzle-kit studio --port 4983 --verbose",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
