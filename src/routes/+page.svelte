@@ -17,7 +17,7 @@
 		{#await data.osteopaths}
 			Loading osteopaths...
 		{:then osteopaths}
-			<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-12">
+			<div class="grid grid-cols-2 sm:grid-cols-3 gap-6 md:grid-cols-4 sm:gap-8 md:gap-12">
 				{#each osteopaths as osteopath}
 					<Button
 						href="/{osteopath.username}"
@@ -26,7 +26,7 @@
 						<ArrowTopRight
 							class="absolute right-4 top-4 text-card-foreground group-hover:scale-125"
 						/>
-						<div class="flex gap-x-4">
+						<div class="flex gap-y-4 flex-col">
 							<Avatar.Root class="size-20">
 								<Avatar.Image src={osteopath.user.image} alt="@" />
 								<Avatar.Fallback>CN</Avatar.Fallback>
