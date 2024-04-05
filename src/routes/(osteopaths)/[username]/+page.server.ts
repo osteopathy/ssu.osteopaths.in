@@ -99,7 +99,7 @@ export const load: PageServerLoad = async (event) => {
     const from = Temporal.Now.plainDateISO()
 
     if (!osteopath.id) return error(404, { message: "Osteopath ID undefined" });
-    if (!event.locals.user?.id) return error(404, { message: "User ID undefined" });
+    // if (!event.locals.user?.id) return error(404, { message: "User ID undefined" });
 
     // if (!osteopath?.courseId) return error(404, { message: "Osteopath hasn't register for a course" });
 
@@ -107,7 +107,7 @@ export const load: PageServerLoad = async (event) => {
         await Promise.allSettled(
             [
                 db.query.appointmentTable.findMany({
-                    where: or(and(
+                    where: event.locals.user ? or(and(
                         eq(appointmentTable.osteopathId, osteopath.id),
                         gte(appointmentTable.date, from.toString()),
                         eq(appointmentTable.status, 'confirmed'),
@@ -116,7 +116,11 @@ export const load: PageServerLoad = async (event) => {
                         eq(appointmentTable.userId, event.locals.user?.id),
                         gte(appointmentTable.date, from.toString()),
                         eq(appointmentTable.status, 'pending'),
-                    ))
+                    )) : and(
+                        eq(appointmentTable.osteopathId, osteopath.id),
+                        gte(appointmentTable.date, from.toString()),
+                        eq(appointmentTable.status, 'confirmed')
+                    )
                 }),
                 db
                     .select()

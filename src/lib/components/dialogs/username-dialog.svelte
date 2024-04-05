@@ -12,7 +12,7 @@
 
 	export let open = true;
 	export let buttonVisible = false;
-	export const onSuccess = (username:string) => {};
+	export const onSuccess = (username: string) => {};
 	let loading = false;
 </script>
 
@@ -112,7 +112,7 @@
 						if (result.status === 200) {
 							open = false;
 							toast.success('Username Successfully Updated!');
-							onSuccess(result.data.username)
+							onSuccess(result.data.username);
 						} else {
 							// @ts-ignore
 							toast.error(result.data.message);
