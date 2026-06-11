@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/button/button.svelte";
+    import Logo from "$lib/components/logo.svelte";
 	import GoogleIcon from "$lib/icons/GoogleIcon.svelte";
+
 	import AppShell from "./AppShell.svelte";
 </script>
 
@@ -9,7 +11,10 @@
 		&nbsp;
 	{/snippet}
     <div class="flex flex-col items-center">
-    	<h1 class="text-xl mb-4"> we to all (V2O) </h1>
+        <div class="flex flex-col items-start">
+        	<Logo />
+    		<h1 class="text-xl mb-4"> we to all (V2O) </h1>
+        </div>
 	   	<Button href="/login/google" variant="default" size="lg">
 	    	<GoogleIcon /> Continue With Google
 		</Button>
