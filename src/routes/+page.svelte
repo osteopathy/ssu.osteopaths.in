@@ -11,8 +11,8 @@
 		&nbsp;
 	{/snippet}
     <div class="flex flex-col items-center">
-        <div class="flex flex-col items-start">
-        	<Logo />
+        <div class="flex flex-col w-32 items-start">
+        	<Logo size={24} />
     		<h1 class="text-xl mb-4"> we to all (V2O) </h1>
         </div>
 	   	<Button href="/login/google" variant="default" size="lg">
