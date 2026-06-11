@@ -8,9 +8,10 @@
 	{#snippet header()}
 		&nbsp;
 	{/snippet}
-    <h1 class="text-xl mb-4"> V2O </h1>
-	<Button href="/login/google" variant="default" size="lg">
-		<GoogleIcon />
-		Continue With Google
-	</Button>
+    <div class="flex flex-col items-center">
+    	<h1 class="text-xl mb-4"> we to all (V2O) </h1>
+	   	<Button href="/login/google" variant="default" size="lg">
+	    	<GoogleIcon /> Continue With Google
+		</Button>
+    </div>
 </AppShell>
