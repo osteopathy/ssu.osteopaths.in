@@ -8,6 +8,7 @@
 	{#snippet header()}
 		&nbsp;
 	{/snippet}
+    <h1 class="text-xl mb-4"> V2O </h1>
 	<Button href="/login/google" variant="default" size="lg">
 		<GoogleIcon />
 		Continue With Google
