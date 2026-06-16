@@ -4,7 +4,7 @@ const suffixes = new Map([
 	["one", "st"],
 	["two", "nd"],
 	["few", "rd"],
-	["other", "th"],
+	["other", "th"]
 ]);
 
 export const ordinal = (n: number) => {

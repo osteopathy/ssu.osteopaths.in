@@ -12,7 +12,7 @@ export const serviceProviderDateWiseScheduleTable = createTable(
 		date: date("date"), // %dd/%mm/%yyyy
 		startAt: text("start_at"),
 		endAt: text("end_at"),
-		disabled: integer("disabled", { mode: 'boolean' }),
+		disabled: integer("disabled", { mode: "boolean" }),
 		...timestamps
 	}
 );

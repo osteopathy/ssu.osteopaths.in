@@ -1,6 +1,6 @@
-import { getContext, setContext } from 'svelte';
+import { getContext, setContext } from "svelte";
 
-let userKey = Symbol('is-current-user');
+let userKey = Symbol("is-current-user");
 
 export function setIsCurrentUser(value: boolean): void {
 	setContext(userKey, value);

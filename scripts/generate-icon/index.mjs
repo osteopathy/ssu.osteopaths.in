@@ -99,14 +99,14 @@ const RequiredIcons = [
 		name: "Plus"
 	},
 	{
-		outline: 'fluent:lock-closed-24-regular',
-		solid: 'fluent:lock-closed-24-filled',
+		outline: "fluent:lock-closed-24-regular",
+		solid: "fluent:lock-closed-24-filled",
 		name: "LockClosed"
 	},
 	{
-		outline: 'fluent:lock-open-24-regular',
-		solid: 'fluent:lock-open-24-filled',
-		name: 'LockOpened'
+		outline: "fluent:lock-open-24-regular",
+		solid: "fluent:lock-open-24-filled",
+		name: "LockOpened"
 	}
 ];
 

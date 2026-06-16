@@ -63,6 +63,7 @@
 		"drizzle-orm": "^0.40.1",
 		"jose": "^6.0.10",
 		"mode-watcher": "^0.5.1",
+		"resend": "^6.6.0",
 		"svelte-easy-crop": "^4.0.1",
 		"tailwind-merge": "^3.0.2",
 		"tailwind-variants": "^0.3.1",

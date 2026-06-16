@@ -78,7 +78,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			status: 400
 		});
 	}
-	const notifyAdmin = async ({ title, body }: { title: string, body: string }) => {
+	const notifyAdmin = async ({ title, body }: { title: string; body: string }) => {
 		try {
 			console.log("[OAuth Callback] Sending admin notification:", { title, body });
 			await event.fetch("/api/v1/push/send", {
@@ -93,7 +93,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		} catch (error) {
 			console.error("[OAuth Callback] Failed to send admin notification:", error);
 		}
-	}
+	};
 
 	const resolveSession = async (
 		event: RequestEvent,
@@ -180,8 +180,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 						user: {
 							...event.locals.user,
 							universityMail: userDetails.email,
-							role: 'student',
-							status: 'verified'
+							role: "student",
+							status: "verified"
 						}
 					});
 				}
@@ -275,7 +275,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	await notifyAdmin({
 		title: `New User Signup ${userDetails.name}`,
 		body: `${userDetails.email}`
-	})
+	});
 
 	return resolveSession(event, user.id, { user });
 }

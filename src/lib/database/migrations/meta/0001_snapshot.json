@@ -1,8 +1,8 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "5f9c5c24-afa4-49da-bfb0-bc6af981e011",
-	"prevId": "00000000-0000-0000-0000-000000000000",
+	"id": "e40ac6b1-4970-422f-aeed-9e6a42ca70d5",
+	"prevId": "5f9c5c24-afa4-49da-bfb0-bc6af981e011",
 	"tables": {
 		"user": {
 			"name": "user",
@@ -737,18 +737,40 @@
 					"name": "title",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
 					"autoincrement": false
 				},
 				"body": {
 					"name": "body",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
 					"autoincrement": false
+				},
+				"type": {
+					"name": "type",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "'in-app'"
 				},
 				"status": {
 					"name": "status",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"data": {
+					"name": "data",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"read_at": {
+					"name": "read_at",
 					"type": "text",
 					"primaryKey": false,
 					"notNull": false,
@@ -758,7 +780,7 @@
 					"name": "user_id",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
 					"autoincrement": false
 				},
 				"createdAt": {

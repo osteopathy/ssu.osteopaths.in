@@ -1,13 +1,20 @@
 {
-  "version": "7",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "6",
-      "when": 1742375793089,
-      "tag": "0000_minor_ozymandias",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "sqlite",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "6",
+			"when": 1742375793089,
+			"tag": "0000_minor_ozymandias",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "6",
+			"when": 1765356483162,
+			"tag": "0001_gigantic_clea",
+			"breakpoints": true
+		}
+	]
 }

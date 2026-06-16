@@ -11,23 +11,23 @@ export const jwtCookieName = "auth-token";
 
 export type SessionValidationResult =
 	| {
-		session: {
-			id: UserSession["id"];
-			userId: UserSession["userId"];
-			expiresAt: UserSession["expiresAt"];
-		};
-		user: {
-			id: User["id"];
-			googleId: User["googleId"];
-			email: User["email"];
-			name: User["name"];
-			picture: User["picture"];
-			phone: User["phone"];
-			universityMail: User["universityMail"];
-			role: User["role"];
-			status: User["status"];
-		};
-	}
+			session: {
+				id: UserSession["id"];
+				userId: UserSession["userId"];
+				expiresAt: UserSession["expiresAt"];
+			};
+			user: {
+				id: User["id"];
+				googleId: User["googleId"];
+				email: User["email"];
+				name: User["name"];
+				picture: User["picture"];
+				phone: User["phone"];
+				universityMail: User["universityMail"];
+				role: User["role"];
+				status: User["status"];
+			};
+	  }
 	| { session: null; user: null };
 
 // JWT Based Session Auth Strategy

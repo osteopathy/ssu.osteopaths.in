@@ -28,7 +28,7 @@ export const actions: Actions = {
 			console.error("[Schedule] Failed to create schedule:", error);
 			return fail(400, { form, error: "A schedule for this date already exists." });
 		}
-		return message(form, 'new schedule')
+		return message(form, "new schedule");
 	},
 	update: async (event) => {
 		if (!event.locals.user) redirect(302, "/");
@@ -44,8 +44,8 @@ export const actions: Actions = {
 				endAt: form.data.end_at,
 				disabled: form.data.disabled
 			})
-			.where(eq(serviceProviderDateWiseScheduleTable.id, form.data.id))
-		return message(form, 'updated schedule')
+			.where(eq(serviceProviderDateWiseScheduleTable.id, form.data.id));
+		return message(form, "updated schedule");
 	},
 	delete: async (event) => {
 		if (!event.locals.user) redirect(302, "/");
@@ -55,7 +55,7 @@ export const actions: Actions = {
 		}
 		await db
 			.delete(serviceProviderDateWiseScheduleTable)
-			.where(eq(serviceProviderDateWiseScheduleTable.id, form.data.id))
-		return message(form, 'deleted schedule')
+			.where(eq(serviceProviderDateWiseScheduleTable.id, form.data.id));
+		return message(form, "deleted schedule");
 	}
-}
+};

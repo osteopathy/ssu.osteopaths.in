@@ -7,7 +7,7 @@ import { error, json } from "@sveltejs/kit";
 export const POST: RequestHandler = async (event) => {
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
 	if (!sessionToken) {
-		return error(401, 'Unauthorized');
+		return error(401, "Unauthorized");
 	}
 	const { session, user } = await auth.validateSessionToken(sessionToken);
 	if (session && user) {
@@ -19,5 +19,5 @@ export const POST: RequestHandler = async (event) => {
 			.encrypt(secret);
 		auth.setJWTTokenCookie(event, jwt, session.expiresAt);
 	}
-	return json({ type: 'success' })
-}
+	return json({ type: "success" });
+};

@@ -4,7 +4,10 @@ import { superValidate, fail, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { acceptRequestSchema } from "./schema";
 import { db } from "$lib/database";
-import { serviceProviderAppointmentRequestTable, serviceProviderAppointmentTable } from "$lib/database/schema";
+import {
+	serviceProviderAppointmentRequestTable,
+	serviceProviderAppointmentTable
+} from "$lib/database/schema";
 import { eq } from "drizzle-orm";
 
 export const actions: Actions = {
@@ -24,13 +27,16 @@ export const actions: Actions = {
 					endAt: form.data.end_at,
 					date: form.data.date
 				}),
-				db.update(serviceProviderAppointmentRequestTable).set({
-					status: 'accepted'
-				}).where(eq(serviceProviderAppointmentRequestTable.id, form.data.id))
-			])
+				db
+					.update(serviceProviderAppointmentRequestTable)
+					.set({
+						status: "accepted"
+					})
+					.where(eq(serviceProviderAppointmentRequestTable.id, form.data.id))
+			]);
 		} catch (error) {
 			return fail(500, { message: "Failed to accept request: " + error });
 		}
 		return message(form, "Accepted Request");
-	},
-}
+	}
+};

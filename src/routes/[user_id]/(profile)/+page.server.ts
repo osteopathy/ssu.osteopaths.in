@@ -15,15 +15,13 @@ const schema = z.object({
 
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user) redirect(302, "/");
-	const pageuser = (event.locals.user.id === event.params.user_id) ? event.locals.user : (
-		await db.query.userTable.findFirst({
-			where: eq(userTable.id, event.params.user_id)
-		})
-	)
-	const form = await superValidate(
-		{ name: pageuser?.name, phone: pageuser?.phone },
-		zod(schema)
-	);
+	const pageuser =
+		event.locals.user.id === event.params.user_id
+			? event.locals.user
+			: await db.query.userTable.findFirst({
+					where: eq(userTable.id, event.params.user_id)
+				});
+	const form = await superValidate({ name: pageuser?.name, phone: pageuser?.phone }, zod(schema));
 	return { form, pageuser };
 };
 

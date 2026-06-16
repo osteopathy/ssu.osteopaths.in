@@ -6,10 +6,15 @@ import {
 	serviceProviderAppointmentTable,
 	serviceProviderDateWiseScheduleTable,
 	serviceProviderTable,
-	serviceSubscriptionTable,
+	serviceSubscriptionTable
 } from "$lib/database/schema";
 import { redirect } from "@sveltejs/kit";
-import { createRequestSchema, unbookAppointmentSchema, updateRequestSchema, withdrawRequestSchema } from "./requests/schema";
+import {
+	createRequestSchema,
+	unbookAppointmentSchema,
+	updateRequestSchema,
+	withdrawRequestSchema
+} from "./requests/schema";
 import { zod } from "sveltekit-superforms/adapters";
 import { superValidate } from "sveltekit-superforms";
 
@@ -33,7 +38,7 @@ export const load: PageServerLoad = async (event) => {
 		],
 		with: {
 			dateWiseSchedule: true
-		},
+		}
 	});
 
 	const serviceProvider = await db.query.serviceProviderTable.findFirst({
@@ -41,27 +46,28 @@ export const load: PageServerLoad = async (event) => {
 		with: {
 			user: true,
 			// if there appointment Request already accepted then fetch current service provider appointments with the user
-			...((appointmentRequest?.status === 'accepted' && appointmentRequest) && {
-				appointments: {
-					where: and(
-						eq(serviceProviderAppointmentTable.userId, event.locals.user.id),
-						gte(serviceProviderAppointmentTable.date, new Date()),
-					),
-					orderBy: [
-						asc(serviceProviderAppointmentTable.date),
-						asc(serviceProviderAppointmentTable.startAt)
-					],
-					limit: 1
-				}
-			}),
+			...(appointmentRequest?.status === "accepted" &&
+				appointmentRequest && {
+					appointments: {
+						where: and(
+							eq(serviceProviderAppointmentTable.userId, event.locals.user.id),
+							gte(serviceProviderAppointmentTable.date, new Date())
+						),
+						orderBy: [
+							asc(serviceProviderAppointmentTable.date),
+							asc(serviceProviderAppointmentTable.startAt)
+						],
+						limit: 1
+					}
+				}),
 			// if there appointment Request already sent from the user don't fetch current service provider schedule
-			...(!(appointmentRequest) && {
+			...(!appointmentRequest && {
 				dateWiseScheduleList: {
 					where: gte(serviceProviderDateWiseScheduleTable.date, new Date()),
 					orderBy: [
 						asc(serviceProviderDateWiseScheduleTable.date),
 						asc(serviceProviderDateWiseScheduleTable.startAt)
-					],
+					]
 				}
 			}),
 			subscriptions: {
@@ -79,7 +85,7 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		serviceProvider,
 		isSubscribed: (serviceProvider?.subscriptions ?? []).length > 0,
-		appointmentRequests: appointmentRequest?.status === 'idle' ? [appointmentRequest] : undefined,
+		appointmentRequests: appointmentRequest?.status === "idle" ? [appointmentRequest] : undefined,
 		unbookappointment,
 		requestforms: {
 			create,

@@ -5,10 +5,17 @@ import { relations, type InferSelectModel } from "drizzle-orm";
 
 export const userNotificationTable = createTable("user_notification", {
 	id,
-	title: text("title"),
-	body: text("body"),
+	title: text("title").notNull(),
+	body: text("body").notNull(),
+	type: text("type", { enum: ["push", "email", "in-app"] })
+		.notNull()
+		.default("in-app"),
 	status: text("status"),
-	userId: text("user_id").references(() => userTable.id, { onDelete: "cascade" }),
+	data: text("data", { mode: "json" }).$type<Record<string, unknown>>(),
+	readAt: text("read_at"),
+	userId: text("user_id")
+		.references(() => userTable.id, { onDelete: "cascade" })
+		.notNull(),
 	createdAt: timestamps.createdAt
 });
 

@@ -14,7 +14,9 @@ export const serviceProviderAppointmentTable = createTable("service_provider_app
 	endAt: text("end_at"),
 	location: text("location"),
 	status: text("status"),
-	appointmentRequestId: text('request_id').references(() => serviceProviderAppointmentRequestTable.id),
+	appointmentRequestId: text("request_id").references(
+		() => serviceProviderAppointmentRequestTable.id
+	),
 	...timestamps
 });
 
@@ -37,6 +39,6 @@ export const serviceProviderAppointmentRelation = relations(
 		appointmentRequest: one(serviceProviderAppointmentRequestTable, {
 			fields: [serviceProviderAppointmentTable.appointmentRequestId],
 			references: [serviceProviderAppointmentRequestTable.id]
-		}),
+		})
 	})
 );

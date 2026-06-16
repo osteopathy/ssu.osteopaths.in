@@ -1,6 +1,6 @@
-import { getContext, setContext } from 'svelte';
+import { getContext, setContext } from "svelte";
 
-let loggedKey = Symbol('is-logged-in');
+let loggedKey = Symbol("is-logged-in");
 
 export function setIsLoggedIn(value: boolean): void {
 	setContext(loggedKey, value);

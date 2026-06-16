@@ -43,6 +43,11 @@ const PAGES = {
 const SERVERS = {
   "POST /api/v1/image": `/api/v1/image`,
   "DELETE /api/v1/image": `/api/v1/image`,
+  "GET /api/v1/notifications": `/api/v1/notifications`,
+  "PATCH /api/v1/notifications/[id]": (params: { id: (string | number) }) => {
+    return `/api/v1/notifications/${params['id']}`
+  },
+  "PATCH /api/v1/notifications/read-all": `/api/v1/notifications/read-all`,
   "POST /api/v1/push/send": `/api/v1/push/send`,
   "POST /api/v1/push/subscribe": `/api/v1/push/subscribe`,
   "POST /api/v1/push/unsubsribe": `/api/v1/push/unsubsribe`,
@@ -203,8 +208,8 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 */
 export type KIT_ROUTES = {
   PAGES: { '/': never, '/admin': never, '/login': never, '/basecolors': never, '/design-system/buttons': never, '/contact-us': never, '/privacy-policy': never, '/term-of-service': never, '/[user_id]': 'user_id', '/[user_id]/dashboard': 'user_id', '/[user_id]/service': 'user_id', '/services/[service]': 'service', '/services/[service]/[service_provider_id]': 'service' | 'service_provider_id', '/services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id' }
-  SERVERS: { 'POST /api/v1/image': never, 'DELETE /api/v1/image': never, 'POST /api/v1/push/send': never, 'POST /api/v1/push/subscribe': never, 'POST /api/v1/push/unsubsribe': never, 'POST /api/v1/refresh': never, 'GET /login/google': never, 'GET /login/google/callback': never }
+  SERVERS: { 'POST /api/v1/image': never, 'DELETE /api/v1/image': never, 'GET /api/v1/notifications': never, 'PATCH /api/v1/notifications/[id]': 'id', 'PATCH /api/v1/notifications/read-all': never, 'POST /api/v1/push/send': never, 'POST /api/v1/push/subscribe': never, 'POST /api/v1/push/unsubsribe': never, 'POST /api/v1/refresh': never, 'GET /login/google': never, 'GET /login/google/callback': never }
   ACTIONS: { 'logout /': never, 'default /admin': never, 'default /[user_id]': 'user_id', 'accept /service_provider/request': never, 'create /service_provider/schedule': never, 'update /service_provider/schedule': never, 'delete /service_provider/schedule': never, 'newschedule /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'unbookappointment /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'bookappointment /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'create /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'update /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'withdraw /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'subscribe /services/[service]/[service_provider_id]/subscription': 'service' | 'service_provider_id', 'unsubscribe /services/[service]/[service_provider_id]/subscription': 'service' | 'service_provider_id' }
   LINKS: Record<string, never>
-  Params: { 'user_id': never, 'service': never, 'service_provider_id': never }
+  Params: { 'user_id': never, 'service': never, 'service_provider_id': never, 'id': never }
 }

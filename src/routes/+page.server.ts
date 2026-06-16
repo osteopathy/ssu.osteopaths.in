@@ -9,18 +9,18 @@ import {
 import { route } from "$lib/routes_helper";
 
 export const load: PageServerLoad = async (event) => {
-	if (event.locals.user) return redirect(302, route('/[user_id]', { user_id: event.locals.user.id }));
+	if (event.locals.user)
+		return redirect(302, route("/[user_id]", { user_id: event.locals.user.id }));
 	return {};
 };
 
 export const actions: Actions = {
 	logout: async (event) => {
 		const sessionToken = event.cookies.get(sessionCookieName);
-		if (event.locals.user === null || !sessionToken)
-			return fail(401);
+		if (event.locals.user === null || !sessionToken) return fail(401);
 		invalidateSession(sessionToken);
 		deleteSessionTokenCookie(event);
-		deleteJWTTokenCookie(event)
+		deleteJWTTokenCookie(event);
 		return redirect(302, "/login");
 	}
 };

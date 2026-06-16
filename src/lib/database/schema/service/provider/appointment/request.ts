@@ -21,7 +21,6 @@ import { serviceProviderDateWiseScheduleTable } from "../date_wise_schedule";
 //   | 'Other'
 //   | 'unknown';
 
-
 export const WithDrawReasons = {
 	AnotherRequestAccepted: "Another Request is Accepted by ...",
 	UserCancelled: "User Cancelled",
@@ -34,7 +33,9 @@ export const serviceProviderAppointmentRequestTable = createTable(
 		id,
 		userId: text("user_id").references(() => userTable.id, { onDelete: "cascade" }),
 		serviceProviderId: text("service_provider_id").references(() => serviceProviderTable.id),
-		dateWiseScheduleId: text("date_wise_schedule_id").references(() => serviceProviderDateWiseScheduleTable.id),
+		dateWiseScheduleId: text("date_wise_schedule_id").references(
+			() => serviceProviderDateWiseScheduleTable.id
+		),
 		date: date("date"), // %dd/%mm/%yyyy
 		startAt: text("start_at"), // user preferred start time
 		endAt: text("end_at"), // user preferred availability time
@@ -66,6 +67,6 @@ export const serviceProviderAppointmentRequestRelation = relations(
 		dateWiseSchedule: one(serviceProviderDateWiseScheduleTable, {
 			fields: [serviceProviderAppointmentRequestTable.dateWiseScheduleId],
 			references: [serviceProviderDateWiseScheduleTable.id]
-		}),
+		})
 	})
 );
