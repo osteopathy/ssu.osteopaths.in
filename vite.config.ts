@@ -18,8 +18,8 @@ export default defineConfig({
 		}),
 		SvelteKitPWA({
 			strategies: "injectManifest",
-			srcDir: "src",
-			filename: "sw.ts",
+			// srcDir: "src",
+			// filename: "sw.ts",
 			registerType: "autoUpdate",
 			// injectRegister: false,
 
@@ -37,7 +37,7 @@ export default defineConfig({
 
 			injectManifest: {
 				globPatterns: ["client/**/*.{js,css,ico,png,svg,webp}"],
-				swDest: ".svelte-kit/cloudflare/client/service-worker.js"
+				// swDest: ".svelte-kit/cloudflare/client/service-worker.js"
 			},
 
 			devOptions: {
