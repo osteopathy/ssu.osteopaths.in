@@ -1,14 +1,27 @@
 <script lang="ts">
-	import { mode, setMode } from "mode-watcher";
+	import { onMount } from "svelte";
+	import { setMode } from "mode-watcher";
+
+	let selectedMode: "light" | "dark" | "system" = "system";
+
+	onMount(() => {
+		const html = document.documentElement;
+		const mode = html.getAttribute("data-mode");
+
+		if (mode === "light" || mode === "dark" || mode === "system") {
+			selectedMode = mode;
+		} else if (html.classList.contains("dark")) {
+			selectedMode = "dark";
+		}
+	});
 </script>
 
 <select
 	class="bg-layer-3 hover:bg-layer-3 border-layer-6 hover:border-layer-7 rounded-md border py-1 pl-2 shadow-sm"
-	onchange={(event) => {
-		const selectedMode = event.currentTarget.value as "light" | "dark" | "system";
+	bind:value={selectedMode}
+	onchange={() => {
 		setMode(selectedMode);
 	}}
-	value={$mode}
 >
 	<option value="light">Theme: Light</option>
 	<option value="dark">Theme: Dark</option>
