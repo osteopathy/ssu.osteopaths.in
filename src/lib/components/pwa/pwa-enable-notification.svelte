@@ -2,8 +2,8 @@
 	import { onMount } from "svelte";
 	import { PUBLIC_VAPID_KEY as VAPID_PUBLIC_KEY } from "$env/static/public";
 
-	let supported = false;
-	let subscribed = false;
+	let supported = $state(false);
+	let subscribed = $state(false);
 
 	async function subscribe() {
 		console.log("Subscribing");

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { enhance } from "$app/forms";
 	import PwaEnableNotification from "$lib/components/pwa/pwa-enable-notification.svelte";
 	import PwaInstallButton from "$lib/components/pwa/pwa-install-button.svelte";
@@ -52,7 +54,7 @@
 				<form
 					method="post"
 					use:enhance
-					on:submit|preventDefault={() => confirm("Delete user?") || event.preventDefault()}
+					onsubmit={preventDefault(() => confirm("Delete user?") || event.preventDefault())}
 				>
 					<input type="hidden" name="action" value="delete" />
 					<input type="hidden" name="user_id" value={user.id} />
