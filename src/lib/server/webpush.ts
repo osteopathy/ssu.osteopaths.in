@@ -1,6 +1,9 @@
 import webPush from "web-push";
-import { PUBLIC_VAPID_KEY as VAPID_PUBLIC_KEY } from "$env/static/public";
-import { VAPID_PRIVATE_KEY, VAPID_SUBJECT } from "$env/static/private";
+import { env } from "$env/dynamic/private";
+
+const VAPID_PUBLIC_KEY = env.PUBLIC_VAPID_KEY;
+const VAPID_PRIVATE_KEY = env.PRIVATE_VAPID_KEY;
+const VAPID_SUBJECT = env.VAPID_SUBJECT;
 
 webPush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 

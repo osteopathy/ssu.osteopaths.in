@@ -1,7 +1,10 @@
 import { dev } from "$app/environment";
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import { DATABASE_URL, DATABASE_AUTH_TOKEN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
+const DATABASE_URL = env.DATABASE_URL;
+const DATABASE_AUTH_TOKEN = env.DATABASE_AUTH_TOKEN;
+// import { DATABASE_URL, DATABASE_AUTH_TOKEN } from "$env/static/private";
 import * as schema from "./schema";
 
 if (!DATABASE_URL) throw new Error("DATABASE_URL is not set");
