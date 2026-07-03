@@ -1,6 +1,6 @@
 import type { RequestHandler } from "./$types";
 import * as auth from "$lib/server/auth/session";
-import { JWT_SECRET } from "$env/static/private";
+import { JWT_SECRET } from "$lib/const";
 import { base64url, EncryptJWT } from "jose";
 import { error, json } from "@sveltejs/kit";
 

@@ -21,7 +21,7 @@ import {
 	createUserWithUniversityMail
 } from "$lib/server/auth/utils";
 import { base64url, EncryptJWT } from "jose";
-import { JWT_SECRET } from "$env/static/private";
+import { JWT_SECRET } from "$lib/const";
 
 // {
 //   iss: 'https://accounts.google.com',

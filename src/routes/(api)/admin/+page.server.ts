@@ -8,7 +8,7 @@ import {
 	setSessionTokenCookie
 } from "$lib/server/auth/session";
 import { createSession } from "$lib/server/auth/utils";
-import { JWT_SECRET } from "$env/static/private";
+import { JWT_SECRET } from "$lib/const";
 import { base64url, EncryptJWT } from "jose";
 import { redirect } from "@sveltejs/kit";
 

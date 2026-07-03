@@ -1,7 +1,7 @@
 import type { Handle } from "@sveltejs/kit";
 import * as auth from "$lib/server/auth/session";
 import { base64url, EncryptJWT, jwtDecrypt } from "jose";
-import { JWT_SECRET } from "$env/static/private";
+import { JWT_SECRET } from "$lib/const";
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
