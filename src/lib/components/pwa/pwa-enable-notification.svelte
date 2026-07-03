@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { PUBLIC_VAPID_KEY as VAPID_PUBLIC_KEY } from "$env/static/public";
+	import { env } from "$env/dynamic/public";
+
+	const VAPID_PUBLIC_KEY = env.PUBLIC_VAPID_KEY;
 
 	let supported = $state(false);
 	let subscribed = $state(false);

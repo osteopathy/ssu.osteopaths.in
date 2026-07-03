@@ -1,7 +1,9 @@
 import { v2 as cloudinary } from "cloudinary";
 import { PUBLIC_CLOUDINARY_CLOUD_NAME } from "$env/static/public";
 import { env } from "$env/dynamic/private";
+import { env as publicEnv } from '$env/dynamic/public';
 
+const PUBLIC_CLOUDINARY_CLOUD_NAME = publicEnv.PUBLIC_CLOUDINARY_CLOUD_NAME;
 const CLOUDINARY_API_KEY = env.CLOUDINARY_API_KEY;
 const CLOUDINARY_API_SECRET = env.CLOUDINARY_API_SECRET;
 

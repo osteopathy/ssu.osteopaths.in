@@ -1,4 +1,11 @@
-import { PUBLIC_CLOUDINARY_CLOUD_NAME, PUBLIC_CLOUDINARY_UPLOAD_PRESET } from "$env/static/public";
+import {
+	PUBLIC_CLOUDINARY_CLOUD_NAME,
+	PUBLIC_CLOUDINARY_UPLOAD_PRESET
+} from "$env/static/public";
+import { env } from '$env/dynamic/public';
+
+const PUBLIC_CLOUDINARY_CLOUD_NAME = publicEnv.PUBLIC_CLOUDINARY_CLOUD_NAME;
+const PUBLIC_CLOUDINARY_UPLOAD_PRESET = publicEnv.PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
 // Uploading File utils
 type ElEvent<T extends Event, E extends Element> = T & { currentTarget: EventTarget & E };
