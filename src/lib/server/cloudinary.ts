@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } from "$lib/const";
+import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } from "$env/static/private";
 import { PUBLIC_CLOUDINARY_CLOUD_NAME } from "$env/static/public";
 
 cloudinary.config({
