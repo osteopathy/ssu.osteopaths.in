@@ -39,7 +39,8 @@ export default defineConfig({
 			},
 
 			injectManifest: {
-				globPatterns: ["client/**/*.{js,css,ico,png,svg,webp}"]
+				globPatterns: ["client/**/*.{js,css,ico,png,svg,webp}"],
+				swDest: ".svelte-kit/cloudflare/client/service-worker.js"
 			},
 
 			devOptions: {
