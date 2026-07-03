@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import { PUBLIC_CLOUDINARY_CLOUD_NAME } from "$env/static/public";
+import { env as publicEnv } from "$env/dynamic/public";
 import { env } from "$env/dynamic/private";
 import { env as publicEnv } from '$env/dynamic/public';
 
