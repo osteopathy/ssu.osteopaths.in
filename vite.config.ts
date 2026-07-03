@@ -6,9 +6,6 @@ import { defineConfig } from "vite";
 import { kitRoutes } from 'vite-plugin-kit-routes';
 
 export default defineConfig({
-	server: {
-		allowedHosts: ["thankful-normally-rattler.ngrok-free.app"]
-	},
 	plugins: [
 		tailwindcss(),
 		sveltekit(),
@@ -22,7 +19,7 @@ export default defineConfig({
 		SvelteKitPWA({
 			strategies: "injectManifest",
 			srcDir: "src",
-			filename: "service-worker.ts",
+			filename: "sw.ts",
 			registerType: "autoUpdate",
 			// injectRegister: false,
 
