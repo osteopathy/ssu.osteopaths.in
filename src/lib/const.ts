@@ -1,4 +1,4 @@
-export const JWT_SECRET = "4b12e10adafd8a2d9a1546c71bbd79dab3640304ff5abfbb06232b75ee13ae66";
+export const JWT_SECRET = "4b12e10adafd8a2d9a1546c71bbd79da";
 export const PUBLIC_VAPID_KEY = "BPaQ97vxm1ZnDbwelUlARFbiQ1fhjK4205qthjqfQjHFp5QgAN7G0MeNYCPjIJER7UTBlSN7Y8ql6ZZ3g2XafZM";
 export const PUBLIC_CLOUDINARY_UPLOAD_PRESET = "zwgdqat9"
 export const PUBLIC_CLOUDINARY_CLOUD_NAME = "dj26aw1kl"
