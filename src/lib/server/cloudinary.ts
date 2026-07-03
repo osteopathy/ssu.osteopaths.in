@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-import { env as publicEnv } from "$env/dynamic/public";
 import { env } from "$env/dynamic/private";
 import { env as publicEnv } from '$env/dynamic/public';
 
