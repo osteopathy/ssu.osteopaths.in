@@ -161,8 +161,16 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				}
 
 				const id = identifier.split(".")[1];
-				const batch = id.substring(1, 5);
-				const course = id.substring(5);
+
+				if (!id) {
+					// Gracefully handle emails that don't match the expected sub-pattern
+					console.error(`[OAuth Callback] Email format does not contain a secondary dot identifier: ${userDetails.email}`);
+					return new Response("Invalid university email pattern.", { status: 400 });
+				}
+
+				const batch = id.length >= 5 ? id.substring(1, 5) : null;
+				const course = id.length > 5 ? id.substring(5) : null;
+
 
 				if (batch && course) {
 					await notifyAdmin({
