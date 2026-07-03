@@ -14,12 +14,12 @@ export default defineConfig({
 		}),
 		icon({
 			autoInstall: true,
-			compiler: "svelte"
+			compiler: "svelte",
 		}),
 		SvelteKitPWA({
-			strategies: "injectManifest",
+			strategies: "generateSW",
 			// srcDir: "src",
-			// filename: "sw.ts",
+			// filename: "service-worker.ts",
 			registerType: "autoUpdate",
 			// injectRegister: false,
 
@@ -29,16 +29,13 @@ export default defineConfig({
 			},
 
 			manifest: {
-				name: "osteopath-in",
-				short_name: "osteopath-in",
+				name: "ssu-osteopath-in",
+				short_name: "ssu-osteopath-in",
 				description: "It is a web application that helps you find the best osteopath near you.",
 				theme_color: "#4f39f6"
 			},
 
-			injectManifest: {
-				globPatterns: ["client/**/*.{js,css,ico,png,svg,webp}"],
-				// swDest: ".svelte-kit/cloudflare/client/service-worker.js"
-			},
+			injectManifest: { globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,webmanifest}', 'prerendered/**/*.{html,json}'] },
 
 			devOptions: {
 				enabled: false,

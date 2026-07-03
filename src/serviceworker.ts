@@ -1,8 +1,11 @@
 /// <reference types="vite/client" />
 /// <reference lib="webworker" />
 
+import { version } from '$service-worker';
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
+
+console.log('SW Active', version);
 // import { NavigationRoute, registerRoute } from 'workbox-routing';
 // createHandlerBoundToURL
 
