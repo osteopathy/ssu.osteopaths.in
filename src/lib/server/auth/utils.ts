@@ -7,6 +7,111 @@ import { eq } from "drizzle-orm";
 import { studentTable, type Student } from "$lib/database/schema/student";
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const AUTH_USER_COLUMNS = [
+	"id",
+	"googleId",
+	"email",
+	"phone",
+	"picture",
+	"universityMail",
+	"status",
+	"name",
+	"role",
+	"createdAt",
+	"updatedAt"
+] as const;
+let userTableColumnsPromise: Promise<Set<string>> | null = null;
+
+const toNullableString = (value: unknown): string | null => {
+	return typeof value === "string" ? value : null;
+};
+
+const toNullableDate = (value: unknown): Date | null => {
+	return value instanceof Date ? value : null;
+};
+
+const toUserRole = (value: unknown): User["role"] => {
+	if (
+		value === "user" ||
+		value === "student" ||
+		value === "service_provider" ||
+		value === "guest"
+	) {
+		return value;
+	}
+
+	return "user";
+};
+
+const toUserStatus = (value: unknown): User["status"] => {
+	if (value === "verified" || value === "idle") {
+		return value;
+	}
+
+	return "idle";
+};
+
+const toAuthUser = (row: Record<string, unknown>): User => {
+	return {
+		id: String(row.id),
+		googleId: toNullableString(row.googleId),
+		email: toNullableString(row.email),
+		phone: toNullableString(row.phone),
+		picture: toNullableString(row.picture),
+		universityMail: toNullableString(row.universityMail),
+		status: toUserStatus(row.status),
+		name: toNullableString(row.name),
+		role: toUserRole(row.role),
+		metadata: null,
+		createdAt: toNullableDate(row.createdAt),
+		updatedAt: toNullableDate(row.updatedAt)
+	};
+};
+
+const getUserTableColumns = async (): Promise<Set<string>> => {
+	if (userTableColumnsPromise === null) {
+		userTableColumnsPromise = db.$client
+			.execute({
+				sql: "PRAGMA table_info(`user`)",
+				args: []
+			})
+			.then((result) => {
+				return new Set(
+					result.rows
+						.map((row) => {
+							const tableInfoRow = row as Record<string, unknown>;
+							return typeof tableInfoRow.name === "string" ? tableInfoRow.name : null;
+						})
+						.filter((column): column is string => column !== null)
+				);
+			});
+	}
+
+	return userTableColumnsPromise;
+};
+
+type UserLookupColumn = "id" | "googleId" | "universityMail";
+
+const getAuthUser = async (lookupColumn: UserLookupColumn, value: string): Promise<User | null> => {
+	const columns = await getUserTableColumns();
+	if (!columns.has("id") || !columns.has(lookupColumn)) {
+		return null;
+	}
+
+	const selectedColumns = AUTH_USER_COLUMNS.filter((column) => columns.has(column));
+
+	const query = await db.$client.execute({
+		sql: `SELECT ${selectedColumns.map((column) => `\`${column}\``).join(", ")} FROM \`user\` WHERE \`${lookupColumn}\` = ? LIMIT 1`,
+		args: [value]
+	});
+
+	const row = (query.rows[0] ?? null) as Record<string, unknown> | null;
+	if (!row) {
+		return null;
+	}
+
+	return toAuthUser(row);
+};
 
 export const updateGoogleAccount = async (id: string, googleUserId: string, email: string) => {
 	return db
@@ -73,16 +178,11 @@ export const connectStudent = async (
 };
 
 export const getUserFromGoogleId = async (value: string): Promise<User | null> => {
-	return (
-		(await db.select().from(userTable).where(eq(userTable.googleId, value)).limit(1))[0] ?? null
-	);
+	return await getAuthUser("googleId", value);
 };
 
 export const getUserFromUniversityMail = async (value: string): Promise<User | null> => {
-	return (
-		(await db.select().from(userTable).where(eq(userTable.universityMail, value)).limit(1))[0] ??
-		null
-	);
+	return await getAuthUser("universityMail", value);
 };
 
 export const createUser = async (
@@ -93,9 +193,17 @@ export const createUser = async (
 	role: "user" | "student" = "user",
 	status: "idle" | "verified" = "idle"
 ): Promise<User> => {
-	return (
-		await db.insert(userTable).values({ googleId, name, email, picture, role, status }).returning()
+	const createdUser = (
+		await db
+			.insert(userTable)
+			.values({ googleId, name, email, picture, role, status })
+			.returning({ id: userTable.id })
 	)[0];
+	const user = await getAuthUser("id", createdUser.id);
+	if (user === null) {
+		throw new Error("[Auth] Failed to fetch newly created user");
+	}
+	return user;
 };
 
 export const createUserWithUniversityMail = async (
@@ -103,14 +211,17 @@ export const createUserWithUniversityMail = async (
 	name: string,
 	picture: string
 ): Promise<User> => {
-	return (
-		(
-			await db
-				.insert(userTable)
-				.values({ universityMail, name, status: "verified", role: "user", picture })
-				.returning()
-		)[0] ?? null
-	);
+	const createdUser = (
+		await db
+			.insert(userTable)
+			.values({ universityMail, name, status: "verified", role: "user", picture })
+			.returning({ id: userTable.id })
+	)[0];
+	const user = await getAuthUser("id", createdUser.id);
+	if (user === null) {
+		throw new Error("[Auth] Failed to fetch newly created university user");
+	}
+	return user;
 };
 
 export const createStudent = async (
