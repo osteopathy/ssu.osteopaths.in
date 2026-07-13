@@ -78,7 +78,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			status: 400
 		});
 	}
-	const notifyAdmin = async ({ title, body }: { title: string, body: string }) => {
+	const notifyAdmin = async ({ title, body }: { title: string; body: string }) => {
 		try {
 			console.log("[OAuth Callback] Sending admin notification:", { title, body });
 			await event.fetch("/api/v1/push/send", {
@@ -93,7 +93,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		} catch (error) {
 			console.error("[OAuth Callback] Failed to send admin notification:", error);
 		}
-	}
+	};
 
 	const resolveSession = async (
 		event: RequestEvent,
@@ -103,12 +103,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	) => {
 		const sessionToken = generateSessionToken();
 		const session = await createSession(sessionToken, userId);
-		console.log("[OAuth Callback] Created session with token:", sessionToken);
+		console.log("[OAuth Callback] Created session");
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
-		console.log("[OAuth Callback] Session token cookie set", JWT_SECRET);
+		console.log("[OAuth Callback] Session token cookie set");
 
 		const secret = base64url.decode(JWT_SECRET);
-		console.log("SECRET", secret);
 		console.log("[OAuth Callback] Decoded JWT secret");
 		const jwt = await new EncryptJWT(payload)
 			.setProtectedHeader({ alg: "dir", enc: "A128CBC-HS256" })
@@ -124,14 +123,22 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			}
 		});
 	};
-	console.log("[OAuth Callback] Decoding ID token", tokens.idToken());
+	const resolveAuthError = (message: string) => {
+		return new Response(null, {
+			status: 302,
+			headers: {
+				Location: `/login?message=${encodeURIComponent(message)}`
+			}
+		});
+	};
+	console.log("[OAuth Callback] Decoding ID token");
 	const claims = decodeIdToken(tokens.idToken()) as {
 		sub: string;
 		name: string;
 		email: string;
 		picture: string;
 	};
-	console.log("[OAuth Callback] Decoded ID token claims:", claims);
+	console.log("[OAuth Callback] Decoded ID token claims");
 	// Reason to use googleUserId instead of just email
 	// A Google ID token's sub field is unique to each Google Account and is never reused.
 	// A Google Account can have multiple email addresses, but only one ID token.
@@ -144,146 +151,157 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	// checking if the mail is ending with @srisriuniversity.edu.in
 	const [identifier, domain] = userDetails.email.split("@");
+	try {
+		if (event.locals.user && state?.endsWith("-mail")) {
+			if (state.endsWith("university-mail") && domain === "srisriuniversity.edu.in") {
+				// first-time need to create entry in student table
+				if (!event.locals.user.universityMail) {
+					const existingUser = await getUserFromUniversityMail(userDetails.email);
 
-	if (event.locals.user && state?.endsWith("-mail")) {
-		if (state.endsWith("university-mail") && domain === "srisriuniversity.edu.in") {
-			// first-time need to create entry in student table
-			if (!event.locals.user.universityMail) {
-				const existingUser = await getUserFromUniversityMail(userDetails.email);
+					if (existingUser) {
+						return resolveSession(
+							event,
+							event.locals.user.id,
+							{ user: event.locals.user },
+							`already another account is linked to this university email ${userDetails.email}`
+						);
+					}
 
+					const id = identifier.split(".")[1];
+
+					if (!id) {
+						// Gracefully handle emails that don't match the expected sub-pattern
+						console.error(
+							`[OAuth Callback] Email format does not contain a secondary dot identifier: ${userDetails.email}`
+						);
+						return new Response("Invalid university email pattern.", { status: 400 });
+					}
+
+					const batch = id.length >= 5 ? id.substring(1, 5) : null;
+					const course = id.length > 5 ? id.substring(5) : null;
+
+					if (batch && course) {
+						await notifyAdmin({
+							title: batch + course + " " + userDetails.name,
+							body: "new student is added to the system"
+						});
+						await connectStudent(
+							event.locals.user.id,
+							userDetails.email,
+							userDetails.name,
+							batch,
+							course
+						);
+						return resolveSession(event, event.locals.user.id, {
+							user: {
+								...event.locals.user,
+								universityMail: userDetails.email,
+								role: "student",
+								status: "verified"
+							}
+						});
+					}
+				}
+				await updateUniversityMail(event.locals.user.id, userDetails.email);
+				event.locals.user.universityMail = userDetails.email;
+			}
+			if (state.endsWith("personal-mail")) {
+				const existingUser = await getUserFromGoogleId(userDetails.googleId);
 				if (existingUser) {
 					return resolveSession(
 						event,
 						event.locals.user.id,
 						{ user: event.locals.user },
-						`already another account is linked to this university email ${userDetails.email}`
+						`already another account is linked to this mail ${userDetails.email}`
 					);
 				}
-
-				const id = identifier.split(".")[1];
-
-				if (!id) {
-					// Gracefully handle emails that don't match the expected sub-pattern
-					console.error(`[OAuth Callback] Email format does not contain a secondary dot identifier: ${userDetails.email}`);
-					return new Response("Invalid university email pattern.", { status: 400 });
-				}
-
-				const batch = id.length >= 5 ? id.substring(1, 5) : null;
-				const course = id.length > 5 ? id.substring(5) : null;
-
-
-				if (batch && course) {
-					await notifyAdmin({
-						title: batch + course + " " + userDetails.name,
-						body: "new student is added to the system"
-					});
-					await connectStudent(
-						event.locals.user.id,
-						userDetails.email,
-						userDetails.name,
-						batch,
-						course
-					);
-					return resolveSession(event, event.locals.user.id, {
-						user: {
-							...event.locals.user,
-							universityMail: userDetails.email,
-							role: 'student',
-							status: 'verified'
-						}
-					});
-				}
+				await updateGoogleAccount(event.locals.user.id, userDetails.googleId, userDetails.email);
+				event.locals.user.email = userDetails.email;
+				event.locals.user.googleId = userDetails.googleId;
 			}
-			await updateUniversityMail(event.locals.user.id, userDetails.email);
-			event.locals.user.universityMail = userDetails.email;
+			return resolveSession(event, event.locals.user.id, { user: event.locals.user });
 		}
-		if (state.endsWith("personal-mail")) {
-			const existingUser = await getUserFromGoogleId(userDetails.googleId);
-			if (existingUser) {
-				return resolveSession(
-					event,
-					event.locals.user.id,
-					{ user: event.locals.user },
-					`already another account is linked to this mail ${userDetails.email}`
-				);
-			}
-			await updateGoogleAccount(event.locals.user.id, userDetails.googleId, userDetails.email);
-			event.locals.user.email = userDetails.email;
-			event.locals.user.googleId = userDetails.googleId;
-		}
-		return resolveSession(event, event.locals.user.id, { user: event.locals.user });
-	}
 
-	const existingUser = await (async () => {
+		const existingUser = await (async () => {
+			if (domain === "srisriuniversity.edu.in") {
+				return await getUserFromUniversityMail(userDetails.email);
+			}
+			if (domain === "gmail.com") {
+				return await getUserFromGoogleId(userDetails.googleId);
+			}
+			return null;
+		})();
+
+		if (existingUser !== null) {
+			return resolveSession(event, existingUser.id, { user: existingUser });
+		}
+
 		if (domain === "srisriuniversity.edu.in") {
-			return await getUserFromUniversityMail(userDetails.email);
-		}
-		if (domain === "gmail.com") {
-			return await getUserFromGoogleId(userDetails.googleId);
-		}
-		return null;
-	})();
+			const id = identifier.split(".")[1];
 
-	if (existingUser !== null) {
-		return resolveSession(event, existingUser.id, { user: existingUser });
-	}
+			const batch = id.substring(1, 5);
+			const course = id.substring(5);
 
-	if (domain === "srisriuniversity.edu.in") {
-		const id = identifier.split(".")[1];
+			if (batch && course) {
+				const student = await createStudent(
+					userDetails.email,
+					userDetails.name,
+					userDetails.picture,
+					batch,
+					course
+				);
+				await notifyAdmin({
+					title: `New Student Signup ${userDetails.name}`,
+					body: `${batch} ${course} ${userDetails.email}`
+				});
+				return resolveSession(event, student.userId, {
+					user: {
+						id: student.userId,
+						name: userDetails.name,
+						googleId: null,
+						email: null,
+						phone: null,
+						picture: student.picture,
+						role: "student",
+						status: "verified",
+						universityMail: userDetails.email
+					}
+				});
+			}
 
-		const batch = id.substring(1, 5);
-		const course = id.substring(5);
-
-		if (batch && course) {
-			const student = await createStudent(
+			const user = await createUserWithUniversityMail(
 				userDetails.email,
 				userDetails.name,
-				userDetails.picture,
-				batch,
-				course
+				userDetails.picture
 			);
 			await notifyAdmin({
-				title: `New Student Signup ${userDetails.name}`,
-				body: `${batch} ${course} ${userDetails.email}`
+				title: `New University Signup ${userDetails.name}`,
+				body: `${userDetails.email}`
 			});
-			return resolveSession(event, student.userId, {
-				user: {
-					id: student.userId,
-					name: userDetails.name,
-					googleId: null,
-					email: null,
-					phone: null,
-					picture: student.picture,
-					role: "student",
-					status: "verified",
-					universityMail: userDetails.email
-				}
-			});
+			return resolveSession(event, user.id, { user });
 		}
 
-		const user = await createUserWithUniversityMail(
-			userDetails.email,
+		const user = await createUser(
+			userDetails.googleId,
 			userDetails.name,
+			userDetails.email,
 			userDetails.picture
 		);
+
 		await notifyAdmin({
-			title: `New University Signup ${userDetails.name}`,
+			title: `New User Signup ${userDetails.name}`,
 			body: `${userDetails.email}`
 		});
+
 		return resolveSession(event, user.id, { user });
+	} catch (error) {
+		console.error("[OAuth Callback] Auth flow failed during database operation", {
+			error,
+			googleId: userDetails.googleId,
+			hasExistingSessionUser: !!event.locals.user,
+			emailDomain: domain,
+			authStateSuffix: state.split("-").slice(-2).join("-")
+		});
+		return resolveAuthError("Authentication failed. Please try again.");
 	}
-
-	const user = await createUser(
-		userDetails.googleId,
-		userDetails.name,
-		userDetails.email,
-		userDetails.picture
-	);
-
-	await notifyAdmin({
-		title: `New User Signup ${userDetails.name}`,
-		body: `${userDetails.email}`
-	})
-
-	return resolveSession(event, user.id, { user });
 }
